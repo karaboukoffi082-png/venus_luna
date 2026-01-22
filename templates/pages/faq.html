@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="py-5" style="background-color: #fcfbf7;">
+    <div class="container" style="max-width: 850px;">
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold" style="color: var(--bleu-nuit);">Besoin d'aide ?</h2>
+            <p class="text-muted">Tout ce qu'il faut savoir sur vos commandes et nos produits.</p>
+        </div>
+
+        <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="faqEveil">
+            <div class="accordion-item border-bottom">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                        Les pierres sont-elles vraiment naturelles ?
+                    </button>
+                </h2>
+                <div id="f1" class="accordion-collapse collapse show">
+                    <div class="accordion-body opacity-75">
+                        Absolument. Chaque pierre est sélectionnée pour son authenticité. Nous fuyons les imitations en plastique ou les pierres synthétiques. Si une pierre a subi un traitement thermique léger (comme certaines Citrines), nous le précisons en toute transparence.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border-bottom">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                        Comment savoir quel cristal me convient ?
+                    </button>
+                </h2>
+                <div id="f2" class="accordion-collapse collapse">
+                    <div class="accordion-body opacity-75">
+                        L'intuition est votre meilleur guide. Souvent, la pierre qui vous attire visuellement est celle dont votre énergie a besoin. Vous pouvez aussi consulter nos descriptions détaillées par "Bienfait" (Amour, Protection, Sommeil).
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                        Quels sont les délais de livraison à Lomé ?
+                    </button>
+                </h2>
+                <div id="f3" class="accordion-collapse collapse">
+                    <div class="accordion-body opacity-75">
+                        Toute commande passée avant 10h est généralement livrée le jour même. Pour les commandes de l'après-midi, la livraison s'effectue le lendemain matin.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

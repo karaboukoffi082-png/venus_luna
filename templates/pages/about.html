@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5" style="background-color: var(--bleu-nuit); color: white;">
+    <div class="container">
+        <div class="text-center mb-5 fade-in">
+            <h1 class="display-3 fw-bold" style="color: var(--or-clair); font-family: 'Playfair Display', serif;">L'Âme d'Éveil Spirituel</h1>
+            <p class="text-gold h4 italic">Harmonie, Énergie et Sérénité à Lomé</p>
+            <div class="mx-auto mt-3" style="width: 100px; height: 2px; background: linear-gradient(to right, transparent, var(--or-clair), transparent);"></div>
+        </div>
+
+        <div class="row align-items-center g-5 mb-5">
+            <div class="col-lg-6">
+                <h2 class="text-gold mb-4">Notre Quête</h2>
+                <p class="lead opacity-90">Éveil Spirituel n'est pas qu'une boutique, c'est un sanctuaire né de la passion pour les énergies subtiles et la lithothérapie authentique.</p>
+                <p class="opacity-75">Dans le tumulte de la vie moderne à Lomé, nous avons ressenti le besoin de créer un pont vers la paix intérieure. Nous sélectionnons chaque cristal pour sa vibration, chaque encens pour sa pureté, afin de vous offrir des outils de transformation réelle.</p>
+                <p class="opacity-75">Que vous cherchiez la protection, l'abondance ou la guérison émotionnelle, notre équipe est là pour vous guider dans le choix de vos compagnons de route minéraux.</p>
+            </div>
+            <div class="col-lg-6">
+                <img src="{% static 'img/f2.png' %}" class="img-fluid rounded-5 shadow-lg border-gold-soft" alt="Spiritualité">
+            </div>
+        </div>
+
+        <div class="mt-5 p-5 rounded-4 text-center shadow-lg" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212, 175, 55, 0.3);">
+            <h3 class="text-gold mb-3">Conception Digitale</h3>
+            <p class="opacity-75 mb-4">Ce sanctuaire numérique a été conçu pour offrir une expérience fluide et apaisante à chaque visiteur.</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h5 class="mb-1 text-white">{{ "Karabou K. Magnouréwa"|upper }}</h5>
+                    <p class="text-gold small mb-3">Développeur Full-Stack & Designer Web</p>
+                    <p class="small opacity-75">Vous souhaitez un site web professionnel, élégant et performant comme celui-ci ?</p>
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <a href="mailto:karaboukoffimagnourewa@gmail.com" class="text-white text-decoration-none small"><i class="fas fa-envelope text-gold"></i> Email</a>
+                        <a href="https://wa.me/22890614169" class="text-white text-decoration-none small"><i class="fab fa-whatsapp text-gold"></i> WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

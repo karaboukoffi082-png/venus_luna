@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="product-detail-section py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'products:list' %}" class="text-gold fw-bold text-decoration-none">Boutique</a></li>
+                <li class="breadcrumb-item active text-dark" aria-current="page">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="main-image-container mb-3 shadow-sm rounded overflow-hidden">
+                    {% for img in product.images.all %}
+                        {% if img.is_main %}
+                            <img src="{{ img.image.url }}" id="main-display" alt="{{ img.alt_text }}" class="img-fluid w-100" style="max-height: 500px; object-fit: contain; background: #fff;">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="d-flex gap-2 overflow-auto pb-2">
+                    {% for img in product.images.all %}
+                    <img src="{{ img.image.url }}" 
+                         class="thumbnail-img rounded cursor-pointer {% if img.is_main %}active-thumb{% endif %}" 
+                         onclick="document.getElementById('main-display').src=this.src"
+                         style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #ddd; cursor: pointer;"
+                         onmouseover="this.style.borderColor='var(--or-sombre)'"
+                         onmouseout="this.style.borderColor='#ddd'">
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="product-info-box p-4 rounded bg-white shadow-sm" style="border: 1px solid rgba(184,134,11,0.2);">
+                    <h1 class="display-5 fw-bold mb-3" style="color: var(--bleu-nuit);">{{ product.name }}</h1>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <span class="price-detail h2 mb-0 me-3 fw-bold" style="color: var(--or-sombre);">{{ product.price }} FCFA</span>
+                        {% if product.compare_price %}
+                            <span class="text-decoration-line-through text-muted h4 mb-0">{{ product.compare_price }} F</span>
+                        {% endif %}
+                    </div>
+
+                    <p class="lead text-dark mb-4">{{ product.short_description }}</p>
+
+                    <hr style="border-color: var(--or-sombre); opacity: 0.2;">
+
+                    <form action="{% url 'orders:cart_add' product.id %}" method="post" class="mt-4">
+                        {% csrf_token %}
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label class="small fw-bold text-dark d-block mb-2">Quantité</label>
+                                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control border-gold py-2">
+                            </div>
+                            <div class="col-md-8">
+                                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold text-uppercase" style="height: 46px;">
+                                    <i class="fas fa-shopping-cart me-2"></i> Ajouter au Panier
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 small">
+                        <p class="text-dark"><i class="fas fa-check-circle text-success me-2"></i> État : <strong>En stock ({{ product.stock }} disponibles)</strong></p>
+                        <p class="text-dark"><i class="fas fa-truck text-gold me-2"></i> Livraison partout à Lomé et environs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="border-bottom pb-3 mb-4" style="color: var(--bleu-nuit); font-family: 'Playfair Display', serif;">
+                    <i class="fas fa-leaf me-2 text-gold"></i>Vertus et Description
+                </h3>
+                <div class="description-content p-4 rounded bg-white shadow-sm" style="line-height: 1.8; color: var(--text-dark); font-size: 1.1rem;">
+                    {{ product.description|linebreaks }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .border-gold { border: 1px solid var(--or-sombre) !important; }
+    .text-gold { color: var(--or-sombre) !important; }
+    .btn-gold { 
+        background: linear-gradient(45deg, var(--or-sombre), var(--or-clair));
+        border: none;
+        color: var(--bleu-nuit) !important;
+    }
+    .btn-gold:hover { transform: scale(1.02); filter: brightness(1.1); }
+</style>
+{% endblock %}

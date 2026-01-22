@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    .bg-warm { background-color: #fdfaf5; }
+    .text-gold { color: #d4af37; }
+    .btn-gold { background-color: #d4af37; color: white; transition: 0.3s; }
+    .btn-gold:hover { background-color: #b8962d; color: white; transform: translateY(-2px); }
+    .stat-card { transition: transform 0.3s, box-shadow 0.3s; border-radius: 15px; }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+    .bg-bleu-nuit { background-color: #1a2a3a; }
+</style>
+
+<div class="container-fluid py-5 bg-warm">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="section-title m-0 fw-bold">Gestion de la Boutique</h2>
+                <p class="text-muted">Bienvenue dans votre espace de contrôle spirituel.</p>
+            </div>
+            <div class="date badge bg-white text-dark shadow-sm p-3 rounded-pill">
+                <i class="far fa-calendar-alt text-gold me-2"></i> {{ today|date:"l d F Y" }}
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5 text-dark">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm p-4 text-center stat-card">
+                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
+                        <i class="fas fa-shopping-bag text-gold fa-2x"></i>
+                    </div>
+                    <h3 class="fw-bold m-0">{{ total_orders }}</h3>
+                    <p class="text-muted small text-uppercase fw-semibold mb-0">Commandes</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm p-4 text-center stat-card">
+                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
+                        <i class="fas fa-money-bill-wave text-success fa-2x"></i>
+                    </div>
+                    <h3 class="fw-bold m-0">{{ total_revenue }} F</h3>
+                    <p class="text-muted small text-uppercase fw-semibold mb-0">Revenus</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm p-4 text-center stat-card">
+                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
+                        <i class="fas fa-users text-primary fa-2x"></i>
+                    </div>
+                    <h3 class="fw-bold m-0">{{ total_customers }}</h3>
+                    <p class="text-muted small text-uppercase fw-semibold mb-0">Clients</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm p-4 text-center stat-card">
+                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
+                        <i class="fas fa-box-open text-warning fa-2x"></i>
+                    </div>
+                    <h3 class="fw-bold m-0 text-danger">{{ pending_orders }}</h3>
+                    <p class="text-muted small text-uppercase fw-semibold mb-0">À traiter</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                    <div class="card-header bg-bleu-nuit text-white p-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-history me-2"></i>Dernières Commandes</h5>
+                        <a href="/admin/orders/order/" class="btn btn-sm btn-outline-light">Voir tout</a>
+                    </div>
+                    <div class="table-responsive p-0">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4">Client</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">{{ order.user.username|default:order.email }}</div>
+                                        <div class="small text-muted">{{ order.created_at|date:"d/m/Y H:i" }}</div>
+                                    </td>
+                                    <td class="fw-bold">{{ order.total }} F</td>
+                                    <td>
+                                        <span class="badge rounded-pill 
+                                            {% if order.status == 'delivered' %}bg-success
+                                            {% elif order.status == 'pending' %}bg-warning text-dark
+                                            {% else %}bg-info{% endif %} p-2 px-3">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="/admin/orders/order/{{ order.id }}/change/" class="btn btn-sm btn-dark rounded-circle">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center py-4">Aucune commande récente.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h5 class="fw-bold mb-4">Analyse des Ventes</h5>
+                    <canvas id="salesChart" height="100"></canvas>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white p-3 border-0">
+                        <h5 class="mb-0 fw-bold text-dark">Actions Rapides</h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="d-grid gap-3">
+                            <a href="/admin/products/product/add/" class="btn btn-gold py-3 shadow-sm">
+                                <i class="fas fa-plus-circle me-2"></i> Ajouter un Produit
+                            </a>
+                            <a href="/admin/products/category/add/" class="btn btn-dark py-3 shadow-sm">
+                                <i class="fas fa-folder-plus me-2"></i> Nouvelle Catégorie
+                            </a>
+                            <a href="/admin/orders/shippingzone/" class="btn btn-outline-dark py-3">
+                                <i class="fas fa-truck me-2"></i> Gérer la Livraison
+                            </a>
+                            <hr>
+                            <a href="/admin/" class="btn btn-light py-2 text-muted">
+                                <i class="fas fa-cogs me-2"></i> Administration Avancée
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <h5 class="fw-bold mb-4 text-dark">Évolution des Revenus</h5>
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <h5 class="fw-bold mb-4 text-dark">Top Catégories</h5>
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    
+    // Récupération des données envoyées par Django
+    // Données pour le Pie Chart
+const pieLabels = {{ pie_labels|safe }};
+const pieData = {{ pie_values|safe }};
+
+const ctx2 = document.getElementById('categoryChart').getContext('2d');
+new Chart(ctx2, {
+    type: 'doughnut', // 'doughnut' est plus moderne que 'pie'
+    data: {
+        labels: pieLabels,
+        datasets: [{
+            data: pieData,
+            backgroundColor: [
+                '#1a2a3a', // Bleu nuit
+                '#d4af37', // Or
+                '#7d5a50', // Marron chaud
+                '#c0c0c0', // Argent
+                '#4a5d4e'  # Vert forêt
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { boxWidth: 12, padding: 20 }
+            }
+        },
+        cutout: '70%' // Crée l'effet de cercle vide au centre
+    }
+});
+    // safe permet d'éviter que Django n'échappe les caractères des listes
+    const labels = {{ chart_labels|safe }}; 
+    const dataValues = {{ chart_values|safe }};
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Ventes (XOF)',
+                data: dataValues,
+                borderColor: '#d4af37',
+                backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointBackgroundColor: '#1a2a3a'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1a2a3a',
+                    titleColor: '#d4af37',
+                    bodyColor: '#fff',
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + ' XOF';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return value + ' F'; }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

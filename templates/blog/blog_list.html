@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h1 class="text-gold text-center mb-5 display-4 post-title">Sagesse & Éveil</h1>
+        
+        <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <article class="blog-card glass-card h-100">
+                    <div class="mb-3 overflow-hidden rounded-3" style="height: 200px; background: #000;">
+                         <img src="{% static 'img/spirit-bg.jpeg' %}" class="w-100 h-100 object-fit-cover opacity-50">
+                    </div>
+                    
+                    <h3 class="h4 mb-3"><a href="{{ post.get_absolute_url }}" class="text-white text-decoration-none">{{ post.title }}</a></h3>
+                    <p class="text-white-50 small mb-4">{{ post.content|truncatewords:20 }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <span class="text-gold small"><i class="far fa-calendar-alt me-2"></i>{{ post.created_at|date:"d M Y" }}</span>
+                        <a href="{{ post.get_absolute_url }}" class="text-gold">Lire la suite →</a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

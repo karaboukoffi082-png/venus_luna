@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 text-center" style="background-color: #f8f9fa;"> <div class="container">
+        <div class="mb-4">
+            <div class="display-1 text-success"><i class="fas fa-check-circle"></i></div>
+        </div>
+
+        <h1 class="display-5 fw-bold mb-3" style="color: #D4AF37;">Commande Confirmée !</h1>
+        
+        <p class="lead text-dark mb-5">Merci pour votre confiance. Votre demande de trésors spirituels est en cours de traitement.</p>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="p-4 rounded-4 mb-4 shadow-sm" style="background: #ffffff; border: 2px dashed #D4AF37;">
+                    
+                    <h4 class="fw-bold mb-4" style="color: #001524;">Récapitulatif de la commande #{{ order.id }}</h4>
+                    
+                    <div class="text-start mb-4">
+                        <p class="mb-2 text-dark"><strong><i class="fas fa-user me-2 text-gold"></i>Client :</strong> {{ order.shipping_address.full_name }}</p>
+                        <p class="mb-2 text-dark"><strong><i class="fas fa-money-bill-wave me-2 text-gold"></i>Montant total :</strong> <span class="fw-bold" style="color: #D4AF37;">{{ order.total_amount }} FCFA</span></p>
+                        <p class="mb-0 text-dark"><strong><i class="fas fa-info-circle me-2 text-gold"></i>Statut :</strong> En attente de vérification (Mobile Money)</p>
+                    </div>
+
+                    <hr style="border-color: rgba(212, 175, 55, 0.3);">
+
+                    <p class="small text-muted mb-3">Pour accélérer la livraison à Lomé, envoyez-nous votre reçu de transfert via WhatsApp :</p>
+                    
+                    <a href="https://wa.me/22893343403?text=Bonjour%20Éveil%20Spirituel,%20je%20viens%20de%20passer%20la%20commande%20n°{{ order.id }}.%20Voici%20mon%20reçu%20de%20paiement." 
+                       target="_blank" 
+                       class="btn btn-success w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm">
+                        <i class="fab fa-whatsapp me-2"></i> Envoyer mon reçu sur WhatsApp
+                    </a>
+
+                    <a href="{% url 'products:list' %}" class="btn btn-outline-dark w-100 py-2 rounded-pill">
+                        Retourner à la boutique
+                    </a>
+                </div>
+                
+                <p class="text-secondary small">Un email de confirmation a également été envoyé à <strong>{{ order.email }}</strong>.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .text-gold { color: #D4AF37 !important; }
+    /* Style spécifique pour le bouton WhatsApp si nécessaire */
+    .btn-success { background-color: #25D366 !important; border: none !important; }
+    .btn-success:hover { background-color: #128C7E !important; transform: translateY(-2px); transition: 0.3s; }
+</style>
+{% endblock %}

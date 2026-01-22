@@ -1,0 +1,364 @@
+/* ==========================================================================
+   1. VARIABLES & CONFIGURATION
+   ========================================================================== */
+:root {
+    /* Couleurs Principales */
+    --primary-color: #050405ff;    /* Violet spirituel doux */
+    --accent-color: #faf7fbff;     /* Rose spirituel clair */
+    --bleu-nuit: #0a1128;        /* Fond luxe */
+    
+    /* Couleurs Or (Palettes) */
+    --or-clair: rgba(253, 191, 5, 1);
+    --or-sombre: #ebbb1fff;
+    
+    /* Couleurs de Texte & Fond */
+    --text-dark: #352f36;
+    --text-white: rgba(16, 9, 9, 1);
+    --bg-light: #160f0fff;
+    --bg-soft: hsla(60, 30%, 96%, 1.00);
+    
+    /* Utilitaires */
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* ==========================================================================
+   2. STYLES GLOBAUX
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body { 
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-soft);
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 1rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ==========================================================================
+   3. NAVIGATION (NAVBAR)
+   ========================================================================== */
+.navbar {
+    padding: 1rem 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    background-color: var(--bleu-nuit) !important;
+}
+
+.nav-link {
+    font-weight: 300;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
+
+.nav-link:hover {
+    color: var(--or-sombre) !important;
+    transform: translateY(-2px);
+}
+
+/* Boutons de la Navbar */
+.btn-gold {
+    background: linear-gradient(45deg, var(--or-sombre), var(--or-clair));
+    color: var(--bleu-nuit) !important;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-gold:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.btn-gold-outline {
+    border: 1px solid var(--or-sombre);
+    color: var(--or-sombre) !important;
+    padding: 6px 15px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.text-gold { 
+    color: var(--or-sombre); 
+}
+
+/* ==========================================================================
+   4. HERO SECTION & CARROUSEL
+   ========================================================================== */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    background-color: var(--bleu-nuit);
+}
+
+.hero-slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(10,17,40,0.3), rgba(10,17,40,0.7));
+    z-index: 5;
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-white);
+    text-align: center;
+    z-index: 10;
+    width: 90%;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.hero-content .text-gold {
+    color: var(--or-clair) !important;
+    font-style: italic;
+    font-size: 1.5rem;
+}
+
+/* ==========================================================================
+   5. SECTIONS & CARTES
+   ========================================================================== */
+.section-title {
+    font-size: 2.5rem;
+    color: var(--bleu-nuit);
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(to right, var(--or-sombre), var(--or-clair));
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.card {
+    background-color: var(--bg-light);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ==========================================================================
+   6. FORMULAIRES
+   ========================================================================== */
+form {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #100e0eff;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(109, 89, 122, 0.2);
+}
+
+/* ==========================================================================
+   7. FOOTER
+   ========================================================================== */
+footer {
+    background-color: #05070d;
+    color: var(--text-white);
+    padding: 4rem 0 2rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+footer ul li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+footer ul li a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+footer ul li a:hover {
+    color: var(--or-sombre) !important;
+    padding-left: 5px;
+}
+
+footer .fab {
+    transition: var(--transition);
+    color: var(--or-sombre);
+    margin-right: 15px;
+}
+
+footer .fab:hover {
+    color: var(--or-clair) !important;
+    transform: translateY(-5px) scale(1.2);
+}
+
+/* ==========================================================================
+   8. ANIMATIONS
+   ========================================================================== */
+.fade-in {
+    opacity: 0;
+    animation: fadeInPage 1s ease-out forwards;
+}
+
+@keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-text {
+    animation: slideDown 1s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   9. RESPONSIVE (MOBILES & TABLETTES)
+   ========================================================================== */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: var(--bleu-nuit);
+        padding: 20px;
+        border-radius: 0 0 15px 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section { height: 45vh; }
+    .hero-content h1 { font-size: 2.2rem; }
+    .section-title { font-size: 1.8rem; }
+    
+    footer { text-align: center; }
+    footer .d-flex { justify-content: center; }
+}
+
+.category-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: var(--transition);
+    cursor: pointer;
+}
+.category-card:hover {
+    transform: scale(1.03);
+}
+.category-card h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--bleu-nuit);
+}
+
+.bg-gold-light {
+    background-color: rgba(212, 175, 55, 0.1);
+}
+
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    background-color: var(--bg-soft);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-group-item.active {
+    background-color: var(--bleu-nuit);
+    border-color: var(--bleu-nuit);
+}
+
+.bg-bleu-nuit {
+    background-color: var(--bleu-nuit);
+}
+
+.btn-wishlist {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+    transition: var(--transition);
+}
+
+.btn-wishlist:hover {
+    transform: scale(1.1);
+    color: #e74c3c;
+}

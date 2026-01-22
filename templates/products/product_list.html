@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 style="color: var(--or-sombre); font-size: 3rem;">Nos Trésors Spirituels</h1>
+        <p class="text-dark">Éveillez votre âme avec nos articles sélectionnés à Lomé.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="mb-4" style="color: var(--bleu-nuit); border-bottom: 2px solid var(--or-sombre); display: inline-block;">Catégories</h4>
+            <ul class="list-unstyled">
+                <li class="mb-3">
+                    <a href="{% url 'products:list' %}" 
+                       class="text-decoration-none {% if not request.GET.category %}text-gold fw-bold{% else %}text-dark{% endif %}">
+                        <i class="fas fa-gem me-2"></i>Tous les produits
+                    </a>
+                </li>
+                
+                {% for cat in categories %}
+                <li class="mb-3">
+                    <a href="?category={{ cat.slug }}" 
+                       class="text-decoration-none {% if request.GET.category == cat.slug %}text-gold fw-bold{% else %}text-dark{% endif %}">
+                        {{ cat.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row g-4">
+                {% for product in products %}
+                <div class="col-md-4">
+                    <div class="product-card position-relative border-0 shadow-sm rounded-3 overflow-hidden bg-white">
+                        
+                        <a href="{% url 'products:toggle_wishlist' product.id %}" class="btn-wishlist position-absolute top-0 end-0 m-3 text-danger" style="z-index: 10;">
+                            <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart fa-lg"></i>
+                        </a>
+
+                        <div class="product-img-container" style="height: 250px; overflow: hidden;">
+                            {% with product.images.all|first as first_img %}
+                                {% if first_img %}
+                                    <img src="{{ first_img.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ product.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/aze1.png' %}" class="w-100 h-100" style="object-fit: cover;" alt="No image">
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+
+                        <div class="p-3 text-center">
+                            <h5 class="mb-2" style="color: var(--bleu-nuit);">{{ product.name }}</h5>
+                            <div class="mb-3">
+                                {% if product.compare_price %}
+                                <span class="old-price text-decoration-line-through text-muted small me-2">{{ product.compare_price }} F</span>
+                                {% endif %}
+                                <span class="fw-bold" style="color: var(--or-sombre); font-size: 1.1rem;">{{ product.price }} FCFA</span>
+                            </div>
+                            <a href="{% url 'products:detail' product.pk %}" class="btn btn-gold d-block py-2">Découvrir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-search fa-3x mb-3" style="color: var(--or-sombre);"></i>
+                    <p class="text-dark italic">Aucun trésor n'a été trouvé dans cette catégorie pour le moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .text-gold { color: var(--or-sombre) !important; }
+    .text-dark { color: #2d2d2d !important; }
+    .product-card { transition: transform 0.3s ease; }
+    .product-card:hover { transform: translateY(-5px); }
+</style>
+{% endblock %}

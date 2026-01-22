@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 d-flex align-items-center" style="min-height: 80vh; background-color: var(--bleu-nuit);">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="mb-4 fade-in">
+                    <div class="success-icon-container">
+                        <i class="fas fa-check-circle fa-5x text-gold"></i>
+                    </div>
+                </div>
+
+                <h1 class="display-5 text-gold mb-3 fw-bold">Merci pour votre confiance !</h1>
+                <p class="lead text-white-50 mb-5">
+                    Votre commande **#{{ order.id }}** a été enregistrée avec succès. 
+                    Un membre de l'équipe **Éveil Spirituel** vous contactera sous peu.
+                </p>
+
+                <div class="p-4 rounded-4 mb-5 text-start" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.3);">
+                    <h4 class="h6 text-gold text-uppercase fw-bold mb-3">Étape finale : Paiement</h4>
+                    <p class="small text-white-50">Si vous n'avez pas encore effectué le transfert, merci de le faire pour valider l'expédition :</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-white-50 small">Montant total :</span>
+                        <span class="text-gold fw-bold h5 mb-0">{{ order.total_price }} FCFA</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-white-50 small">Numéro TMoney/Flooz :</span>
+                        <span class="text-white fw-bold">+228 93 34 34 03</span>
+                    </div>
+                    <hr class="border-gold opacity-25">
+                    <p class="x-small text-muted mb-0 italic">
+                        <i class="fas fa-info-circle me-1"></i> 
+                        Envoyez une capture d'écran du transfert sur WhatsApp pour une validation plus rapide.
+                    </p>
+                </div>
+
+                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'products:list' %}" class="btn-gold-outline px-4 py-2">Continuer mes achats</a>
+                    <a href="https://wa.me/22893343403?text=Bonjour,%20je%20viens%20de%20passer%20la%20commande%20#{{ order.id }}" 
+                       class="btn btn-success px-4 py-2 rounded-pill">
+                        <i class="fab fa-whatsapp me-2"></i>Envoyer le reçu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .success-icon-container {
+        animation: scaleUp 0.5s ease-out;
+    }
+    @keyframes scaleUp {
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.2); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .text-white-50 { color: rgba(255,255,255,0.6) !important; }
+    .bg-soft-gold { background: rgba(212, 175, 55, 0.1); }
+</style>
+{% endblock %}

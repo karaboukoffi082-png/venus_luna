@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg sticky-top" style="background-color: var(--bleu-nuit); border-bottom: 1px solid var(--or-sombre);">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
+            <span style="color: var(--or-clair); font-family: 'Playfair Display', serif; font-weight: bold; font-size: 1.5rem;">ÉVEIL SPIRITUEL</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border-color: var(--or-sombre);">
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link text-white px-3" href="{% url 'core:home' %}">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link text-white px-3" href="{% url 'products:list' %}">Boutique</a></li>
+                <li class="nav-item"><a class="nav-link text-white px-3" href="{% url 'blog:list' %}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link text-white px-3" href="{% url 'core:contact' %}">Contact</a></li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+                <a href="{% url 'orders:cart_detail' %}" class="position-relative text-gold">
+                    <i class="fas fa-shopping-cart fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7rem;">
+                        {{ cart_items|length|default:"0" }}
+                    </span>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a class="btn-gold-outline btn-sm dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="Photo" class="rounded-circle border border-gold" style="width: 24px; height: 24px; object-fit: cover;">
+                            {% else %}
+                                <i class="fas fa-user-circle me-1"></i>
+                            {% endif %}
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end bg-dark border-gold">
+                            <li><a class="dropdown-item text-white" href="{% url 'accounts:client_dashboard' %}">Mon Profil</a></li>
+                            <li><hr class="dropdown-divider border-secondary"></li>
+                            <li>
+                                <form action="{% url 'accounts:logout' %}" method="post" class="px-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-link text-danger p-0 text-decoration-none small">Déconnexion</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="text-white-50 small text-decoration-none">Connexion</a>
+                    <a href="{% url 'accounts:register' %}" class="btn-gold btn-sm">S'inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

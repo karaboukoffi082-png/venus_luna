@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 d-flex align-items-center" style="min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="glass-card text-center p-5 shadow-lg">
+                    <h2 class="post-title mb-4" style="font-size: 2.5rem;">Se Connecter</h2>
+                    <p class="text-white-50 mb-4">Entrez dans votre sanctuaire personnel.</p>
+                    
+                    <form method="post" class="auth-form text-start">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="text-gold small mb-1">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger x-small">{{ field.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn-gold w-100 py-3 mt-3">Ouvrir la session</button>
+                    </form>
+                    
+                    <div class="mt-4">
+                        <p class="text-white-50 small">Nouveau sur l'Éveil ? 
+                            <a href="{% url 'accounts:register' %}" class="text-gold">Créer un compte</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="section-title text-start mb-5">Mes Coups de Cœur ✨</h2>
+    
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}">
+                {% else %}
+                    <div class="bg-light text-center py-5">Pas d'image</div>
+                {% endif %}
+                
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="text-gold fw-bold">{{ item.product.price }} XOF</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ item.product.get_absolute_url }}" class="btn-gold">Voir le produit</a>
+                        
+                        <a href="{% url 'products:toggle_wishlist' item.product.id %}" class="text-danger small text-decoration-none">
+                            <i class="fas fa-trash-alt me-1"></i> Retirer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Votre liste est vide pour le moment.</p>
+            <a href="{% url 'products:list' %}" class="btn-gold-outline">Explorer la boutique</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
