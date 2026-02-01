@@ -2,26 +2,24 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5" style="background-color: var(--bleu-nuit); min-height: 100vh;">
+<section class="py-5" style="background-color: #001524; min-height: 100vh;">
     <div class="container">
-        <h1 class="mb-5 text-center" style="color: var(--or-clair); font-family: 'Playfair Display', serif;">Finaliser votre Commande</h1>
+        <h1 class="mb-5 text-center" style="color: #D4AF37; font-family: 'Playfair Display', serif;">Finaliser votre Commande</h1>
 
         <div class="row g-5">
             <div class="col-lg-7">
                 <div class="p-4 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212, 175, 55, 0.2);">
-                    <h3 class="text-gold mb-4"><i class="fas fa-map-marker-alt me-2"></i>Informations de Livraison</h3>
+                    <h3 style="color: #D4AF37;" class="mb-4"><i class="fas fa-shipping-fast me-2"></i>Informations de Livraison</h3>
                     
                     <form method="post" class="checkout-form" id="checkout-form">
                         {% csrf_token %}
                         <div class="row g-3">
                             {% for field in form %}
                             <div class="{% if field.name == 'full_name' or field.name == 'email' or field.name == 'address' %}col-12{% else %}col-md-6{% endif %}">
-                                <label class="form-label text-gold small fw-bold text-uppercase">{{ field.label }}</label>
-                                
+                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37;">{{ field.label }}</label>
                                 <div class="custom-field">
                                     {{ field }}
                                 </div>
-
                                 {% if field.errors %}
                                     <div class="text-danger x-small mt-1">{{ field.errors|first }}</div>
                                 {% endif %}
@@ -29,35 +27,23 @@
                             {% endfor %}
                             
                             <div class="col-12 mt-4">
-                                <label class="form-label text-gold small fw-bold text-uppercase">Zone de livraison à Lomé</label>
-                                <select class="form-select bg-dark text-white border-gold custom-select" id="zone-select" name="shipping_zone" required>
+                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37;">Zone de livraison à Lomé</label>
+                                <select class="form-select bg-dark text-white border-gold custom-select" id="zone-select" name="shipping_zone" required style="border-color: rgba(212, 175, 55, 0.4);">
                                     <option value="0" selected disabled>Choisir votre quartier...</option>
                                     {% for zone in zones %}
-                                    <option value="{{ zone.price }}">{{ zone.name }} (+{{ zone.price }} F)</option>
+                                    <option value="{{ zone.price }}">{{ zone.name }} (+{{ zone.price }}FCFA)</option>
                                     {% endfor %}
                                 </select>
                             </div>
                         </div>
 
-                        <div class="mt-5 p-4 rounded-4 bg-black border-gold shadow-lg">
-                            <h4 class="text-gold h6 mb-3"><i class="fas fa-mobile-alt me-2"></i>Paiement Mobile Money (Togo)</h4>
-                            <p class="small text-white opacity-75">Veuillez effectuer le transfert avant de valider :</p>
-                            
-                            <div class="bg-dark p-3 rounded-3 mb-3 border border-warning" style="border-style: dashed !important;">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-white-50 small">Numéro TMoney / Flooz :</span>
-                                    <span class="text-white fw-bold">+228 90 00 00 00</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-white-50 small">Nom du récepteur :</span>
-                                    <span class="text-gold fw-bold">ÉVEIL SPIRITUEL</span>
-                                </div>
-                            </div>
-                            <p class="small text-muted mb-0 italic"><i class="fas fa-info-circle me-1"></i> Note : Votre commande sera traitée dès réception du transfert.</p>
+                        <div class="mt-5 p-4 rounded-4 bg-black border-gold shadow-lg" style="border: 1px solid #D4AF37;">
+                            <h4 style="color: #D4AF37;" class="h6 mb-3"><i class="fas fa-shield-alt me-2"></i>Paiement Sécurisé PayGate</h4>
+                            <p class="small text-white opacity-75 mb-0">Vous allez être redirigé vers la plateforme sécurisée pour payer via <strong>TMoney</strong> ou <strong>Moov Money</strong>.</p>
                         </div>
 
-                        <button type="submit" class="btn-gold w-100 py-3 mt-4 fs-5 fw-bold shadow-lg text-uppercase">
-                            Confirmer la commande (<span id="btn-total">{{ total }}</span> F)
+                        <button type="submit" class="btn w-100 py-3 mt-4 fs-5 fw-bold shadow-lg text-uppercase" style="background-color: #D4AF37; color: #001524; border-radius: 50px;">
+                            Payer ma commande (<span id="btn-total">{{ total }}</span>FCFA)
                         </button>
                     </form>
                 </div>
@@ -65,45 +51,45 @@
 
             <div class="col-lg-5">
                 <div class="sticky-top" style="top: 100px;">
-                    <div class="card bg-transparent border-gold rounded-4 overflow-hidden shadow">
-                        <div class="card-header border-gold py-3 bg-black">
-                            <h4 class="mb-0 text-gold h5"><i class="fas fa-shopping-basket me-2"></i>Résumé</h4>
+                    <div class="card bg-transparent border-gold rounded-4 overflow-hidden shadow" style="border: 1px solid #D4AF37;">
+                        <div class="card-header py-3 bg-black" style="border-bottom: 1px solid #D4AF37;">
+                            <h4 class="mb-0 h5" style="color: #D4AF37;"><i class="fas fa-shopping-basket me-2"></i>Votre Panier</h4>
                         </div>
                         <div class="card-body p-0" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2);">
                             <ul class="list-group list-group-flush">
                                 {% for item in items %}
-                                <li class="list-group-item bg-transparent text-white border-gold d-flex justify-content-between align-items-center py-3">
+                                <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid rgba(212,175,55,0.1);">
                                     <div class="d-flex align-items-center">
                                         <div class="position-relative me-3">
-                                            <span class="badge rounded-pill bg-gold text-dark position-absolute top-0 start-100 translate-middle" style="z-index: 2;">{{ item.quantity }}</span>
-                                            <div style="width: 55px; height: 55px; background: #222; border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
+                                            <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle" style="background-color: #D4AF37; color: #001524;">{{ item.quantity }}</span>
+                                            <div style="width: 50px; height: 50px; background: #222; border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
                                                 {% if item.product.images.first %}
                                                 <img src="{{ item.product.images.first.image.url }}" class="w-100 h-100 object-fit-cover">
                                                 {% else %}
-                                                <i class="fas fa-box text-muted d-flex h-100 align-items-center justify-content-center"></i>
+                                                <i class="fas fa-gem text-muted d-flex h-100 align-items-center justify-content-center"></i>
                                                 {% endif %}
                                             </div>
                                         </div>
                                         <span class="small fw-bold">{{ item.product.name }}</span>
                                     </div>
-                                    <span class="text-gold fw-bold">{{ item.line_total }} F</span>
+                                    <span style="color: #D4AF37;" class="fw-bold">{{ item.line_total }} F</span>
                                 </li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="card-footer border-gold bg-black p-4">
+                        <div class="card-footer bg-black p-4" style="border-top: 1px solid #D4AF37;">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-white-50 small">Sous-total</span>
+                                <span class="text-white-50 small">Produits</span>
                                 <span class="text-white">{{ total }} F</span>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
-                                <span class="text-white-50 small">Frais de livraison</span>
-                                <span class="text-gold fw-bold" id="shipping-cost">Choisir une zone</span>
+                                <span class="text-white-50 small">Livraison (Lomé)</span>
+                                <span class="fw-bold" id="shipping-cost" style="color: #D4AF37;">0 F</span>
                             </div>
-                            <hr class="border-gold opacity-50">
+                            <hr style="border-color: rgba(212, 175, 55, 0.5);">
                             <div class="d-flex justify-content-between h4 mb-0">
-                                <span class="text-gold fw-bold">TOTAL</span>
-                                <span class="text-gold fw-bold"><span id="grand-total">{{ total }}</span> F</span>
+                                <span style="color: #D4AF37;" class="fw-bold">TOTAL</span>
+                                <span style="color: #D4AF37;" class="fw-bold"><span id="grand-total">{{ total }}</span> F</span>
                             </div>
                         </div>
                     </div>
@@ -114,29 +100,30 @@
 </section>
 
 <style>
-    /* Style pour les champs Django */
-    .custom-field input, .custom-field textarea {
-        width: 100%;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.3) !important;
-        border: 1px solid rgba(212, 175, 55, 0.4) !important;
-        color: white !important;
-        border-radius: 8px;
-        margin-bottom: 5px;
+    /* Force le texte en BLANC sur le fond SOMBRE par défaut */
+    .custom-field input, .custom-field textarea, .form-control {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #ffffff !important; /* Texte blanc */
+        border: 1px solid #D4AF37 !important;
     }
-    .custom-field input:focus {
-        border-color: var(--or-clair) !important;
-        outline: none;
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-    }
-    .custom-select {
-        cursor: pointer;
-        padding: 12px !important;
-    }
-    .x-small { font-size: 0.75rem; }
-    .object-fit-cover { object-fit: cover; }
-</style>
 
+    /* QUAND ON CLIQUE DEDANS (Focus) */
+    .custom-field input:focus, .form-control:focus {
+        background-color: #ffffff !important; /* Le fond devient blanc pour la lecture */
+        color: #001524 !important; /* LE TEXTE DEVIENT NOIR (très sombre) pour être visible ! */
+        border-color: #D4AF37 !important;
+        outline: none;
+    }
+
+    /* Correction pour l'auto-remplissage du navigateur (souvent jaune ou blanc) */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #D4AF37 !important;
+        -webkit-box-shadow: 0 0 0px 1000px #001524 inset !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+</style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const zoneSelect = document.getElementById('zone-select');
@@ -144,18 +131,14 @@
         const totalDisplay = document.getElementById('grand-total');
         const btnTotal = document.getElementById('btn-total');
         
-        // Nettoyage de la variable total transmise par Django (au cas où il y aurait des espaces ou formats)
-        const subtotal = parseInt("{{ total }}".replace(/\s/g, ''));
+        // Extraction propre du sous-total
+        const subtotal = parseInt("{{ total }}".replace(/\D/g, ''));
 
         zoneSelect.addEventListener('change', function() {
             const shipPrice = parseInt(this.value);
             const finalTotal = subtotal + shipPrice;
 
-            // Mise à jour visuelle fluide
             shippingDisplay.innerText = shipPrice.toLocaleString() + " F";
-            shippingDisplay.classList.replace('text-gold', 'text-success');
-            
-            // On utilise toLocaleString pour les séparateurs de milliers (ex: 10 000)
             totalDisplay.innerText = finalTotal.toLocaleString();
             btnTotal.innerText = finalTotal.toLocaleString();
         });

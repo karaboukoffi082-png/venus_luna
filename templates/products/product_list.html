@@ -58,7 +58,7 @@
                                 {% endif %}
                                 <span class="fw-bold" style="color: var(--or-sombre); font-size: 1.1rem;">{{ product.price }} FCFA</span>
                             </div>
-                            <a href="{% url 'products:detail' product.pk %}" class="btn btn-gold d-block py-2">Découvrir</a>
+                            <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-gold d-block py-2">Découvrir</a>
                         </div>
                     </div>
                 </div>

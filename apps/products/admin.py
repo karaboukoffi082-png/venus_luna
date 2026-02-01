@@ -13,11 +13,11 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ("name", "description")
     ordering = ("order", "name")
-    list_editable = ("order",) # Permet de changer l'ordre sans ouvrir la catégorie
+    list_editable = ("order",)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # Ajout de 'display_image' pour voir le produit d'un coup d'œil
+    # Liste des produits
     list_display = (
         "display_image", 
         "name",
@@ -27,16 +27,31 @@ class ProductAdmin(admin.ModelAdmin):
         "is_active",
         "featured",
     )
-    # Rendre les champs modifiables directement dans la liste
     list_editable = ("price", "stock", "is_active", "featured")
-    
     list_filter = ("is_active", "featured", "category")
     search_fields = ("name", "short_description", "description")
     prepopulated_fields = {"slug": ("name",)}
-    inlines = [ProductImageInline]
-    readonly_fields = ("created_at", "updated_at")
+    
+    # ORGANISATION DES CHAMPS (Pour s'assurer qu'ils apparaissent tous)
+    fieldsets = (
+        ("Informations Générales", {
+            "fields": ("name", "slug", "category", "featured", "is_active")
+        }),
+        ("Description du Produit", {
+            "fields": ("short_description", "description"),
+        }),
+        ("Tarification et Stock", {
+            "fields": (("price", "old_price"), "stock"), # Met prix et prix barré sur la même ligne
+        }),
+        ("Métadonnées", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",), # Cache cette section par défaut
+        }),
+    )
 
-    # Fonction pour afficher la petite image dans la liste
+    readonly_fields = ("created_at", "updated_at")
+    inlines = [ProductImageInline]
+
     def display_image(self, obj):
         main_image = obj.images.filter(is_main=True).first() or obj.images.first()
         if main_image and main_image.image:
@@ -49,7 +64,6 @@ class ProductImageAdmin(admin.ModelAdmin):
     list_display = ("product", "image_preview", "is_main", "order", "created_at")
     list_filter = ("is_main",)
     search_fields = ("product__name", "alt_text")
-    ordering = ("product", "order")
 
     def image_preview(self, obj):
         if obj.image:
@@ -57,5 +71,4 @@ class ProductImageAdmin(admin.ModelAdmin):
         return "Pas d'image"
     image_preview.short_description = "Aperçu"
 
-# On enregistre aussi la Wishlist pour pouvoir la voir
 admin.site.register(Wishlist)

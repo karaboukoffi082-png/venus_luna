@@ -20,6 +20,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
+DEMARCHE_API_KEY = os.getenv('DEMARCHE_API_KEY')
+DEMARCHE_API_URL = os.getenv('DEMARCHE_API_URL')
+PAYGATE_TOKEN = os.getenv('PAYGATE_TOKEN')
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -96,9 +101,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": 'site_spirituel',
+        "USER": 'MAGNOUREWA',
+        "PASSWORD":  "KARa@40bou",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 

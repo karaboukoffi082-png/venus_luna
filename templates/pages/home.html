@@ -6,7 +6,7 @@
     {% for banner in banners %}
     <div class="hero-slide {% if forloop.first %}active{% endif %}">
         <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
-        <div class="hero-overlay"></div>
+        <div></div>
         <div class="hero-content container">
             <h1 class="display-2 fw-bold mb-3 animate-text" style="color: #ffffff !important;">{{ banner.title }}</h1>
             <p class="h4 mb-4 animate-text-delay" style="color: var(--or-clair) !important;">{{ banner.subtitle }}</p>

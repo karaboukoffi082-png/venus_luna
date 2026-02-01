@@ -1,9 +1,9 @@
 <!-- templates/orders/cart.html -->
-<h1>Panier</h1>
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
+<h1>Panier</h1>
 <section class="py-5">
     <div class="container">
         <h1 class="mb-5" style="color: var(--or-clair); text-align: center;">Votre Sanctuaire d'Achats</h1>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="p-4 rounded-4" style="background: rgba(255,255,255,0.05); border: 1px solid var(--or-sombre);">
+                <div class="p-4 rounded-4" style="background: rgba(93, 173, 46, 0.05); border: 1px solid var(--or-sombre);">
                     <h4 class="text-gold mb-4">Récapitulatif</h4>
                     <div class="d-flex justify-content-between mb-3 text-white-50">
                         <span>Articles ({{ cart_items|length }})</span>
@@ -85,8 +85,8 @@
                     <div class="mt-4 text-center">
                         <small class="text-muted d-block mb-2">Modes de paiement acceptés au Togo :</small>
                         <div class="d-flex justify-content-center gap-3">
-                            <img src="{% static 'img/tmoney_logo.png' %}" alt="TMoney" style="height: 25px; filter: grayscale(1);">
-                            <img src="{% static 'img/flooz_logo.png' %}" alt="Flooz" style="height: 25px; filter: grayscale(1);">
+                            <img src="{% static 'img/tmoney_logo.png' %}" alt="TMoney" style="height: 30px;">
+                            <img src="{% static 'img/flooz_logo.png' %}" alt="Flooz" style="height: 40px; ">
                         </div>
                     </div>
                 </div>

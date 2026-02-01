@@ -6,7 +6,7 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 from datetime import timedelta
 
-# Import des modèles depuis tes différentes apps
+# Import des modèles
 from .models import Product, Category, Wishlist
 from apps.orders.models import Order, OrderItem
 
@@ -15,6 +15,7 @@ from apps.orders.models import Order, OrderItem
 def admin_dashboard(request):
     # 1. Statistiques Globales
     total_orders = Order.objects.count()
+    # Note : 'total' doit correspondre au champ dans apps.orders.models.Order
     total_revenue = Order.objects.filter(status='delivered').aggregate(Sum('total'))['total__sum'] or 0
     total_customers = User.objects.filter(is_staff=False).count()
     pending_orders = Order.objects.filter(status='pending').count()
@@ -66,9 +67,9 @@ def toggle_wishlist(request, product_id):
     wish_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
     
     if not created:
-        wish_item.delete()  # Si le produit y est déjà, on l'enlève
+        wish_item.delete() 
         
-    return redirect(request.META.get('HTTP_REFERER', 'products:list'))
+    return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
 
 @login_required
 def wishlist_detail(request):
@@ -93,14 +94,12 @@ def product_list(request):
         'wishlist_ids': wishlist_ids
     })
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk, is_active=True)
-    related_products = Product.objects.filter(category=product.category).exclude(pk=pk)[:4]
+# CORRECTION ICI : Utilisation du slug au lieu du PK pour correspondre au modèle
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug, is_active=True)
+    related_products = Product.objects.filter(category=product.category).exclude(slug=slug)[:4]
     
     return render(request, 'products/product_detail.html', {
         'product': product,
         'related_products': related_products
     })
-    
-    # Exemple dans toggle_wishlist :
-    return redirect(request.META.get('HTTP_REFERER', 'products:list'))

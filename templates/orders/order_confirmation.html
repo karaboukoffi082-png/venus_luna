@@ -1,10 +1,10 @@
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #d4af37; padding: 20px;">
     <div style="text-align: center; background-color: #001529; padding: 20px;">
-        <h1 style="color: #d4af37; margin: 0;">ÉVEIL SPIRITUEL</h1>
+        <h1 style="color: #d4af37; margin: 0;">VENUS LUNA</h1>
     </div>
     
-    <h2 style="color: #001529;">Merci pour votre commande, {{ order.user.username }} !</h2>
-    <p>Nous avons bien reçu votre commande <strong>#{{ order.id }}</strong>.</p>
+    <h2 style="color: #001529;">Merci pour votre commande, {{ order.shipping_address.full_name }} !</h2>
+    <p>Nous avons bien reçu votre paiement. Votre commande <strong>#{{ order.id }}</strong> est désormais en cours de préparation.</p>
     
     <table style="width: 100%; border-collapse: collapse;">
         <tr style="background-color: #f8f9fa;">
@@ -13,24 +13,29 @@
         </tr>
         {% for item in order.items.all %}
         <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ item.product.name }} (x{{ item.quantity }})</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ item.name }} (x{{ item.quantity }})</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">{{ item.price }} F</td>
         </tr>
         {% endfor %}
         <tr>
-            <td style="padding: 10px; font-weight: bold;">TOTAL À PAYER</td>
-            <td style="padding: 10px; font-weight: bold; text-align: right; color: #d4af37;">{{ order.total_price }} FCFA</td>
+            <td style="padding: 10px; font-weight: bold;">TOTAL PAYÉ</td>
+            <td style="padding: 10px; font-weight: bold; text-align: right; color: #d4af37;">{{ order.total }} FCFA</td>
         </tr>
     </table>
 
-    <div style="margin-top: 30px; padding: 15px; background-color: #fff9e6; border-left: 5px solid #d4af37;">
+    <div style="margin-top: 30px; padding: 15px; background-color: #e6fffa; border-left: 5px solid #28a745;">
         <p style="margin: 0; font-size: 14px;">
-            <strong>Rappel Paiement Mobile Money :</strong><br>
-            Veuillez effectuer le transfert au <strong>+228 93 34 34 03</strong> si ce n'est pas encore fait.
+            <strong>Paiement Confirmé :</strong><br>
+            Votre reçu officiel au format PDF est <strong>joint à cet email</strong>. Vous pouvez également le télécharger dans votre espace client sur notre site.
         </p>
     </div>
 
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="font-size: 14px;">Notre équipe à Lomé vous contactera dès que votre colis sera prêt pour la livraison.</p>
+    </div>
+
     <p style="font-size: 12px; color: #777; margin-top: 30px; text-align: center;">
-        Boutique Éveil Spirituel - Lomé, Togo.
+        Boutique VENUS LUNA - Adidoadin, Lomé, Togo.<br>
+        Contact : +228 93 34 34 03
     </p>
 </div>

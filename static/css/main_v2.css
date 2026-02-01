@@ -53,7 +53,7 @@ h1, h2, h3 {
    ========================================================================== */
 .navbar {
     padding: 1rem 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(76, 250, 7, 0.3);
     background-color: var(--bleu-nuit) !important;
 }
 
@@ -229,7 +229,7 @@ input:focus {
    7. FOOTER
    ========================================================================== */
 footer {
-    background-color: #05070d;
+    background-color: #40b61dff;
     color: var(--text-white);
     padding: 4rem 0 2rem;
     border-top: 1px solid rgba(212, 175, 55, 0.2);
@@ -361,4 +361,11 @@ footer .fab:hover {
 .btn-wishlist:hover {
     transform: scale(1.1);
     color: #e74c3c;
+}
+
+.custom-field input, .custom-field textarea {
+    position: relative;
+    z-index: 5; /* Assure que le champ est au-dessus du fond */
+    pointer-events: auto !important; /* Force l'autorisation du clic */
+    cursor: text;
 }
