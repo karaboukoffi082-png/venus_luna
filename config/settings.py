@@ -98,7 +98,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # --- AUTHENTIFICATION ---
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-
+# settings.py
+BKAPAY_PUBLIC_KEY = "pk_live_XXXX"
+BKAPAY_CALLBACK_URL = "https://votresite.com/paiement/retour"
 # --- CONFIGURATION EMAIL (GMAIL) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
