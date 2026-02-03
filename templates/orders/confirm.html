@@ -2,57 +2,67 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 text-center" style="background-color: #f8f9fa;">
+<section class="py-5 text-center" style="background-color: #001524; min-height: 100vh; display: flex; align-items: center;">
     <div class="container">
         <div class="mb-4">
-            <div class="display-1 text-success"><i class="fas fa-check-circle"></i></div>
+            <div class="display-1" style="color: #D4AF37; animation: bounceIn 1s ease;">
+                <i class="fas fa-check-circle"></i>
+            </div>
         </div>
 
-        <h1 class="display-5 fw-bold mb-3" style="color: #D4AF37;">Commande Confirmée !</h1>
+        <h1 class="display-5 fw-bold mb-3" style="color: #D4AF37; font-family: 'Playfair Display', serif;">Commande Confirmée !</h1>
         
-        <p class="lead text-dark mb-5">Merci pour votre confiance. Votre demande de trésors spirituels est en cours de traitement.</p>
+        <p class="lead text-white-50 mb-5">Merci pour votre confiance. Vos trésors spirituels sont en route vers vous.</p>
 
         <div class="row justify-content-center">
             <div class="col-md-7">
-                <div class="p-4 rounded-4 mb-4 shadow-sm" style="background: #ffffff; border: 2px dashed #D4AF37;">
+                <div class="p-4 rounded-4 mb-4 shadow-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212, 175, 55, 0.3);">
                     
-                    <h4 class="fw-bold mb-4" style="color: #001524;">Récapitulatif de la commande #{{ order.id }}</h4>
+                    <h4 class="fw-bold mb-4" style="color: #D4AF37;">Récapitulatif de la commande #{{ order.id }}</h4>
                     
-                    <div class="text-start mb-4">
-                        <p class="mb-2 text-dark"><strong><i class="fas fa-user me-2 text-gold"></i>Client :</strong> {{ order.shipping_address.full_name }}</p>
-                        <p class="mb-2 text-dark"><strong><i class="fas fa-money-bill-wave me-2 text-gold"></i>Montant total :</strong> <span class="fw-bold" style="color: #D4AF37;">{{ order.total }} FCFA</span></p>
-                        <p class="mb-0 text-dark"><strong><i class="fas fa-info-circle me-2 text-gold"></i>Statut :</strong> Paiement validé</p>
+                    <div class="text-start mb-4 p-3 rounded-3" style="background: rgba(0,0,0,0.3);">
+                        <p class="mb-2 text-white"><strong><i class="fas fa-user me-2" style="color: #D4AF37;"></i>Client :</strong> {{ order.shipping_address.full_name }}</p>
+                        <p class="mb-2 text-white"><strong><i class="fas fa-money-bill-wave me-2" style="color: #D4AF37;"></i>Montant total :</strong> <span class="fw-bold" style="color: #D4AF37;">{{ order.total_amount }} F</span></p>
+                        <p class="mb-0 text-white"><strong><i class="fas fa-info-circle me-2" style="color: #D4AF37;"></i>Statut :</strong> <span class="badge bg-success">Paiement validé</span></p>
                     </div>
 
-                    <hr style="border-color: rgba(212, 175, 55, 0.3);">
+                    <hr style="border-color: rgba(212, 175, 55, 0.2);">
 
-                    <a href="{% url 'orders:order_pdf' order.id %}" class="btn btn-dark w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm">
-                        <i class="fas fa-file-pdf me-2 text-gold"></i> Télécharger mon reçu PDF
+                    <a href="{% url 'orders:order_pdf' order.id %}" class="btn w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm" 
+                       style="background-color: #D4AF37; color: #001524; border: none;">
+                        <i class="fas fa-file-pdf me-2"></i> Télécharger mon reçu PDF
                     </a>
 
-                    <p class="small text-muted mb-3">Besoin d'aide ? Contactez notre support à Lomé via WhatsApp :</p>
+                    <p class="small text-white-50 mb-3">Besoin d'aide ? Contactez notre support à Lomé :</p>
                     
-                    <a href="https://wa.me/22893343403?text=Bonjour%20Éveil%20Spirituel,%20je%20viens%20de%20passer%20la%20commande%20n°{{ order.id }}.%20Pouvez-vous%20m'informer%20sur%20la%20livraison ?" 
+                    <a href="https://wa.me/22893343403?text=Bonjour%20Venus%20Luna,%20je%20viens%20de%20passer%20la%20commande%20n°{{ order.id }}." 
                        target="_blank" 
-                       class="btn btn-success w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm">
-                        <i class="fab fa-whatsapp me-2"></i> Contacter sur WhatsApp
+                       class="btn btn-whatsapp w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm text-white">
+                        <i class="fab fa-whatsapp me-2"></i> Contacter via WhatsApp
                     </a>
 
-                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-dark w-100 py-2 rounded-pill">
+                    <a href="{% url 'products:list' %}" class="btn btn-outline-light w-100 py-2 rounded-pill opacity-75">
                         Retourner à la boutique
                     </a>
                 </div>
                 
-                <p class="text-secondary small">Un email avec votre reçu PDF a été envoyé à <strong>{{ order.email }}</strong>.</p>
+                <p class="text-white-50 small">Un email de confirmation a été envoyé à <strong>{{ order.email }}</strong>.</p>
             </div>
         </div>
     </div>
 </section>
 
 <style>
-    .text-gold { color: #D4AF37 !important; }
-    .btn-success { background-color: #25D366 !important; border: none !important; }
-    .btn-success:hover { background-color: #128C7E !important; transform: translateY(-2px); transition: 0.3s; }
+    .btn-whatsapp { background-color: #25D366; transition: 0.3s; }
+    .btn-whatsapp:hover { background-color: #128C7E; transform: translateY(-2px); color: white; }
+    
+    @keyframes bounceIn {
+        0% { transform: scale(0.3); opacity: 0; }
+        50% { transform: scale(1.05); opacity: 1; }
+        70% { transform: scale(0.9); }
+        100% { transform: scale(1); }
+    }
+
     .rounded-4 { border-radius: 1.5rem !important; }
 </style>
 {% endblock %}

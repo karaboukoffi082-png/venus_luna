@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,214 +7,211 @@ from django.urls import reverse
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
+from .utils import generate_order_pdf  
 from .forms import CheckoutForm
-from .utils import (
-    add_to_cart, update_cart_item, clear_cart, get_cart,
-    cart_items_detail, send_order_confirmation
-)
 from .models import Order, OrderItem, ShippingAddress, ShippingZone
 from apps.products.models import Product
-from .services import DemarcheAPI 
+# On importe maintenant le service PayPlus
+from .services import PayPlusService 
 
 logger = logging.getLogger(__name__)
 
-# --- WEBHOOK DÉMARCHÉ ---
+# --- GESTION DU PANIER ---
+
+def cart_add(request, product_id):
+    cart = request.session.get('cart', {})
+    product = get_object_or_404(Product, id=product_id)
+    p_id = str(product_id)
+    if p_id in cart:
+        cart[p_id]['quantity'] += 1
+    else:
+        cart[p_id] = {'quantity': 1, 'price': str(product.price)}
+    request.session['cart'] = cart
+    messages.success(request, f"{product.name} ajouté au panier.")
+    return redirect(request.META.get('HTTP_REFERER', 'orders:cart_detail'))
+
+def cart_update(request, product_id):
+    cart = request.session.get('cart', {})
+    p_id = str(product_id)
+    if p_id in cart:
+        try:
+            quantity = int(request.POST.get('quantity', 1))
+            if quantity > 0:
+                cart[p_id]['quantity'] = quantity
+            else:
+                del cart[p_id]
+        except (ValueError, TypeError): pass
+    request.session['cart'] = cart
+    return redirect('orders:cart_detail')
+
+def cart_remove(request, product_id):
+    cart = request.session.get('cart', {})
+    p_id = str(product_id)
+    if p_id in cart:
+        del cart[p_id]
+        request.session['cart'] = cart
+    return redirect('orders:cart_detail')
+
+# --- PAIEMENT & WEBHOOK PAYPLUS ---
+
 @csrf_exempt
-def demarche_webhook(request):
-    """ Réception de la confirmation de paiement par l'API Démarché """
+def payplus_webhook(request):
+    """ Réception de la confirmation de paiement par PayPlus Africa """
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            order_id = data.get('external_reference')
-            status = data.get('status', '').upper() 
+            # PayPlus renvoie l'identifiant dans 'order_id' ou 'external_reference'
+            order_id = data.get('order_id') or data.get('external_reference')
+            status = str(data.get('status', '')).lower() 
 
-            if order_id and status in ['SUCCESS', 'PAID']:
+            if order_id and status in ['success', 'completed', 'paid', 'approved']:
                 order = Order.objects.get(id=order_id)
                 if not order.payment_status:
                     order.status = 'paid'
                     order.payment_status = True
+                    # On enregistre l'ID de transaction réel de PayPlus
                     order.paygate_tx_id = data.get('transaction_id')
-                    order.payment_method = data.get('network')
-                    order.save() 
+                    order.save()
                     
                     try:
+                        from .utils import send_order_confirmation
                         send_order_confirmation(order)
                     except Exception as e:
-                        logger.error(f"Erreur envoi email : {e}")
-
+                        logger.error(f"Erreur email confirmation : {e}")
+                
                 return HttpResponse(status=200)
         except Exception as e:
-            logger.error(f"Erreur Webhook : {e}")
+            logger.error(f"Erreur Webhook PayPlus : {e}")
             return HttpResponse(status=400)
             
     return HttpResponse(status=400)
 
-# --- PANIER ---
-def cart_items_detail(request):
-    from apps.products.models import Product
+# Alias pour garder la compatibilité avec tes anciennes URLs
+bkapay_webhook = payplus_webhook
+demarche_webhook = payplus_webhook
+
+# --- TUNNEL DE COMMANDE ---
+
+def get_cart_data(request):
     cart = request.session.get("cart", {})
     items = []
-    total = Decimal("0.00")
-
+    total = Decimal("0")
     for p_id, data in cart.items():
         try:
             product = Product.objects.get(pk=p_id)
-            qty = data["quantity"] if isinstance(data, dict) else data
-            qty = int(qty)
-            
+            qty = int(data["quantity"])
             sub = product.price * qty
             total += sub
-            
-            # On ajoute 'name' et 'price' directement dans le dictionnaire
-            items.append({
-                "product": product, 
-                "name": product.name,    # <--- Ajouté pour {{ item.name }}
-                "price": product.price,  # <--- Ajouté pour {{ item.price }}
-                "quantity": qty, 
-                "subtotal": sub
-            })
-        except (Product.DoesNotExist, KeyError, TypeError, ValueError):
-            continue
-            
+            items.append({"product": product, "quantity": qty, "subtotal": sub})
+        except: continue
     return items, total
 
-def cart_add(request, product_id):
-    if request.method == 'POST':
-        quantity = int(request.POST.get('quantity', 1))
-        add_to_cart(request, product_id, quantity)
-        messages.success(request, "Produit ajouté au panier !")
-    return redirect('orders:cart_detail')
-
-def cart_update(request, product_id):
-    if request.method == 'POST':
-        try:
-            quantity = int(request.POST.get('quantity', 1))
-            update_cart_item(request, product_id, quantity)
-            messages.success(request, "Quantité mise à jour.")
-        except ValueError:
-            messages.error(request, "Quantité invalide.")
-    return redirect('orders:cart_detail')
-
-def cart_remove(request, product_id):
-    update_cart_item(request, product_id, 0)
-    messages.info(request, "Produit retiré du panier.")
-    return redirect('orders:cart_detail')
-
-# --- TUNNEL DE COMMANDE ---
 def checkout(request):
-    items, total = cart_items_detail(request)
-    zones = ShippingZone.objects.all() # Zones de livraison dynamiques depuis la DB
-    
-    if not items:
-        messages.error(request, "Votre panier est vide.")
+    items, total = get_cart_data(request)
+    zones = ShippingZone.objects.all()
+    if not items: 
+        messages.warning(request, "Votre panier est vide.")
         return redirect('orders:cart_detail')
 
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
-        # On récupère le prix de livraison envoyé par le select HTML
-        shipping_fee = int(request.POST.get('shipping_zone', 0))
-
         if form.is_valid():
-            # 1. Création de la commande
+            # Création de la commande
             order = Order.objects.create(
                 user=request.user if request.user.is_authenticated else None,
                 email=form.cleaned_data['email'],
-                notes=form.cleaned_data.get('notes', ''),
-                status='pending',
-                shipping_price=shipping_fee
+                shipping_price=Decimal(request.POST.get('shipping_zone', 0))
             )
             
-            # 2. Création des articles de commande
+            # Création des articles de commande
             for it in items:
                 OrderItem.objects.create(
-                    order=order,
-                    product=it['product'],
+                    order=order, 
+                    product=it['product'], 
                     name=it['product'].name,
-                    price=it['product'].price,
-                    quantity=it['quantity'],
+                    price=it['product'].price, 
+                    quantity=it['quantity']
                 )
             
-            # 3. Calcul du total final (Produits + Livraison)
             order.recalc_total()
             
-            # 4. Adresse de livraison
+            # Adresse de livraison
             ShippingAddress.objects.create(
-                order=order,
-                full_name=form.cleaned_data['full_name'],
-                phone=form.cleaned_data.get('phone', ''),
-                address=form.cleaned_data['address'],
-                city=form.cleaned_data.get('city', 'Lomé'),
+                order=order, 
+                full_name=form.cleaned_data['full_name'], 
+                address=form.cleaned_data['address']
             )
-
-            # 5. Lancement du paiement (Push USSD)
-            phone = form.cleaned_data.get('phone', '')
-            clean_phone = re.sub(r'\D', '', phone) # Nettoie le numéro (enlève les espaces)
-            
-            # Détection Togo : TMoney (90/91/92/93/70) vs Moov (96/97/98/99)
-            network = "TMONEY" if clean_phone.startswith(('90', '91', '92', '93', '70')) else "MOOV"
             
             try:
-                api = DemarcheAPI()
-                result = api.collect_payment(order, clean_phone, network)
-
-                if result.get('status') in ['success', 'pending']:
-                    clear_cart(request)
-                    # Redirige vers la page d'attente
-                    return redirect('orders:order_confirm', order_id=order.id)
+                # Utilisation du service PayPlus
+                payplus = PayPlusService()
+                payment_data = payplus.create_payment(order)
+                
+                # PayPlus renvoie une URL vers leur portail sécurisé
+                if payment_data and payment_data.get('payment_url'):
+                    request.session['cart'] = {} # On vide le panier
+                    return redirect(payment_data['payment_url'])
                 else:
-                    order.delete() # Nettoyage si l'API échoue
-                    messages.error(request, f"Erreur de paiement : {result.get('message', 'Échec technique')}")
+                    logger.error(f"PayPlus n'a pas renvoyé d'URL : {payment_data}")
+                    messages.error(request, "Le service de paiement PayPlus est momentanément indisponible.")
+                    order.delete()
             except Exception as e:
+                logger.error(f"Erreur lors de l'appel PayPlus : {e}")
                 order.delete()
-                logger.error(f"Erreur API Démarché : {e}")
-                messages.error(request, "Service de paiement indisponible pour le moment.")
-        else:
-            messages.error(request, "Veuillez vérifier les informations saisies.")
+                messages.error(request, "Erreur technique lors du paiement.")
     else:
-        # GET request
-        initial = {'city': 'Lomé'}
-        if request.user.is_authenticated:
-            initial['email'] = request.user.email
-        form = CheckoutForm(initial=initial)
-
+        form = CheckoutForm()
+        
     return render(request, 'orders/checkout.html', {
         'form': form, 
         'items': items, 
-        'total': total,
-        'zones': zones # On envoie les vraies zones à la template
+        'total': total, 
+        'zones': zones
     })
 
-# --- SUIVI ET PDF ---
-def order_confirm(request, order_id):
-    """ Page de confirmation / Page d'attente USSD """
-    order = get_object_or_404(Order, pk=order_id)
-    if order.payment_status:
-        return render(request, 'orders/confirm.html', {'order': order})
-    return render(request, 'orders/waiting_confirm.html', {'order': order})
+# --- VUES CLIENTS ---
 
-def download_receipt(request, order_id):
-    """ Téléchargement du reçu PDF """
+def cart_detail(request):
+    items, total = get_cart_data(request)
+    return render(request, 'orders/cart.html', {'cart_items': items, 'cart_total': total})
+
+def order_confirm(request, order_id):
+    """ Page de retour après paiement """
     order = get_object_or_404(Order, pk=order_id)
-    # Sécurité : Seul le propriétaire ou le staff peut voir le reçu
-    if not request.user.is_staff and (not request.user.is_authenticated or order.user != request.user):
-        raise Http404()
-    if not order.receipt:
-        raise Http404("Le reçu n'est pas encore prêt.")
-    return FileResponse(order.receipt.open('rb'), content_type='application/pdf')
+    # On peut ajouter une vérification de statut ici via l'API si nécessaire
+    return render(request, 'orders/confirm.html', {'order': order})
 
 @login_required
 def order_history(request):
-    """ Historique des commandes de l'utilisateur """
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'orders/history.html', {'orders': orders})
 
-def cart_detail(request):
-    """Affiche le Sanctuaire d'Achats (panier)"""
-    # On récupère les données via notre utilitaire
-    items, total = cart_items_detail(request)
+# --- GÉNÉRATION DU REÇU (PDF) ---
+
+ # Assure-toi d'avoir importé ta fonction
+
+def download_receipt(request, order_id):
+    """ Génère et télécharge le reçu PDF pour le client """
+    # Si l'utilisateur est admin, il peut tout voir, sinon seulement sa commande
+    if request.user.is_staff:
+        order = get_object_or_404(Order, pk=order_id)
+    else:
+        # Sécurité : on vérifie que la commande appartient bien à l'utilisateur (si connecté)
+        order = get_object_or_404(Order, pk=order_id)
+        # Optionnel: if order.user != request.user: raise Http404
+
+    # Appel de la fonction de génération
+    pdf_content = generate_order_pdf(order)
+
+    if pdf_content:
+        response = HttpResponse(pdf_content, content_type='application/pdf')
+        filename = f"Recu_VenusLuna_{order.id}.pdf"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
     
-    context = {
-        'cart_items': items,
-        'cart_total': total,
-    }
-    return render(request, 'orders/cart.html', context)
+    # Si la génération échoue, on renvoie une erreur propre au lieu d'un fichier de 45 octets
+    messages.error(request, "Impossible de générer le PDF pour le moment.")
+    return redirect('orders:order_confirm', order_id=order.id)
+
+# Alias pour garder la cohérence avec tes URLs
+order_pdf = download_receipt

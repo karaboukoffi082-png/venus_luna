@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        @page { size: A4; margin: 2cm; }
-        body { font-family: Helvetica, sans-serif; color: #333; line-height: 1.5; }
-        .header { text-align: center; border-bottom: 2px solid #d4af37; padding-bottom: 20px; }
-        .shop-name { font-size: 24px; color: #d4af37; font-weight: bold; text-transform: uppercase; }
-        .receipt-title { font-size: 18px; margin-top: 10px; color: #555; }
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: 'Helvetica', Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; }
+        .header { text-align: center; border-bottom: 2px solid #d4af37; padding-bottom: 20px; margin-bottom: 30px; }
+        .shop-name { font-size: 28px; color: #d4af37; font-weight: bold; letter-spacing: 2px; }
+        .receipt-title { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 5px; }
         
-        .details-container { margin-top: 30px; width: 100%; }
-        .col { width: 50%; float: left; }
-        .clear { clear: both; }
+        /* Flex layout for details */
+        .details-container { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .col { width: 48%; }
+        .text-right { text-align: right; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 40px; }
-        th { background-color: #f8f8f8; border-bottom: 2px solid #eee; padding: 12px; text-align: left; }
-        td { border-bottom: 1px solid #eee; padding: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #fafafa; border-bottom: 2px solid #eee; padding: 12px; text-align: left; font-size: 13px; }
+        td { border-bottom: 1px solid #f1f1f1; padding: 12px; font-size: 14px; }
         
-        .total-section { margin-top: 30px; text-align: right; }
-        .total-amount { font-size: 20px; color: #d4af37; font-weight: bold; }
+        .summary-wrapper { margin-top: 30px; display: flex; justify-content: flex-end; }
+        .summary-table { width: 250px; }
+        .summary-table td { border: none; padding: 5px 0; }
+        .total-row { font-size: 18px; color: #d4af37; font-weight: bold; border-top: 2px solid #d4af37 !important; }
         
-        .footer { margin-top: 100px; text-align: center; font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 20px; }
+        .footer { margin-top: 60px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
     </style>
 </head>
 <body>
@@ -31,17 +34,16 @@
 
     <div class="details-container">
         <div class="col">
-            <strong>Facturé à :</strong><br>
+            <strong style="color: #d4af37;">Client :</strong><br>
             {{ order.shipping_address.full_name }}<br>
             {{ order.shipping_address.phone }}<br>
             {{ order.shipping_address.city }}, Togo
         </div>
-        <div class="col" style="text-align: right;">
-            <strong>Commande :</strong> #{{ order.id }}<br>
+        <div class="col text-right">
+            <strong>N° Commande :</strong> #{{ order.id }}<br>
             <strong>Date :</strong> {{ order.created_at|date:"d/m/Y" }}<br>
             <strong>Paiement :</strong> {{ order.payment_method }}
         </div>
-        <div class="clear"></div>
     </div>
 
     <table>
@@ -49,8 +51,8 @@
             <tr>
                 <th>Produit</th>
                 <th style="text-align: center;">Qté</th>
-                <th style="text-align: right;">Prix Unitaire</th>
-                <th style="text-align: right;">Total</th>
+                <th class="text-right">Prix Unitaire</th>
+                <th class="text-right">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -58,21 +60,33 @@
             <tr>
                 <td>{{ item.name }}</td>
                 <td style="text-align: center;">{{ item.quantity }}</td>
-                <td style="text-align: right;">{{ item.price }} F</td>
-                <td style="text-align: right;">{{ item.line_total }} F</td>
+                <td class="text-right">{{ item.price }} F</td>
+                <td class="text-right">{{ item.line_total }} F</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <div class="total-section">
-        <p>Sous-total : {{ order.total }} F CFA</p>
-        <p class="total-amount">TOTAL PAYÉ : {{ order.total }} F CFA</p>
+    <div class="summary-wrapper">
+        <table class="summary-table">
+            <tr>
+                <td>Sous-total :</td>
+                <td class="text-right">{{ order.subtotal }} F</td>
+            </tr>
+            <tr>
+                <td>Livraison :</td>
+                <td class="text-right">{{ order.shipping_price|default:"0" }} F</td>
+            </tr>
+            <tr class="total-row">
+                <td>TOTAL :</td>
+                <td class="text-right">{{ order.total }} F CFA</td>
+            </tr>
+        </table>
     </div>
 
     <div class="footer">
-        <p>Merci de votre achat spirituel. Ce document sert de preuve d'achat officielle.</p>
-        <p>Boutique venus luna - Adidoadin, Lomé, Togo - Tel: +228 93 34 34 03</p>
+        <p>Merci de votre achat spirituel chez Venus Luna. Ce document sert de preuve d'achat officielle.</p>
+        <p>Adidoadin, Lomé, Togo | Tel: +228 93 34 34 03 | www.venusluna.tg</p>
     </div>
 </body>
 </html>

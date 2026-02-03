@@ -2,48 +2,55 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5" style="background-color: #001524; min-height: 100vh;">
+<section class="py-5" style="background-color: #030303ff; min-height: 100vh;">
     <div class="container">
-        <h1 class="mb-5 text-center" style="color: #D4AF37; font-family: 'Playfair Display', serif;">Finaliser votre Commande</h1>
+        <h1 class="mb-5 text-center" style="color: #D4AF37; font-family: 'Playfair Display', serif; letter-spacing: 2px;">FINALISER VOTRE COMMANDE</h1>
 
         <div class="row g-5">
             <div class="col-lg-7">
-                <div class="p-4 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212, 175, 55, 0.2);">
-                    <h3 style="color: #D4AF37;" class="mb-4"><i class="fas fa-shipping-fast me-2"></i>Informations de Livraison</h3>
+                <div class="p-4 rounded-4 shadow-lg" style="background: rgba(40, 62, 182, 0.02); border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <h3 style="color: #D4AF37; font-size: 1.5rem;" class="mb-4">
+                        <i class="fas fa-shipping-fast me-2"></i>Informations de Livraison
+                    </h3>
                     
                     <form method="post" class="checkout-form" id="checkout-form">
                         {% csrf_token %}
                         <div class="row g-3">
                             {% for field in form %}
                             <div class="{% if field.name == 'full_name' or field.name == 'email' or field.name == 'address' %}col-12{% else %}col-md-6{% endif %}">
-                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37;">{{ field.label }}</label>
+                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37; letter-spacing: 1px;">{{ field.label }}</label>
                                 <div class="custom-field">
                                     {{ field }}
                                 </div>
                                 {% if field.errors %}
-                                    <div class="text-danger x-small mt-1">{{ field.errors|first }}</div>
+                                    <div class="text-danger small mt-1" style="font-size: 0.8rem;">{{ field.errors|first }}</div>
                                 {% endif %}
                             </div>
                             {% endfor %}
                             
                             <div class="col-12 mt-4">
-                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37;">Zone de livraison à Lomé</label>
-                                <select class="form-select bg-dark text-white border-gold custom-select" id="zone-select" name="shipping_zone" required style="border-color: rgba(212, 175, 55, 0.4);">
-                                    <option value="0" selected disabled>Choisir votre quartier...</option>
+                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37;">Zone de livraison (Lomé & Environs)</label>
+                                <select class="form-select bg-dark text-white border-gold" id="zone-select" name="shipping_zone" required 
+                                        style="border: 1px solid rgba(212, 175, 55, 0.4); height: 50px; border-radius: 8px;">
+                                    <option value="0" selected disabled>Choisissez votre quartier...</option>
                                     {% for zone in zones %}
-                                    <option value="{{ zone.price }}">{{ zone.name }} (+{{ zone.price }}FCFA)</option>
+                                    <option value="{{ zone.price }}">{{ zone.name }} (+{{ zone.price }} F)</option>
                                     {% endfor %}
                                 </select>
                             </div>
                         </div>
 
-                        <div class="mt-5 p-4 rounded-4 bg-black border-gold shadow-lg" style="border: 1px solid #D4AF37;">
-                            <h4 style="color: #D4AF37;" class="h6 mb-3"><i class="fas fa-shield-alt me-2"></i>Paiement Sécurisé PayGate</h4>
-                            <p class="small text-white opacity-75 mb-0">Vous allez être redirigé vers la plateforme sécurisée pour payer via <strong>TMoney</strong> ou <strong>Moov Money</strong>.</p>
+                        <div class="mt-5 p-4 rounded-4 bg-black border-gold" style="border: 1px solid rgba(212, 175, 55, 0.5); background: linear-gradient(45deg, #000, #001524);">
+                            <h4 style="color: #D4AF37;" class="h6 mb-3"><i class="fas fa-lock me-2"></i>Paiement Sécurisé</h4>
+                            <p class="small text-white-50 mb-0">
+                                Vous allez être redirigé vers **Bkapay** pour finaliser le règlement via 
+                                <span class="text-white fw-bold">TMoney</span> ou <span class="text-white fw-bold">Moov Money</span>.
+                            </p>
                         </div>
 
-                        <button type="submit" class="btn w-100 py-3 mt-4 fs-5 fw-bold shadow-lg text-uppercase" style="background-color: #D4AF37; color: #001524; border-radius: 50px;">
-                            Payer ma commande (<span id="btn-total">{{ total }}</span>FCFA)
+                        <button type="submit" class="btn w-100 py-3 mt-4 fs-5 fw-bold shadow-lg text-uppercase transition-all" 
+                                style="background-color: #D4AF37; color: #001524; border-radius: 8px; border: none;">
+                            Confirmer et Payer (<span id="btn-total">{{ total }}</span> F)
                         </button>
                     </form>
                 </div>
@@ -51,43 +58,43 @@
 
             <div class="col-lg-5">
                 <div class="sticky-top" style="top: 100px;">
-                    <div class="card bg-transparent border-gold rounded-4 overflow-hidden shadow" style="border: 1px solid #D4AF37;">
-                        <div class="card-header py-3 bg-black" style="border-bottom: 1px solid #D4AF37;">
-                            <h4 class="mb-0 h5" style="color: #D4AF37;"><i class="fas fa-shopping-basket me-2"></i>Votre Panier</h4>
+                    <div class="card bg-transparent border-gold rounded-4 overflow-hidden shadow-lg" style="border: 1px solid rgba(212, 175, 55, 0.3);">
+                        <div class="card-header py-3 bg-black" style="border-bottom: 1px solid rgba(212, 175, 55, 0.3);">
+                            <h4 class="mb-0 h5 text-center" style="color: #D4AF37; letter-spacing: 1px;">RÉSUMÉ DE LA COMMANDE</h4>
                         </div>
-                        <div class="card-body p-0" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2);">
+                        <div class="card-body p-0" style="max-height: 350px; overflow-y: auto; background: rgba(0,0,0,0.3);">
                             <ul class="list-group list-group-flush">
                                 {% for item in items %}
                                 <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid rgba(212,175,55,0.1);">
                                     <div class="d-flex align-items-center">
                                         <div class="position-relative me-3">
-                                            <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle" style="background-color: #D4AF37; color: #001524;">{{ item.quantity }}</span>
-                                            <div style="width: 50px; height: 50px; background: #222; border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
+                                            <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle" style="background-color: #D4AF37; color: #001524; font-size: 0.7rem;">{{ item.quantity }}</span>
+                                            <div style="width: 50px; height: 50px; background: #111; border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.2);">
                                                 {% if item.product.images.first %}
-                                                <img src="{{ item.product.images.first.image.url }}" class="w-100 h-100 object-fit-cover">
+                                                    <img src="{{ item.product.images.first.image.url }}" class="w-100 h-100 object-fit-cover">
                                                 {% else %}
-                                                <i class="fas fa-gem text-muted d-flex h-100 align-items-center justify-content-center"></i>
+                                                    <div class="h-100 d-flex align-items-center justify-content-center text-muted"><i class="fas fa-gem"></i></div>
                                                 {% endif %}
                                             </div>
                                         </div>
-                                        <span class="small fw-bold">{{ item.product.name }}</span>
+                                        <span class="small fw-bold">{{ item.name }}</span>
                                     </div>
-                                    <span style="color: #D4AF37;" class="fw-bold">{{ item.line_total }} F</span>
+                                    <span style="color: #D4AF37;" class="fw-bold">{{ item.subtotal }} F</span>
                                 </li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="card-footer bg-black p-4" style="border-top: 1px solid #D4AF37;">
+                        <div class="card-footer bg-black p-4" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-white-50 small">Produits</span>
+                                <span class="text-white-50 small">Sous-total produits</span>
                                 <span class="text-white">{{ total }} F</span>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
-                                <span class="text-white-50 small">Livraison (Lomé)</span>
+                                <span class="text-white-50 small">Frais de livraison</span>
                                 <span class="fw-bold" id="shipping-cost" style="color: #D4AF37;">0 F</span>
                             </div>
-                            <hr style="border-color: rgba(212, 175, 55, 0.5);">
-                            <div class="d-flex justify-content-between h4 mb-0">
+                            <hr style="border-color: rgba(212, 175, 55, 0.3);">
+                            <div class="d-flex justify-content-between h3 mb-0">
                                 <span style="color: #D4AF37;" class="fw-bold">TOTAL</span>
                                 <span style="color: #D4AF37;" class="fw-bold"><span id="grand-total">{{ total }}</span> F</span>
                             </div>
@@ -100,30 +107,28 @@
 </section>
 
 <style>
-    /* Force le texte en BLANC sur le fond SOMBRE par défaut */
+    /* Correction de l'affichage des champs (Texte blanc sur fond sombre) */
     .custom-field input, .custom-field textarea, .form-control {
         background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #ffffff !important; /* Texte blanc */
-        border: 1px solid #D4AF37 !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        padding: 12px 15px !important;
+        border-radius: 8px !important;
     }
 
-    /* QUAND ON CLIQUE DEDANS (Focus) */
     .custom-field input:focus, .form-control:focus {
-        background-color: #ffffff !important; /* Le fond devient blanc pour la lecture */
-        color: #001524 !important; /* LE TEXTE DEVIENT NOIR (très sombre) pour être visible ! */
+        background-color: #ffffff !important;
+        color: #001524 !important;
         border-color: #D4AF37 !important;
-        outline: none;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
     }
 
-    /* Correction pour l'auto-remplissage du navigateur (souvent jaune ou blanc) */
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover, 
-    input:-webkit-autofill:focus {
-        -webkit-text-fill-color: #D4AF37 !important;
-        -webkit-box-shadow: 0 0 0px 1000px #001524 inset !important;
-        transition: background-color 5000s ease-in-out 0s;
+    .btn:hover {
+        filter: brightness(1.1);
+        transform: translateY(-2px);
     }
 </style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const zoneSelect = document.getElementById('zone-select');
@@ -131,13 +136,14 @@
         const totalDisplay = document.getElementById('grand-total');
         const btnTotal = document.getElementById('btn-total');
         
-        // Extraction propre du sous-total
-        const subtotal = parseInt("{{ total }}".replace(/\D/g, ''));
+        // On récupère le sous-total sans les textes
+        const subtotal = parseInt("{{ total }}".replace(/\D/g, '')) || 0;
 
         zoneSelect.addEventListener('change', function() {
-            const shipPrice = parseInt(this.value);
+            const shipPrice = parseInt(this.value) || 0;
             const finalTotal = subtotal + shipPrice;
 
+            // Mise à jour de l'affichage
             shippingDisplay.innerText = shipPrice.toLocaleString() + " F";
             totalDisplay.innerText = finalTotal.toLocaleString();
             btnTotal.innerText = finalTotal.toLocaleString();

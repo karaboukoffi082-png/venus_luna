@@ -16,19 +16,22 @@ class Order(models.Model):
     email = models.EmailField("Email client", blank=True)
     status = models.CharField("Statut", max_length=20, choices=ORDER_STATUS, default='pending')
     
-    subtotal = models.DecimalField("Sous-total", max_digits=10, decimal_places=2, default=0)
-    shipping_price = models.DecimalField("Frais de port", max_digits=10, decimal_places=2, default=0)
-    total = models.DecimalField("Total", max_digits=10, decimal_places=2, default=0)
+    # Passage à 0 décimales pour le FCFA (plus propre pour Bkapay)
+    subtotal = models.DecimalField("Sous-total", max_digits=10, decimal_places=0, default=0)
+    shipping_price = models.DecimalField("Frais de port", max_digits=10, decimal_places=0, default=0)
+    total = models.DecimalField("Total", max_digits=10, decimal_places=0, default=0)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     notes = models.TextField("Notes", blank=True)
 
+    # --- Champs Paiement Bkapay ---
     payment_status = models.BooleanField("Paiement confirmé", default=False)
-    paygate_tx_id = models.CharField("ID Transaction", max_length=100, blank=True, null=True, unique=True)
+    paygate_tx_id = models.CharField("ID Transaction Bkapay", max_length=100, blank=True, null=True, unique=True)
+    payment_url = models.URLField("Lien de paiement", max_length=500, blank=True, null=True) # Nouveau : pour retrouver le lien
     payment_method = models.CharField("Méthode (Moov/TMoney)", max_length=50, blank=True, null=True)
+    
     receipt = models.FileField("Reçu PDF", upload_to='receipts/%Y/%m/%d/', blank=True, null=True)
-
     stock_updated = models.BooleanField("Stock mis à jour", default=False, editable=False)
 
     class Meta:
@@ -39,24 +42,25 @@ class Order(models.Model):
     def __str__(self):
         return f"Commande #{self.id} — {self.get_status_display()}"
 
-    def recalc_total(self):
+    def recalc_total(self, save=True):
         """ Calcule le sous-total et le total final """
-        # On sécurise le shipping_price s'il est None
         shipping = self.shipping_price or 0
+        # Calcul du sous-total basé sur les items
         self.subtotal = sum([item.line_total for item in self.items.all()])
         self.total = self.subtotal + shipping
-        self.save()
+        if save:
+            # On utilise update_fields pour ne pas déclencher inutilement d'autres signaux
+            super().save(update_fields=['subtotal', 'total'])
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField("Nom du produit", max_length=255)
-    price = models.DecimalField("Prix unitaire", max_digits=10, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField("Prix unitaire", max_digits=10, decimal_places=0, null=True, blank=True)
     quantity = models.PositiveIntegerField("Quantité", default=1)
     
     @property
     def line_total(self):
-        """ Calcule le prix de la ligne. Sécurisé pour l'admin. """
         if self.price is None or self.quantity is None:
             return 0
         return self.price * self.quantity

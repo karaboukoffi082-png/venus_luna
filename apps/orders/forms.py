@@ -32,13 +32,11 @@ class CheckoutForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
-    # postal_code a été supprimé car absent de la table shippingaddress
-    
     country = forms.CharField(
         label="Pays", 
         max_length=100, 
         initial="Togo",
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
     )
     
     notes = forms.CharField(
@@ -48,20 +46,26 @@ class CheckoutForm(forms.Form):
     )
 
     def clean_phone(self):
-        """Vérifie que le numéro est un numéro Togolais valide"""
+        """Nettoie et valide le numéro Togolais pour l'API PayPlus"""
         phone = self.cleaned_data.get('phone')
-        clean_phone = re.sub(r'\D', '', phone)
+        # On enlève tout ce qui n'est pas un chiffre
+        digits = re.sub(r'\D', '', phone)
 
-        if clean_phone.startswith('228'):
-            short_phone = clean_phone[3:]
+        # Si l'utilisateur a saisi 228XXXXXXXX
+        if digits.startswith('228'):
+            short_phone = digits[3:]
+            full_phone = digits
         else:
-            short_phone = clean_phone
+            short_phone = digits
+            full_phone = f"228{digits}"
 
+        # Validation de la longueur (8 chiffres après le 228)
         if len(short_phone) != 8:
-            raise forms.ValidationError("Le numéro doit comporter 8 chiffres.")
+            raise forms.ValidationError("Le numéro doit comporter 8 chiffres (ex: 90010203).")
 
+        # Préfixes valides Togo (Moov & TMoney)
         valid_prefixes = ('90', '91', '92', '93', '96', '97', '98', '99', '79', '70')
         if not short_phone.startswith(valid_prefixes):
-            raise forms.ValidationError("Numéro T-Money ou Moov invalide.")
+            raise forms.ValidationError("Ce numéro ne semble pas appartenir à Moov ou T-Money.")
 
-        return clean_phone
+        return full_phone

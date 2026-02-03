@@ -2,25 +2,240 @@
 {% load static %}
 
 {% block content %}
+ 
+
 <header class="hero-section">
     {% for banner in banners %}
     <div class="hero-slide {% if forloop.first %}active{% endif %}">
-        <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
-        <div></div>
+        <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="hero-bg">
+        
+        <div class="hero-overlay"></div>
+        
         <div class="hero-content container">
-            <h1 class="display-2 fw-bold mb-3 animate-text" style="color: #ffffff !important;">{{ banner.title }}</h1>
-            <p class="h4 mb-4 animate-text-delay" style="color: var(--or-clair) !important;">{{ banner.subtitle }}</p>
-            <a href="{% url 'products:list' %}" class="btn-gold px-5 py-3">Découvrir la Collection</a>
+            <h1 class="display-2 fw-bold mb-3 animate-text">{{ banner.title }}</h1>
+            <p class="h4 mb-4 animate-text-delay">{{ banner.subtitle }}</p>
+            <div class="mt-5">
+                <a href="{% url 'products:list' %}" class="btn-gold px-5 py-3">Découvrir la Collection</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="hero-slide active">
+        <div class="hero-overlay"></div>
+        <div class="hero-content container">
+            <h1 class="display-2 fw-bold mb-3">VENUS LUNA</h1>
+            <p class="h4 mb-4">Éveil Spirituel & Bien-être</p>
+            <a href="{% url 'products:list' %}" class="btn-gold px-5 py-3">Boutique</a>
         </div>
     </div>
     {% endfor %}
 </header>
 
+<style>
+/* --- STYLE DU SLIDER VENUS LUNA --- */
+.hero-section {
+    position: relative;
+    height: 85vh; /* Hauteur de l'écran */
+    min-height: 500px;
+    background-color: #001529;
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 1.2s ease-in-out; /* Transition douce */
+    display: flex;
+    align-items: center;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,21,41,0.6), rgba(0,21,41,0.3));
+    z-index: -1;
+}
+
+.hero-content {
+    color: #ffffff;
+    z-index: 10;
+    text-align: center;
+}
+
+.animate-text {
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    color: #ffffff !important;
+}
+
+.animate-text-delay {
+    color: #d4af37 !important; /* Couleur Or */
+    font-style: italic;
+}
+
+/* Bouton doré personnalisé */
+.btn-gold {
+    background-color: #d4af37;
+    color: #001529;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.btn-gold:hover {
+    background-color: #f1c40f;
+    transform: scale(1.05);
+    color: #000;
+}
+</style>
+
+<script>
+/* --- LOGIQUE DE DÉFILEMENT --- */
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+    const slideInterval = 6000; // 6 secondes par image
+
+    if (slides.length > 1) {
+        setInterval(() => {
+            // Désactiver la slide actuelle
+            slides[currentSlide].classList.remove('active');
+            
+            // Calculer la suivante
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            // Activer la nouvelle
+            slides[currentSlide].classList.add('active');
+        }, slideInterval);
+    }
+});
+</script>
+
+
+<section class="venus-animated-section">
+    <style>
+        .venus-animated-section {
+            padding: 120px 0;
+            background: #ffffffff;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Décoration d'arrière-plan (Cercles bleus diffus) */
+        .venus-animated-section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(30, 58, 148, 0.05);
+            filter: blur(80px);
+            border-radius: 50%;
+            top: 10%;
+            left: 20%;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-logo-animated {
+            width: 250px; /* Taille du logo */
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(30, 58, 138, 0.15);
+            /* Animation principale */
+            animation: venusFloat 5s ease-in-out infinite;
+            border: 1px solid rgba(30, 58, 138, 0.1);
+        }
+
+        /* L'ombre dynamique sous le logo */
+        .logo-glow-shadow {
+            width: 180px;
+            height: 25px;
+            background: radial-gradient(circle, rgba(30, 58, 138, 0.2) 0%, transparent 70%);
+            margin-top: 40px;
+            border-radius: 50%;
+            animation: venusShadow 5s ease-in-out infinite;
+        }
+
+        /* Animation de flottement élégante */
+        @keyframes venusFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-30px) scale(1.02);
+            }
+        }
+
+        /* Animation de l'ombre (rétrécit et s'atténue quand le logo monte) */
+        @keyframes venusShadow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(0.6);
+                opacity: 0.2;
+            }
+        }
+
+        /* Petit texte sous le logo (optionnel) */
+        .logo-caption {
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            color: #1e3a8a;
+            font-style: italic;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+    </style>
+
+    <div class="logo-wrapper">
+        <img src="/static/img/logovenusluna.JPEG" alt="Venus-Luna Logo" class="main-logo-animated">
+        <div class="logo-glow-shadow"></div>
+        <p class="logo-caption">L'essence de la spiritualité</p>
+    </div>
+</section>
 <section class="py-5 container">
     <div class="row align-items-center g-5">
         <div class="col-lg-6 fade-in">
             <div class="shadow-lg" style="border-radius:15px; overflow:hidden;">
-                <img src="{% static 'img/aze1.png' %}" alt="Ambiance spirituelle" class="img-fluid" style="height:400px; width:100%; object-fit:cover;">
+                <img src="{% static 'img/ab6.jpeg' %}" alt="Ambiance spirituelle" class="img-fluid" style="height:400px; width:100%; object-fit:cover;">
             </div>
         </div>
         <div class="col-lg-6 fade-in">
@@ -113,6 +328,46 @@
                         <h4 style="color: var(--bleu-nuit);">Savons & Soins spirituels</h4>
                         <a href="{% url 'products:list' %}?category=accessoires" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
                     </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="py-5 bg-soft">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            
+            <!-- Texte -->
+            <div class="col-lg-5 fade-in">
+                <h2 class="section-title mb-4" style="color: var(--bleu-nuit);">
+                    Notre Localisation
+                </h2>
+                <p class="lead text-dark">
+                    Retrouvez <strong>VENUS LUNA</strong> dans votre espace spirituel à Lomé.
+                </p>
+                <p class="text-dark mb-2">
+                    📍 Lomé – Togo <br>
+                    🕒 Ouvert du lundi au samedi <br>
+                    📞 Contact : +228 93 34 34 03
+                </p>
+                <a href="https://www.google.com/maps/dir/Boutique+spirituelle+Venus+Luna,+Adidoadin,+Lom%C3%A9//@6.2092407,1.1869991,21z/data=!4m8!4m7!1m5!1m1!1s0x102157ac0d43f93f:0x5dcccde43bdf92e8!2m2!1d1.186984!2d6.2092363!1m0?hl=fr&entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoASAFQAw%3D%3D" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" target="_blank" class="btn-gold-outline mt-3">
+                    Ouvrir dans Google Maps
+                </a>
+                
+            </div>
+
+            <!-- Carte -->
+            <div class="col-lg-7 fade-in">
+                <div class="shadow-lg" style="border-radius:15px; overflow:hidden;">
+                    <iframe
+                        src="https://www.google.com/maps?q=Lomé%20Togo&output=embed"
+                        width="100%"
+                        height="380"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy">
+                    </iframe>
                 </div>
             </div>
 

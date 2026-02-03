@@ -2,40 +2,42 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 d-flex align-items-center" style="background-color: #001524; min-height: 100vh;">
+<section class="py-5 d-flex align-items-center" style="background-color: #232425ff; min-height: 100vh;">
     <div class="container text-center">
         <div class="row justify-content-center">
             <div class="col-md-7">
                 <div class="payment-loader mb-5">
-                    <div class="spinner-border" role="status" style="width: 5rem; height: 5rem; color: #D4AF37; border-width: 0.25em;">
-                        <span class="visually-hidden">Chargement...</span>
+                    <div class="spinner-border" role="status" style="width: 5rem; height: 5rem; color: #f5f10bff; border-width: 0.25em;">
+                        <span class="visually-hidden">Vérification...</span>
                     </div>
                 </div>
 
-                <h2 class="display-6 fw-bold mb-4" style="color: #D4AF37; font-family: 'Playfair Display', serif;">
-                    Validation sur votre mobile
+                <h2 class="display-6 fw-bold mb-4" style="color: #f3e309ff; font-family: 'Playfair Display', serif;">
+                    Traitement de votre commande
                 </h2>
                 
-                <div class="p-4 rounded-4 mb-4" style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2);">
-                    <p class="lead text-white mb-0">
-                        Un message Push (USSD) a été envoyé au :<br>
-                        <strong style="color: #D4AF37; font-size: 1.4rem;">{{ order.shipping_address.phone }}</strong>
+                <div class="p-4 rounded-4 mb-4 shadow-lg" style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <p class="lead text-white mb-2">
+                        Commande <strong style="color: #D4AF37;">#{{ order.id }}</strong>
+                    </p>
+                    <p class="text-white-50">
+                        Nous attendons la confirmation du paiement de <span class="text-white fw-bold">{{ order.total_amount }} F</span>.
                     </p>
                 </div>
 
-                <div class="instruction-steps text-start d-inline-block text-white opacity-75 mb-5">
-                    <p class="mb-3"><i class="fas fa-mobile-alt me-3" style="color: #D4AF37;"></i> <strong>1. Déverrouillez</strong> votre téléphone.</p>
-                    <p class="mb-3"><i class="fas fa-key me-3" style="color: #D4AF37;"></i> <strong>2. Saisissez votre code PIN</strong> pour valider les {{ order.total }} F.</p>
-                    <p class="mb-0"><i class="fas fa-sync-alt fa-spin me-3" style="color: #D4AF37;"></i> <strong>3. Ne fermez pas</strong> cette page, elle se rafraîchira seule.</p>
+                <div class="instruction-steps text-start d-inline-block text-white opacity-75 mb-5 p-4 rounded-3" style="background: rgba(57, 55, 170, 0.2);">
+                    <p class="mb-3"><i class="fas fa-check-circle me-3" style="color: #D4AF37;"></i> 1. Si vous avez validé le paiement sur votre mobile.</p>
+                    <p class="mb-3"><i class="fas fa-hourglass-half me-3" style="color: #D4AF37;"></i> 2. Patientez quelques instants pendant la synchronisation.</p>
+                    <p class="mb-0"><i class="fas fa-sync-alt fa-spin me-3" style="color: #D4AF37;"></i> 3. Cette page se redirigera dès que le signal sera reçu.</p>
                 </div>
 
-                <div class="progress mb-4" style="height: 3px; background: rgba(255,255,255,0.1);">
-                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%; background-color: #D4AF37; transition: width 5s linear;"></div>
+                <div class="progress mb-4" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%; background-color: #D4AF37; transition: width 4.8s linear;"></div>
                 </div>
 
                 <p class="small text-white-50">
-                    Vous n'avez rien reçu ? Vérifiez votre signal réseau ou 
-                    <a href="{% url 'orders:checkout' %}" class="text-decoration-none" style="color: #D4AF37;">réessayez ici</a>.
+                    Un problème ? Notre équipe est disponible pour vous aider ou vous pouvez 
+                    <a href="{% url 'orders:checkout' %}" class="text-decoration-none fw-bold" style="color: #D4AF37;">recommencer l'opération</a>.
                 </p>
             </div>
         </div>
@@ -43,25 +45,40 @@
 </section>
 
 <script>
-    // Vérification du statut toutes les 5 secondes
     function checkPaymentStatus() {
         const progressBar = document.getElementById('progress-bar');
+        progressBar.style.transition = "none";
         progressBar.style.width = "0%";
         
-        // On déclenche l'animation de la barre
-        setTimeout(() => { progressBar.style.width = "100%"; }, 100);
+        // Relance l'animation de la barre
+        setTimeout(() => { 
+            progressBar.style.transition = "width 4.8s linear";
+            progressBar.style.width = "100%"; 
+        }, 50);
 
-        fetch(window.location.href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(response => {
-                // Si la vue Django redirige (vers confirm.html), on suit la redirection
-                if (response.redirected) {
-                    window.location.href = response.url;
-                }
-            })
-            .catch(err => console.log("En attente de la validation..."));
+        // Appel AJAX pour vérifier si le statut a changé en 'paid'
+        fetch(window.location.href, { 
+            headers: { 'X-Requested-With': 'XMLHttpRequest' } 
+        })
+        .then(response => {
+            // Si la vue `order_confirm` détecte que order.payment_status est True,
+            // elle doit renvoyer un signal (ou Django fera la redirection auto si configuré)
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.text();
+            }
+        })
+        .then(html => {
+            // Si le mot "Succès" ou un élément de la page confirm.html apparaît dans le retour
+            if (html && html.includes("Paiement Confirmé")) {
+                window.location.reload(); // Rechargement simple car la vue affichera alors confirm.html
+            }
+        })
+        .catch(err => console.log("Synchronisation en cours..."));
     }
 
-    // Lancement immédiat et répétition
+    // Lancement et répétition
     checkPaymentStatus();
     setInterval(checkPaymentStatus, 5000);
 </script>
@@ -72,11 +89,11 @@
     }
     @keyframes pulse-gold {
         0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); }
-        50% { transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+        50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3)); }
         100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); }
     }
     .instruction-steps p {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 </style>
 {% endblock %}
