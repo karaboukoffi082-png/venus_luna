@@ -1,4 +1,4 @@
-from django.contrib import admin  # <-- C'est cette ligne qui manque !
+from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
 from .models import SiteSettings, Banner, SocialLink
@@ -13,11 +13,22 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         return not SiteSettings.objects.exists()
 
     def changelist_view(self, request, extra_context=None):
-        """ 
-        Si une config existe, au lieu de voir la liste vide ou l'erreur,
-        on est redirigé directement vers la page de modification.
-        """
+        """ Redirige vers la modification si une config existe déjà """
         obj = SiteSettings.objects.first()
         if obj:
             return redirect(reverse('admin:core_sitesettings_change', args=[obj.pk]))
         return super().changelist_view(request, extra_context)
+
+# --- AJOUTE CES LIGNES POUR CORRIGER LES ERREURS 404 ---
+
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_active', 'order', 'created_at')
+    list_filter = ('is_active',)
+    search_fields = ('title', 'subtitle')
+    ordering = ('order',)
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url', 'icon_class')
+    search_fields = ('name', 'url')

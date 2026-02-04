@@ -10,8 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --- SÉCURITÉ (Utilise les variables du .env) ---
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-it')
 DEBUG = os.getenv('DEBUG') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
-
+#ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.app']
 # --- CONFIGURATION PAYPLUS AFRICA ---
 PAYPLUS_API_KEY = os.getenv('PAYPLUS_API_KEY')
 PAYPLUS_MERCHANT_ID = os.getenv('PAYPLUS_MERCHANT_ID')
@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Tes Apps
     'apps.accounts',
     'apps.products',
     'apps.orders',
@@ -37,7 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Pour les fichiers statiques en prod
+      #'whitenoise.middleware.WhiteNoiseMiddleware', Pour les fichiers statiques en prod
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -99,8 +98,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 # settings.py
-BKAPAY_PUBLIC_KEY = "pk_live_XXXX"
-BKAPAY_CALLBACK_URL = "https://votresite.com/paiement/retour"
+BKAPAY_PUBLIC_KEY = os.getenv('BKAPAY_PUBLIC_KEY')
+BKAPAY_SECRET_WEBHOOK = os.getenv('BKAPAY_SECRET_WEBHOOK')
 # --- CONFIGURATION EMAIL (GMAIL) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

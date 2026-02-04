@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe # Ajout de mark_safe
 from .models import Order, OrderItem, ShippingAddress, ShippingZone
 
 # --- INLINES ---
@@ -24,11 +24,10 @@ class ShippingAddressInline(admin.StackedInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    # CORRECTION : Ajout de 'status' pour permettre list_editable
     list_display = (
         'id', 
-        'status',           # Champ modifiable
-        'colored_status',   # Aperçu visuel
+        'status', 
+        'colored_status', 
         'status_stock', 
         'payment_indicator', 
         'total_display', 
@@ -45,7 +44,6 @@ class OrderAdmin(admin.ModelAdmin):
         }),
         ('Détails Financiers', {
             'fields': ('subtotal', 'shipping_price', 'total'),
-            'description': 'Les montants sont en FCFA (sans centimes).'
         }),
         ('Paiement & Suivi BKAPAY', {
             'fields': ('payment_status', 'payment_method', 'paygate_tx_id', 'payment_url', 'receipt', 'stock_updated'),
@@ -57,22 +55,20 @@ class OrderAdmin(admin.ModelAdmin):
     )
     
     readonly_fields = ('created_at', 'updated_at', 'subtotal', 'total', 'stock_updated', 'payment_url')
-    
-    # Doit figurer dans list_display pour fonctionner
     list_editable = ('status',) 
-    
     inlines = (OrderItemInline, ShippingAddressInline)
 
-    # --- MÉTHODES D'AFFICHAGE ---
+    # --- MÉTHODES D'AFFICHAGE CORRIGÉES ---
 
     def colored_status(self, obj):
         colors = {
-            'pending': '#ffc107',   # Jaune
-            'paid': '#28a745',      # Vert
-            'shipped': '#17a2b8',   # Bleu
-            'delivered': '#001524', # Sombre
-            'cancelled': '#dc3545',  # Rouge
+            'pending': '#ffc107',
+            'paid': '#28a745',
+            'shipped': '#17a2b8',
+            'delivered': '#001524',
+            'cancelled': '#dc3545',
         }
+        # Ici on utilise format_html car on injecte des variables {}
         return format_html(
             '<span style="background: {}; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 11px;">{}</span>',
             colors.get(obj.status, '#6c757d'),
@@ -82,10 +78,11 @@ class OrderAdmin(admin.ModelAdmin):
 
     def payment_indicator(self, obj):
         if obj.payment_status:
-            return format_html('<span style="color: #28a745;">✔ Payé</span>')
+            # CORRECTION : Utilisation de mark_safe pour les chaînes fixes sans variables
+            return mark_safe('<span style="color: #28a745;">✔ Payé</span>')
         if obj.payment_url:
             return format_html('<a href="{}" target="_blank" style="color: #d4af37;">🔗 Lien envoyé</a>', obj.payment_url)
-        return format_html('<span style="color: #dc3545;">✘ Non payé</span>')
+        return mark_safe('<span style="color: #dc3545;">✘ Non payé</span>')
     payment_indicator.short_description = "Paiement"
 
     def total_display(self, obj):
@@ -94,10 +91,10 @@ class OrderAdmin(admin.ModelAdmin):
 
     def status_stock(self, obj):
         if obj.stock_updated:
-            return format_html('<span title="Stock déduit" style="cursor:help;">✅</span>')
+            return mark_safe('<span title="Stock déduit" style="cursor:help;">✅</span>')
         if obj.status == 'paid':
-            return format_html('<span title="Stock non déduit !" style="cursor:help;">⚠️</span>')
-        return format_html('<span style="color: #ccc;">-</span>')
+            return mark_safe('<span title="Stock non déduit !" style="cursor:help;">⚠️</span>')
+        return "-" # Chaîne simple sans HTML = pas besoin de format_html
     status_stock.short_description = "Stk"
 
     def view_receipt_link(self, obj):

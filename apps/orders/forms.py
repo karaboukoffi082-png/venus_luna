@@ -45,8 +45,12 @@ class CheckoutForm(forms.Form):
         required=False
     )
 
+    def clean_full_name(self):
+        """Met en majuscule la première lettre de chaque nom"""
+        return self.cleaned_data.get('full_name').title()
+
     def clean_phone(self):
-        """Nettoie et valide le numéro Togolais pour l'API PayPlus"""
+        """Nettoie et valide le numéro Togolais pour l'API"""
         phone = self.cleaned_data.get('phone')
         # On enlève tout ce qui n'est pas un chiffre
         digits = re.sub(r'\D', '', phone)
@@ -64,8 +68,9 @@ class CheckoutForm(forms.Form):
             raise forms.ValidationError("Le numéro doit comporter 8 chiffres (ex: 90010203).")
 
         # Préfixes valides Togo (Moov & TMoney)
+        # 90-93, 96-99 (TogoCellulaire) / 70, 79 (Moov)
         valid_prefixes = ('90', '91', '92', '93', '96', '97', '98', '99', '79', '70')
         if not short_phone.startswith(valid_prefixes):
-            raise forms.ValidationError("Ce numéro ne semble pas appartenir à Moov ou T-Money.")
+            raise forms.ValidationError("Ce numéro ne semble pas appartenir à un opérateur Togolais valide.")
 
         return full_phone

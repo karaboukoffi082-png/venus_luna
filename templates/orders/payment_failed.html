@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 d-flex align-items-center" style="background-color: #030303; min-height: 80vh;">
+    <div class="container text-center">
+        <div class="mb-4 fade-in">
+            <div class="error-icon-wrapper">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+        </div>
+
+        <h1 class="display-4 fw-bold mb-3" style="color: #e74c3c; font-family: 'Playfair Display', serif;">Échec du paiement</h1>
+        
+        <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 600px;">
+            Nous n'avons pas pu traiter votre transaction via <strong>BKApay</strong>. 
+            Cela peut être dû à une interruption de connexion ou à une annulation de l'opération.
+        </p>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-5">
+                <div class="p-4 rounded-4" style="background: rgba(231, 76, 60, 0.05); border: 1px solid rgba(231, 76, 60, 0.2);">
+                    <h5 style="color: #e74c3c;"><i class="fas fa-question-circle me-2"></i>Que faire ?</h5>
+                    <ul class="text-start text-white-50 small mt-3">
+                        <li>Vérifiez votre solde <strong>TMoney</strong> ou <strong>Moov Money</strong>.</li>
+                        <li>Assurez-vous d'avoir validé la demande de confirmation sur votre téléphone.</li>
+                        <li>Réessayez de valider votre panier.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'orders:checkout' %}" class="btn-gold px-5 py-3 fw-bold text-uppercase">Réessayer le paiement</a>
+            <a href="{% url 'core:contact' %}" class="btn-outline-white px-5 py-3 fw-bold text-uppercase">Besoin d'aide ?</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .error-icon-wrapper {
+        font-size: 80px;
+        color: #e74c3c;
+        animation: pulseError 2s infinite;
+    }
+
+    .btn-gold {
+        background-color: #D4AF37;
+        color: #001524;
+        border: none;
+        border-radius: 5px;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-gold:hover {
+        background-color: #b8962d;
+        color: #001524;
+        transform: translateY(-3px);
+    }
+
+    .btn-outline-white {
+        background-color: transparent;
+        color: white;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 5px;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-outline-white:hover {
+        background-color: white;
+        color: #030303;
+    }
+
+    @keyframes pulseError {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .fade-in {
+        animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+{% endblock %}

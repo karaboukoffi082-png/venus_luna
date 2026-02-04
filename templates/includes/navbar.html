@@ -15,6 +15,15 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'products:list' %}">Boutique</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:list' %}">Blog</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'core:contact' %}">Contact</a></li>
+                
+                {# AJOUT DU LIEN DASHBOARD POUR L'ADMIN #}
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="{% url 'orders:admin_dashboard' %}">
+                        <i class="fas fa-chart-line me-1"></i> Dashboard
+                    </a>
+                </li>
+                {% endif %}
             </ul>
 
             <div class="d-flex align-items-center gap-4 pe-4">
@@ -65,11 +74,11 @@
 
 /* --- LOGO COLLÉ À GAUCHE --- */
 .navbar-logo {
-    height: 90px; /* Taille demandée */
+    height: 90px;
     width: auto;
     object-fit: contain;
     display: block;
-    border-radius: 30 px; /* Arrondi seulement côté droit */
+    border-radius: 30px; 
     margin-left: 0 !important;
 }
 

@@ -334,39 +334,42 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </section>
+
+
 <section class="py-5 bg-soft">
     <div class="container">
         <div class="row align-items-center g-5">
             
-            <!-- Texte -->
             <div class="col-lg-5 fade-in">
-                <h2 class="section-title mb-4" style="color: var(--bleu-nuit);">
+                <h2 class="section-title mb-4" style="color: #1e3a8a; font-weight: bold;">
                     Notre Localisation
                 </h2>
                 <p class="lead text-dark">
                     Retrouvez <strong>VENUS LUNA</strong> dans votre espace spirituel à Lomé.
                 </p>
-                <p class="text-dark mb-2">
-                    📍 Lomé – Togo <br>
-                    🕒 Ouvert du lundi au samedi <br>
-                    📞 Contact : +228 93 34 34 03
-                </p>
-                <a href="https://www.google.com/maps/dir/Boutique+spirituelle+Venus+Luna,+Adidoadin,+Lom%C3%A9//@6.2092407,1.1869991,21z/data=!4m8!4m7!1m5!1m1!1s0x102157ac0d43f93f:0x5dcccde43bdf92e8!2m2!1d1.186984!2d6.2092363!1m0?hl=fr&entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoASAFQAw%3D%3D" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" target="_blank" class="btn-gold-outline mt-3">
+                <div class="text-dark mb-4">
+                    <p class="mb-2">📍 <strong>Quartier :</strong> Adidoadin, Lomé – Togo</p>
+                    <p class="mb-2">🕒 <strong>Ouvert :</strong> Lun - Sam (08:30 – 19:00)</p>
+                    <p class="mb-0">📞 <strong>Contact :</strong> +228 93 34 34 03</p>
+                </div>
+                
+                <a href="https://www.google.com/maps/search/?api=1&query=Boutique+spirituelle+Venus+Luna+Adidoadin+Lome" 
+                   target="_blank" 
+                   class="btn-gold-action">
                     Ouvrir dans Google Maps
                 </a>
-                
             </div>
 
-            <!-- Carte -->
             <div class="col-lg-7 fade-in">
-                <div class="shadow-lg" style="border-radius:15px; overflow:hidden;">
-                    <iframe
-                        src="https://www.google.com/maps?q=Lomé%20Togo&output=embed"
-                        width="100%"
-                        height="380"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy">
+                <div class="shadow-lg" style="border-radius:15px; overflow:hidden; border: 2px solid #d4af37;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.425301887309!2d1.1844080758416035!3d6.209236493778553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x102357ac0d43f93f%3A0x5dcccdc43bdf94e8!2sBoutique%20spirituelle%20Venus%20Luna!5e0!3m2!1sfr!2stg!4v1707000000000!5m2!1sfr!2stg" 
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
             </div>
@@ -374,6 +377,32 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </section>
+
+<style>
+/* Bouton Or / Bleu Nuit */
+.btn-gold-action {
+    display: inline-block;
+    padding: 14px 30px;
+    background-color: #d4af37;
+    color: #1e3a8a;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-gold-action:hover {
+    background-color: #1e3a8a;
+    color: #d4af37;
+}
+
+.bg-soft {
+    background-color: #fcfcfc;
+}
+</style>
 
 <section class="py-5" style="background-color: var(--bleu-nuit);">
     <div class="container text-center">
