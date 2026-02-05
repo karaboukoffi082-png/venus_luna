@@ -3,90 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        @page { size: A4; margin: 1.5cm; }
-        body { font-family: 'Helvetica', Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; }
-        .header { text-align: center; border-bottom: 2px solid #d4af37; padding-bottom: 20px; margin-bottom: 30px; }
-        .shop-name { font-size: 28px; color: #d4af37; font-weight: bold; letter-spacing: 2px; }
-        .receipt-title { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 5px; }
+        @page { 
+            size: A4; 
+            margin: 0; /* On gère les marges en interne pour le cadre */
+        }
+        body { 
+            font-family: 'Helvetica', 'Arial', sans-serif; 
+            color: #408540ff; 
+            line-height: 1.5; 
+            margin: 0;
+            background-color: #ffffff;
+        }
         
-        /* Flex layout for details */
-        .details-container { display: flex; justify-content: space-between; margin-bottom: 40px; }
-        .col { width: 48%; }
-        .text-right { text-align: right; }
+        /* Cadre de prestige sur toute la page */
+        .page-border {
+            border: 15px solid #0a3d2d; /* Vert nuit Venus */
+            height: 100%;
+            margin: 0;
+            padding: 40px;
+            box-sizing: border-box;
+        }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { background-color: #fafafa; border-bottom: 2px solid #eee; padding: 12px; text-align: left; font-size: 13px; }
-        td { border-bottom: 1px solid #f1f1f1; padding: 12px; font-size: 14px; }
+        .inner-border {
+            border: 1px solid #d4af37; /* Liseré doré */
+            height: 100%;
+            padding: 30px;
+            position: relative;
+        }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .shop-name { 
+            font-size: 32px; 
+            color: #0a3d2d; 
+            font-weight: bold; 
+            letter-spacing: 5px; 
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .gold-divider {
+            height: 2px;
+            width: 100px;
+            background-color: #d4af37;
+            margin: 10px auto;
+        }
+        .receipt-title { font-size: 12px; text-transform: uppercase; color: #888; letter-spacing: 2px; }
         
-        .summary-wrapper { margin-top: 30px; display: flex; justify-content: flex-end; }
-        .summary-table { width: 250px; }
-        .summary-table td { border: none; padding: 5px 0; }
-        .total-row { font-size: 18px; color: #d4af37; font-weight: bold; border-top: 2px solid #d4af37 !important; }
+        .details-container { margin-bottom: 40px; width: 100%; }
+        .details-table { width: 100%; border: none; }
+        .details-table td { vertical-align: top; border: none; padding: 0; }
+
+        .client-info { font-size: 13px; color: #444; }
+        .order-info { text-align: right; font-size: 13px; }
+        .label { color: #d4af37; font-weight: bold; text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 3px; }
+
+        table.items-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table.items-table th { 
+            border-bottom: 2px solid #d4af37; 
+            padding: 12px; 
+            text-align: left; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            color: #0a3d2d;
+            background-color: #fcfaf5;
+        }
+        table.items-table td { border-bottom: 1px solid #eee; padding: 15px 12px; font-size: 13px; }
         
-        .footer { margin-top: 60px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
+        .summary-wrapper { margin-top: 30px; }
+        .summary-table { width: 220px; margin-left: auto; }
+        .summary-table td { padding: 6px 0; font-size: 13px; }
+        .total-row { 
+            font-size: 18px; 
+            color: #0a3d2d; 
+            font-weight: bold; 
+            border-top: 2px solid #d4af37;
+        }
+
+        .status-stamp {
+            position: absolute;
+            top: 150px;
+            right: 50px;
+            border: 3px solid #28a745;
+            color: #28a745;
+            padding: 10px 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transform: rotate(-15deg);
+            opacity: 0.2;
+            border-radius: 10px;
+            font-size: 24px;
+        }
+
+        .footer { 
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            text-align: center; 
+            font-size: 10px; 
+            color: #999; 
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="shop-name">VENUS LUNA</div>
-        <div class="receipt-title">Reçu de Paiement Numérique</div>
-    </div>
+    <div class="page-border">
+        <div class="inner-border">
+            
+            <div class="status-stamp">PAIEMENT VALIDÉ</div>
 
-    <div class="details-container">
-        <div class="col">
-            <strong style="color: #d4af37;">Client :</strong><br>
-            {{ order.shipping_address.full_name }}<br>
-            {{ order.shipping_address.phone }}<br>
-            {{ order.shipping_address.city }}, Togo
+            <div class="header">
+                <div class="shop-name">VENUS LUNA</div>
+                <div class="gold-divider"></div>
+                <div class="receipt-title">Reçu Officiel de Transaction</div>
+            </div>
+
+            <table class="details-table">
+                <tr>
+                    <td class="client-info">
+                        <span class="label">Destinataire</span>
+                        <strong style="font-size: 16px; color: #0a3d2d;">{{ order.shipping_address.full_name }}</strong><br>
+                        {{ order.shipping_address.phone }}<br>
+                        {{ order.shipping_address.address }}<br>
+                        {{ order.shipping_address.city }}, Togo
+                    </td>
+                    <td class="order-info">
+                        <span class="label">Détails de commande</span>
+                        <strong>Référence :</strong> #{{ order.id }}<br>
+                        <strong>Date :</strong> {{ order.created_at|date:"d F Y" }}<br>
+                        <strong>Méthode :</strong> Mobile Money (BKAPAY)
+                    </td>
+                </tr>
+            </table>
+
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th width="50%">Désignation du Trésor</th>
+                        <th style="text-align: center;">Qté</th>
+                        <th style="text-align: right;">Prix Unitaire</th>
+                        <th style="text-align: right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td><strong>{{ item.name }}</strong></td>
+                        <td style="text-align: center;">{{ item.quantity }}</td>
+                        <td style="text-align: right;">{{ item.price }} F</td>
+                        <td style="text-align: right;">{{ item.line_total }} F</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="summary-wrapper">
+                <table class="summary-table">
+                    <tr>
+                        <td>Sous-total :</td>
+                        <td style="text-align: right;">{{ order.subtotal }} F</td>
+                    </tr>
+                    <tr>
+                        <td>Frais de livraison :</td>
+                        <td style="text-align: right;">{{ order.shipping_price|default:"0" }} F</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td style="padding-top: 15px;">TOTAL :</td>
+                        <td style="text-align: right; padding-top: 15px;">{{ order.total }} FCFA</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="margin-top: 50px; font-style: italic; font-size: 12px; color: #666; text-align: center;">
+                "Que ces objets vous accompagnent vers une sérénité profonde."
+            </div>
+
+            <div class="footer">
+                <p>Boutique VENUS LUNA - Adidoadin, Lomé, Togo</p>
+                <p>RC N° 228-LOM-202X-B-XXXX | Tel: +228 93 34 34 03</p>
+                <p style="margin-top: 10px; color: #d4af37;">Document généré numériquement - Valable sans signature.</p>
+            </div>
+
         </div>
-        <div class="col text-right">
-            <strong>N° Commande :</strong> #{{ order.id }}<br>
-            <strong>Date :</strong> {{ order.created_at|date:"d/m/Y" }}<br>
-            <strong>Paiement :</strong> {{ order.payment_method }}
-        </div>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Produit</th>
-                <th style="text-align: center;">Qté</th>
-                <th class="text-right">Prix Unitaire</th>
-                <th class="text-right">Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order.items.all %}
-            <tr>
-                <td>{{ item.name }}</td>
-                <td style="text-align: center;">{{ item.quantity }}</td>
-                <td class="text-right">{{ item.price }} F</td>
-                <td class="text-right">{{ item.line_total }} F</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <div class="summary-wrapper">
-        <table class="summary-table">
-            <tr>
-                <td>Sous-total :</td>
-                <td class="text-right">{{ order.subtotal }} F</td>
-            </tr>
-            <tr>
-                <td>Livraison :</td>
-                <td class="text-right">{{ order.shipping_price|default:"0" }} F</td>
-            </tr>
-            <tr class="total-row">
-                <td>TOTAL :</td>
-                <td class="text-right">{{ order.total }} F CFA</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="footer">
-        <p>Merci de votre achat spirituel chez Venus Luna. Ce document sert de preuve d'achat officielle.</p>
-        <p>Adidoadin, Lomé, Togo | Tel: +228 93 34 34 03 | www.venusluna.tg</p>
     </div>
 </body>
 </html>

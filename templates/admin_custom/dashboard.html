@@ -4,240 +4,238 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-    .bg-warm { background-color: #fdfaf5; }
-    .text-gold { color: #d4af37; }
-    .btn-gold { background-color: #d4af37; color: white; transition: 0.3s; }
-    .btn-gold:hover { background-color: #b8962d; color: white; transform: translateY(-2px); }
-    .stat-card { transition: transform 0.3s, box-shadow 0.3s; border-radius: 15px; }
-    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
-    .bg-bleu-nuit { background-color: #1a2a3a; }
+    :root {
+        --venus-vert: #145c44;
+        --venus-vert-dark: #0a3d2d;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+        --venus-soft: #f0f7f4;
+    }
+
+    .bg-venus-admin { background-color: var(--venus-soft); min-height: 100vh; }
+    .text-venus { color: var(--venus-vert); }
+    .text-or { color: var(--venus-or) !important; }
+    
+    .btn-venus-admin { background-color: var(--venus-vert); color: white; border-radius: 12px; transition: 0.3s; border: none; }
+    .btn-venus-admin:hover { background-color: var(--venus-vert-dark); color: white; transform: translateY(-2px); }
+    
+    .btn-or-admin { background-color: var(--venus-jaune); color: var(--venus-vert-dark); border-radius: 12px; font-weight: bold; border: none; }
+    .btn-or-admin:hover { background-color: var(--venus-or); color: white; }
+
+    .stat-card { 
+        border: none; 
+        border-radius: 20px; 
+        transition: all 0.3s ease; 
+        background: white;
+    }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(20, 92, 68, 0.1) !important; }
+    
+    .icon-shape {
+        width: 60px; height: 60px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 15px;
+        margin: 0 auto 15px;
+    }
+
+    .table-venus thead { background-color: var(--venus-vert); color: white; }
+    .badge-venus { background-color: var(--venus-soft); color: var(--venus-vert); border: 1px solid var(--venus-vert); }
 </style>
 
-<div class="container-fluid py-5 bg-warm">
+<div class="container-fluid py-5 bg-venus-admin">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
             <div>
-                <h2 class="section-title m-0 fw-bold">Gestion de la Boutique</h2>
-                <p class="text-muted">Bienvenue dans votre espace de contrôle spirituel.</p>
+                <h2 class="fw-bold text-venus m-0">Sanctuaire de Gestion</h2>
+                <p class="text-muted">Analyse des flux et contrôle de la boutique Venus Luna.</p>
             </div>
-            <div class="date badge bg-white text-dark shadow-sm p-3 rounded-pill">
-                <i class="far fa-calendar-alt text-gold me-2"></i> {{ today|date:"l d F Y" }}
+            <div class="badge bg-white text-venus shadow-sm p-3 rounded-pill border">
+                <i class="far fa-calendar-alt text-or me-2"></i> {{ today|date:"l d F Y" }}
             </div>
         </div>
 
-        <div class="row g-4 mb-5 text-dark">
+        <div class="row g-4 mb-5">
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm p-4 text-center stat-card">
-                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
-                        <i class="fas fa-shopping-bag text-gold fa-2x"></i>
+                <div class="card shadow-sm p-4 text-center stat-card">
+                    <div class="icon-shape" style="background: rgba(20, 92, 68, 0.1); color: var(--venus-vert);">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
                     </div>
                     <h3 class="fw-bold m-0">{{ total_orders }}</h3>
-                    <p class="text-muted small text-uppercase fw-semibold mb-0">Commandes</p>
+                    <p class="text-muted small text-uppercase fw-bold mb-0">Commandes</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm p-4 text-center stat-card">
-                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
-                        <i class="fas fa-money-bill-wave text-success fa-2x"></i>
+                <div class="card shadow-sm p-4 text-center stat-card">
+                    <div class="icon-shape" style="background: rgba(212, 175, 55, 0.1); color: var(--venus-or);">
+                        <i class="fas fa-coins fa-2x"></i>
                     </div>
                     <h3 class="fw-bold m-0">{{ total_revenue }} F</h3>
-                    <p class="text-muted small text-uppercase fw-semibold mb-0">Revenus</p>
+                    <p class="text-muted small text-uppercase fw-bold mb-0">Chiffre d'Affaires</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm p-4 text-center stat-card">
-                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
-                        <i class="fas fa-users text-primary fa-2x"></i>
+                <div class="card shadow-sm p-4 text-center stat-card">
+                    <div class="icon-shape" style="background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                        <i class="fas fa-user-astronomy fa-2x"></i>
                     </div>
                     <h3 class="fw-bold m-0">{{ total_customers }}</h3>
-                    <p class="text-muted small text-uppercase fw-semibold mb-0">Clients</p>
+                    <p class="text-muted small text-uppercase fw-bold mb-0">Abonnés</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm p-4 text-center stat-card">
-                    <div class="p-3 rounded-circle bg-light mx-auto mb-3" style="width: 70px;">
-                        <i class="fas fa-box-open text-warning fa-2x"></i>
+                <div class="card shadow-sm p-4 text-center stat-card">
+                    <div class="icon-shape" style="background: rgba(220, 53, 69, 0.1); color: #dc3545;">
+                        <i class="fas fa-hourglass-half fa-2x"></i>
                     </div>
                     <h3 class="fw-bold m-0 text-danger">{{ pending_orders }}</h3>
-                    <p class="text-muted small text-uppercase fw-semibold mb-0">À traiter</p>
+                    <p class="text-muted small text-uppercase fw-bold mb-0">En Attente</p>
                 </div>
             </div>
         </div>
 
-        <div class="row g-4">
+        <div class="row g-4 mb-4">
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-                    <div class="card-header bg-bleu-nuit text-white p-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="fas fa-history me-2"></i>Dernières Commandes</h5>
-                        <a href="/admin/orders/order/" class="btn btn-sm btn-outline-light">Voir tout</a>
+                    <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center border-bottom">
+                        <h5 class="mb-0 fw-bold text-venus"><i class="fas fa-list-ul me-2 text-or"></i>Flux Récents</h5>
+                        <a href="/admin/orders/order/" class="btn btn-sm btn-outline-venus">Tout voir</a>
                     </div>
-                    <div class="table-responsive p-0">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 table-venus">
+                            <thead>
                                 <tr>
                                     <th class="ps-4">Client</th>
-                                    <th>Montant</th>
+                                    <th>Énergie (Total)</th>
                                     <th>Statut</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center">Détails</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="bg-white">
                                 {% for order in recent_orders %}
                                 <tr>
                                     <td class="ps-4">
                                         <div class="fw-bold text-dark">{{ order.user.username|default:order.email }}</div>
-                                        <div class="small text-muted">{{ order.created_at|date:"d/m/Y H:i" }}</div>
+                                        <div class="x-small text-muted">{{ order.created_at|date:"d M, H:i" }}</div>
                                     </td>
-                                    <td class="fw-bold">{{ order.total }} F</td>
+                                    <td class="fw-bold text-venus">{{ order.total }} F</td>
                                     <td>
-                                        <span class="badge rounded-pill 
+                                        <span class="badge rounded-pill px-3 py-2 
                                             {% if order.status == 'delivered' %}bg-success
                                             {% elif order.status == 'pending' %}bg-warning text-dark
-                                            {% else %}bg-info{% endif %} p-2 px-3">
+                                            {% else %}bg-info{% endif %}">
                                             {{ order.get_status_display }}
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <a href="/admin/orders/order/{{ order.id }}/change/" class="btn btn-sm btn-dark rounded-circle">
-                                            <i class="fas fa-eye"></i>
+                                        <a href="/admin/orders/order/{{ order.id }}/change/" class="btn btn-sm btn-light rounded-circle text-venus">
+                                            <i class="fas fa-external-link-alt"></i>
                                         </a>
                                     </td>
                                 </tr>
                                 {% empty %}
-                                <tr><td colspan="4" class="text-center py-4">Aucune commande récente.</td></tr>
+                                <tr><td colspan="4" class="text-center py-5 text-muted">Le cristal est vide. Aucune commande.</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="card border-0 shadow-sm rounded-4 p-4">
-                    <h5 class="fw-bold mb-4">Analyse des Ventes</h5>
-                    <canvas id="salesChart" height="100"></canvas>
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold mb-4 text-venus">Évolution des Revenus (XOF)</h5>
+                    <div style="height: 300px;">
+                        <canvas id="salesChart"></canvas>
+                    </div>
                 </div>
             </div>
             
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
                     <div class="card-header bg-white p-3 border-0">
-                        <h5 class="mb-0 fw-bold text-dark">Actions Rapides</h5>
+                        <h5 class="mb-0 fw-bold text-venus">Actions de Création</h5>
                     </div>
-                    <div class="card-body pt-0">
+                    <div class="card-body pt-0 text-center">
                         <div class="d-grid gap-3">
-                            <a href="/admin/products/product/add/" class="btn btn-gold py-3 shadow-sm">
+                            <a href="/admin/products/product/add/" class="btn btn-or-admin py-3 shadow-sm">
                                 <i class="fas fa-plus-circle me-2"></i> Ajouter un Produit
                             </a>
-                            <a href="/admin/products/category/add/" class="btn btn-dark py-3 shadow-sm">
-                                <i class="fas fa-folder-plus me-2"></i> Nouvelle Catégorie
+                            <a href="/admin/products/category/add/" class="btn btn-venus-admin py-3 shadow-sm">
+                                <i class="fas fa-layer-group me-2"></i> Nouvelle Catégorie
                             </a>
-                            <a href="/admin/orders/shippingzone/" class="btn btn-outline-dark py-3">
-                                <i class="fas fa-truck me-2"></i> Gérer la Livraison
+                            <a href="/admin/orders/shippingzone/" class="btn btn-outline-dark py-3 rounded-4">
+                                <i class="fas fa-map-marker-alt me-2"></i> Zones de Livraison
                             </a>
-                            <hr>
-                            <a href="/admin/" class="btn btn-light py-2 text-muted">
-                                <i class="fas fa-cogs me-2"></i> Administration Avancée
+                            <hr class="my-4">
+                            <a href="/admin/" class="btn btn-light py-2 text-muted rounded-pill">
+                                <i class="fas fa-shield-alt me-2"></i> Panel Admin Django
                             </a>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold mb-4 text-venus">Top Catégories</h5>
+                    <div style="height: 250px;">
+                        <canvas id="categoryChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row g-4">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-            <h5 class="fw-bold mb-4 text-dark">Évolution des Revenus</h5>
-            <canvas id="salesChart"></canvas>
-        </div>
-    </div>
 
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-            <h5 class="fw-bold mb-4 text-dark">Top Catégories</h5>
-            <canvas id="categoryChart"></canvas>
-        </div>
-    </div>
-</div>
 <script>
-    const ctx = document.getElementById('salesChart').getContext('2d');
-    
-    // Récupération des données envoyées par Django
-    // Données pour le Pie Chart
-const pieLabels = {{ pie_labels|safe }};
-const pieData = {{ pie_values|safe }};
+    // Configuration Chart.js
+    const venusGreen = '#145c44';
+    const venusGold = '#d4af37';
 
-const ctx2 = document.getElementById('categoryChart').getContext('2d');
-new Chart(ctx2, {
-    type: 'doughnut', // 'doughnut' est plus moderne que 'pie'
-    data: {
-        labels: pieLabels,
-        datasets: [{
-            data: pieData,
-            backgroundColor: [
-                '#1a2a3a', // Bleu nuit
-                '#d4af37', // Or
-                '#7d5a50', // Marron chaud
-                '#c0c0c0', // Argent
-                '#4a5d4e'  # Vert forêt
-            ],
-            borderWidth: 2,
-            borderColor: '#ffffff'
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { boxWidth: 12, padding: 20 }
-            }
-        },
-        cutout: '70%' // Crée l'effet de cercle vide au centre
-    }
-});
-    // safe permet d'éviter que Django n'échappe les caractères des listes
-    const labels = {{ chart_labels|safe }}; 
-    const dataValues = {{ chart_values|safe }};
-
-    new Chart(ctx, {
+    // 1. Line Chart : Revenus
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    new Chart(salesCtx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: {{ chart_labels|safe }},
             datasets: [{
-                label: 'Ventes (XOF)',
-                data: dataValues,
-                borderColor: '#d4af37',
+                label: 'Revenus',
+                data: {{ chart_values|safe }},
+                borderColor: venusGold,
                 backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                borderWidth: 3,
-                fill: true,
+                borderWidth: 4,
                 tension: 0.4,
-                pointRadius: 5,
-                pointBackgroundColor: '#1a2a3a'
+                fill: true,
+                pointBackgroundColor: venusGreen,
+                pointBorderColor: '#fff',
+                pointRadius: 6
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1a2a3a',
-                    titleColor: '#d4af37',
-                    bodyColor: '#fff',
-                    callbacks: {
-                        label: function(context) {
-                            return context.parsed.y + ' XOF';
-                        }
-                    }
-                }
-            },
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) { return value + ' F'; }
-                    }
-                }
+                y: { grid: { display: false }, ticks: { color: '#888' } },
+                x: { grid: { display: false }, ticks: { color: '#888' } }
+            }
+        }
+    });
+
+    // 2. Doughnut Chart : Catégories
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ pie_labels|safe }},
+            datasets: [{
+                data: {{ pie_values|safe }},
+                backgroundColor: [venusGreen, venusGold, '#0a3d2d', '#fbc02d', '#c0c0c0'],
+                borderWidth: 5,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } }
             }
         }
     });

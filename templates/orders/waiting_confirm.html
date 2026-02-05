@@ -2,67 +2,171 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 d-flex align-items-center" style="background-color: #232425ff; min-height: 100vh;">
-    <div class="container text-center">
+<style>
+    :root {
+        --venus-profond: #2d9e3cff;
+        --venus-aura: #17a52eff;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    .sync-section {
+        background: radial-gradient(circle at center, var(--venus-aura), var(--venus-profond));
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        color: white;
+        overflow: hidden;
+    }
+
+    /* Loader Mystique */
+    .orb-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 40px;
+    }
+
+    .orb-core {
+        width: 100%;
+        height: 100%;
+        border: 4px solid transparent;
+        border-top-color: var(--venus-or);
+        border-bottom-color: var(--venus-jaune);
+        border-radius: 50%;
+        animation: rotateOrb 1.5s linear infinite;
+    }
+
+    .orb-inner {
+        position: absolute;
+        top: 15px; left: 15px; right: 15px; bottom: 15px;
+        border: 2px solid transparent;
+        border-left-color: white;
+        border-right-color: white;
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: rotateOrb 3s linear infinite reverse;
+    }
+
+    @keyframes rotateOrb {
+        to { transform: rotate(360deg); }
+    }
+
+    .glass-sync-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        border-radius: 40px;
+        padding: 50px 30px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+
+    .sync-steps {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        padding: 25px;
+        margin: 30px 0;
+        border-left: 3px solid var(--venus-or);
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+        opacity: 0.8;
+    }
+
+    .step-item i {
+        margin-top: 4px;
+        margin-right: 15px;
+        color: var(--venus-or);
+        width: 20px;
+    }
+
+    /* Barre de progression élégante */
+    .progress-minimal {
+        height: 3px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--venus-or), var(--venus-jaune));
+        width: 0%;
+        transition: width 4.8s linear;
+    }
+</style>
+
+<section class="sync-section">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-7">
-                <div class="payment-loader mb-5">
-                    <div class="spinner-border" role="status" style="width: 5rem; height: 5rem; color: #f5f10bff; border-width: 0.25em;">
-                        <span class="visually-hidden">Vérification...</span>
+            <div class="col-lg-7 text-center">
+                
+                <div class="glass-sync-card">
+                    <div class="orb-container">
+                        <div class="orb-core"></div>
+                        <div class="orb-inner"></div>
+                        <i class="fas fa-fingerprint" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--venus-or); font-size: 2rem;"></i>
+                    </div>
+
+                    <h2 class="display-6 fw-bold mb-2" style="font-family: 'Playfair Display', serif;">Connexion Lunaire</h2>
+                    <p class="text-white-50">Nous synchronisons votre paiement pour la commande <span class="text-gold fw-bold">#{{ order.id }}</span>.</p>
+
+                    <div class="sync-steps text-start">
+                        <div class="step-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Si vous avez validé sur votre téléphone (T-Money/Moov), ne fermez pas cette page.</span>
+                        </div>
+                        <div class="step-item">
+                            <i class="fas fa-satellite-dish"></i>
+                            <span>Notre passerelle <strong>BKApay</strong> interroge les serveurs sécurisés.</span>
+                        </div>
+                        <div class="step-item mb-0">
+                            <i class="fas fa-magic"></i>
+                            <span>Votre accès aux trésors spirituels sera débloqué dans un instant.</span>
+                        </div>
+                    </div>
+
+                    <div class="px-4 mb-4">
+                        <div class="progress-minimal">
+                            <div id="progress-bar" class="progress-fill"></div>
+                        </div>
+                        <p class="x-small text-white-50 mt-2 italic">Analyse des flux financiers en cours...</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top border-secondary">
+                        <p class="small text-white-50">
+                            Un délai inhabituel ? <br>
+                            <a href="https://wa.me/22893343403" class="text-gold text-decoration-none fw-bold">
+                                <i class="fab fa-whatsapp me-1"></i> Contacter l'assistance à Lomé
+                            </a>
+                        </p>
                     </div>
                 </div>
 
-                <h2 class="display-6 fw-bold mb-4" style="color: #f3e309ff; font-family: 'Playfair Display', serif;">
-                    Traitement de votre commande
-                </h2>
-                
-                <div class="p-4 rounded-4 mb-4 shadow-lg" style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2);">
-                    <p class="lead text-white mb-2">
-                        Commande <strong style="color: #D4AF37;">#{{ order.id }}</strong>
-                    </p>
-                    <p class="text-white-50">
-                        Nous attendons la confirmation du paiement de <span class="text-white fw-bold">{{ order.total_amount }} F</span>.
-                    </p>
-                </div>
-
-                <div class="instruction-steps text-start d-inline-block text-white opacity-75 mb-5 p-4 rounded-3" style="background: rgba(57, 55, 170, 0.2);">
-                    <p class="mb-3"><i class="fas fa-check-circle me-3" style="color: #D4AF37;"></i> 1. Si vous avez validé le paiement sur votre mobile.</p>
-                    <p class="mb-3"><i class="fas fa-hourglass-half me-3" style="color: #D4AF37;"></i> 2. Patientez quelques instants pendant la synchronisation.</p>
-                    <p class="mb-0"><i class="fas fa-sync-alt fa-spin me-3" style="color: #D4AF37;"></i> 3. Cette page se redirigera dès que le signal sera reçu.</p>
-                </div>
-
-                <div class="progress mb-4" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%; background-color: #D4AF37; transition: width 4.8s linear;"></div>
-                </div>
-
-                <p class="small text-white-50">
-                    Un problème ? Notre équipe est disponible pour vous aider ou vous pouvez 
-                    <a href="{% url 'orders:checkout' %}" class="text-decoration-none fw-bold" style="color: #D4AF37;">recommencer l'opération</a>.
-                </p>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    function checkPaymentStatus() {
-        const progressBar = document.getElementById('progress-bar');
-        progressBar.style.transition = "none";
-        progressBar.style.width = "0%";
+    function checkStatus() {
+        const bar = document.getElementById('progress-bar');
+        bar.style.transition = "none";
+        bar.style.width = "0%";
         
-        // Relance l'animation de la barre
         setTimeout(() => { 
-            progressBar.style.transition = "width 4.8s linear";
-            progressBar.style.width = "100%"; 
+            bar.style.transition = "width 4.8s linear";
+            bar.style.width = "100%"; 
         }, 50);
 
-        // Appel AJAX pour vérifier si le statut a changé en 'paid'
         fetch(window.location.href, { 
             headers: { 'X-Requested-With': 'XMLHttpRequest' } 
         })
         .then(response => {
-            // Si la vue `order_confirm` détecte que order.payment_status est True,
-            // elle doit renvoyer un signal (ou Django fera la redirection auto si configuré)
             if (response.redirected) {
                 window.location.href = response.url;
             } else {
@@ -70,30 +174,15 @@
             }
         })
         .then(html => {
-            // Si le mot "Succès" ou un élément de la page confirm.html apparaît dans le retour
-            if (html && html.includes("Paiement Confirmé")) {
-                window.location.reload(); // Rechargement simple car la vue affichera alors confirm.html
+            // On vérifie si la réponse contient un indicateur de succès ou si le statut a changé
+            if (html && (html.includes("Transaction Réussie") || html.includes("success"))) {
+                window.location.reload();
             }
         })
-        .catch(err => console.log("Synchronisation en cours..."));
+        .catch(err => console.log("Alignement des étoiles en cours..."));
     }
 
-    // Lancement et répétition
-    checkPaymentStatus();
-    setInterval(checkPaymentStatus, 5000);
+    checkStatus();
+    setInterval(checkStatus, 5000);
 </script>
-
-<style>
-    .payment-loader {
-        animation: pulse-gold 2s infinite ease-in-out;
-    }
-    @keyframes pulse-gold {
-        0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); }
-        50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3)); }
-        100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); }
-    }
-    .instruction-steps p {
-        font-size: 1rem;
-    }
-</style>
 {% endblock %}

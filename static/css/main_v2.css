@@ -1,184 +1,643 @@
-/* ==========================================================================
-   1. VARIABLES & CONFIGURATION
-   ========================================================================== */
-:root {
-    /* Couleurs Principales */
-    --primary-color: #1e3a8a;       /* Bleu Royal (remplace le violet noir) */
-    --accent-color: #e0f2fe;        /* Bleu ciel très clair (fond doux) */
-    --bleu-nuit: #1a51d1ff;           /* Bleu nuit luxe (remplace le noir profond) */
-    --bleu-ciel: #480fe6ff;           /* Bleu ciel vif pour les accents */
-    
-    /* Couleurs Or (Palettes) - Conservées pour le contraste */
-    --or-clair: rgba(253, 191, 5, 1);
-    --or-sombre: #ebbb1fff;
-    
-    /* Couleurs de Texte & Fond */
-    --text-dark: #1e293b;           /* Gris-bleu très foncé pour lisibilité */
-    --text-white: #ffffff;
-    --bg-light: #f8fafc;            /* Fond blanc bleuté */
-    --bg-soft: #f0f9ff;             /* Fond bleu ciel très léger */
-    
-    /* Utilitaires */
-    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+/* === FOOTER VENUS LUNA === */
+.venus-footer {
+    background: linear-gradient(135deg, #0b7a3b, #1faa59);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
 }
 
-/* ==========================================================================
-   2. STYLES GLOBAUX
-   ========================================================================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Animation d’apparition */
+.footer-animate {
+    animation: fadeUp 1.2s ease-in-out;
 }
 
-body { 
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    color: var(--text-dark);
-    background-color: var(--bg-soft); /* Utilise le bleu ciel léger */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-h1, h2, h3 {
-    font-family: 'Playfair Display', serif;
-    margin-bottom: 1rem;
-    color: var(--bleu-nuit); /* Titres en bleu profond */
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* ==========================================================================
-   3. NAVIGATION (NAVBAR)
-   ========================================================================== */
-.navbar {
-    padding: 1rem 0;
-    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
-    background-color: var(--bleu-nuit) !important; /* Fond bleu nuit */
-}
-
-.nav-link {
-    color: var(--accent-color) !important; /* Texte lien en bleu ciel clair */
-    font-weight: 300;
+/* Titres */
+.footer-title {
+    color: #f6d84c; /* jaune */
     letter-spacing: 1px;
-    transition: var(--transition);
+}
+
+.footer-subtitle {
+    color: #ffffff;
+    position: relative;
+}
+
+.footer-subtitle::after {
+    content: "";
+    width: 40px;
+    height: 3px;
+    background: #f6d84c;
+    display: block;
+    margin-top: 6px;
+}
+
+/* Texte */
+.footer-text {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Liens */
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #f6d84c;
+    padding-left: 6px;
+}
+
+/* Icônes sociales */
+.social-icons a {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.4s ease;
+}
+
+.social-icons a:hover {
+    background: #f6d84c;
+    color: #0b7a3b;
+    transform: scale(1.15) rotate(8deg);
+}
+
+/* Séparateur */
+.footer-separator {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Bas du footer */
+.footer-bottom {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* ================= NAVBAR VENUS LUNA ================= */
+
+.custom-navbar {
+    background: linear-gradient(135deg, #0b7a3b, #1faa59);
+    padding: 0.4rem 0;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    transition: all 0.4s ease;
+}
+
+/* Animation apparition */
+.nav-animate {
+    animation: slideDown 0.9s ease-in-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.navbar-logo {
+    height: 85px;
+    border-radius: 18px;
+    transition: transform 0.4s ease;
+}
+
+.navbar-logo:hover {
+    transform: scale(1.05) rotate(-1deg);
+}
+
+/* Liens */
+.nav-link {
+    color: #ffffff !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: #f6d84c;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
 }
 
 .nav-link:hover {
-    color: var(--or-sombre) !important;
+    color: #f6d84c !important;
+}
+
+.nav-link:hover::after {
+    width: 70%;
+}
+
+/* Panier */
+.cart-icon-wrapper {
+    position: relative;
+    color: white;
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+}
+
+.cart-icon-wrapper:hover {
+    transform: scale(1.15);
+    color: #f6d84c;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #f6d84c;
+    color: #0b7a3b;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 3px 7px;
+    border-radius: 50%;
+}
+
+/* Utilisateur */
+.user-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 16px;
+    border: 2px solid #ffffff;
+    border-radius: 30px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.user-dropdown-toggle:hover {
+    background: #f6d84c;
+    color: #0b7a3b;
+}
+
+/* Avatar */
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Connexion / Inscription */
+.login-link {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-register {
+    background: #f6d84c;
+    color: #0b7a3b;
+    font-weight: bold;
+    padding: 8px 22px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background: white;
+    color: #0b7a3b;
     transform: translateY(-2px);
 }
 
-/* Boutons de la Navbar */
-.btn-gold {
-    background: linear-gradient(45deg, var(--or-sombre), var(--or-clair));
-    color: var(--bleu-nuit) !important;
+/* Déconnexion */
+.logout-btn {
+    background: none;
     border: none;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: var(--transition);
+    color: #dc3545;
+    font-weight: bold;
 }
 
-/* ... (btn-gold:hover et outline inchangés) ... */
+/* Burger mobile */
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+/* ================= ABOUT PAGE VENUS LUNA ================= */
 
-/* ==========================================================================
-   4. HERO SECTION & CARROUSEL
-   ========================================================================== */
-.hero-section {
-    position: relative;
-    width: 100%;
-    height: 60vh;
-    overflow: hidden;
-    margin-bottom: 3rem;
-    background-color: var(--bleu-nuit);
+.about-section {
+    background: linear-gradient(135deg, #0b7a3b, #1faa59);
+    color: white;
 }
 
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Dégradé passant du bleu nuit transparent au bleu nuit plus opaque */
-    background: linear-gradient(to bottom, rgba(15,23,42,0.3), rgba(15,23,42,0.8));
-    z-index: 5;
+/* Titres */
+.about-title {
+    color: #f6d84c;
+    font-family: 'Playfair Display', serif;
 }
 
-.hero-content h1 {
-    font-size: 3.5rem;
-    text-shadow: 2px 2px 8px rgba(15, 23, 42, 0.5);
-    color: var(--text-white);
+.about-subtitle {
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
 }
 
-/* ==========================================================================
-   5. SECTIONS & CARTES
-   ========================================================================== */
+/* Divider */
+.divider {
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #f6d84c, transparent);
+}
+
+/* Section title */
 .section-title {
-    font-size: 2.5rem;
-    color: var(--bleu-nuit);
-    text-align: center;
+    color: #f6d84c;
+    font-weight: bold;
+}
+
+/* Image */
+.about-image {
+    border: 2px solid rgba(246, 216, 76, 0.4);
+    transition: transform 0.6s ease;
+}
+
+.about-image:hover {
+    transform: scale(1.03);
+}
+
+/* Carte créateur */
+.creator-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(246, 216, 76, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.creator-role {
+    color: #f6d84c;
+    font-size: 0.95rem;
+}
+
+/* Liens contact */
+.contact-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: 2px solid #f6d84c;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.contact-link i {
+    margin-right: 6px;
+}
+
+.contact-link:hover {
+    background: #f6d84c;
+    color: #0b7a3b;
+}
+
+/* ================= ANIMATIONS ================= */
+
+.fade-up {
+    animation: fadeUp 1.2s ease;
+}
+
+.slide-left {
+    animation: slideLeft 1.2s ease;
+}
+
+.slide-right {
+    animation: slideRight 1.2s ease;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+
+
+
+/* ================= CONFIDENTIALITÉ ================= */
+
+.privacy-section {
+    background: linear-gradient(135deg, #0b7a3b, #1faa59);
+    color: white;
+}
+
+.privacy-card {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1f2937;
+    border-top: 6px solid #f6d84c;
+}
+
+/* Titres */
+.privacy-title {
+    color: #0b7a3b;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    opacity: 0.85;
+}
+
+/* Blocs */
+.privacy-block {
     margin-bottom: 3rem;
-    position: relative;
 }
 
-.card {
-    background-color: white;
-    border: 1px solid var(--accent-color); /* Bordure bleu ciel très fin */
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
-    transition: var(--transition);
+.privacy-block h4 {
+    color: #f6d84c;
+    border-bottom: 2px solid rgba(246, 216, 76, 0.4);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
 }
 
-/* ==========================================================================
-   6. FORMULAIRES
-   ========================================================================== */
-input, textarea, select {
+.privacy-block p {
+    opacity: 0.9;
+    line-height: 1.8;
+}
+
+/* Texte important */
+.privacy-block .strong {
+    font-weight: bold;
+    color: #0b7a3b;
+}
+
+.privacy-block .note {
+    font-style: italic;
+    color: #374151;
+}
+
+/* Animation */
+.fade-up {
+    animation: fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* ================= CONTACT PAGE ================= */
+
+.contact-section {
+    background: linear-gradient(135deg, #0b7a3b, #1faa59);
+    color: white;
+}
+
+/* Titres */
+.contact-title {
+    color: #f6d84c;
+}
+
+.contact-subtitle {
+    opacity: 0.85;
+}
+
+/* Divider */
+.divider {
+    width: 110px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #f6d84c, transparent);
+}
+
+/* Cartes */
+.contact-card {
+    background: rgba(255,255,255,0.95);
+    color: #1f2937;
+    border-radius: 20px;
+    border: 1px solid rgba(246, 216, 76, 0.35);
+    box-shadow: 0 20px 35px rgba(0,0,0,0.18);
+}
+
+/* Titres internes */
+.section-title {
+    color: #0b7a3b;
+    font-weight: bold;
+}
+
+/* Coordonnées */
+.contact-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.contact-item i {
+    color: #f6d84c;
+    font-size: 1.2rem;
+    margin-top: 4px;
+}
+
+.contact-item h6 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.contact-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+/* Formulaire */
+.contact-form label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form select {
     width: 100%;
     padding: 12px;
-    margin: 10px 0;
-    border: 1px solid var(--accent-color); /* Bordure bleu ciel clair */
-    border-radius: 8px;
-    background-color: #fff;
-    transition: var(--transition);
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: white;
 }
 
-input:focus {
-    border-color: var(--bleu-ciel); /* Focus en bleu ciel vif */
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #f6d84c;
     outline: none;
-    box-shadow: 0 0 8px rgba(14, 165, 233, 0.2);
+    box-shadow: 0 0 8px rgba(246, 216, 76, 0.3);
 }
 
-/* ==========================================================================
-   7. FOOTER
-   ========================================================================== */
-footer {
-    background-color: var(--bleu-nuit); /* Remplacé le vert par le bleu nuit */
-    color: var(--text-white);
-    padding: 4rem 0 2rem;
-    border-top: 2px solid var(--bleu-ciel); /* Ligne de séparation bleu ciel */
+/* Bouton */
+.btn-submit {
+    background: #f6d84c;
+    color: #0b7a3b;
+    font-weight: bold;
+    border-radius: 30px;
+    border: none;
+    transition: all 0.3s ease;
 }
 
-footer ul li a {
-    color: var(--accent-color); /* Liens footer en bleu ciel doux */
-    text-decoration: none;
-    transition: var(--transition);
+.btn-submit:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
 }
 
-/* ... (le reste des styles footer et animations inchangés) ... */
-
-/* Modification spécifique pour les éléments actifs */
-.list-group-item.active {
-    background-color: var(--bleu-ciel); /* Bleu ciel pour l'élément actif */
-    border-color: var(--bleu-ciel);
+/* Animations */
+.fade-up {
+    animation: fadeUp 1.1s ease;
 }
 
-.btn-wishlist {
-    color: var(--bleu-ciel); /* Coeur en bleu ciel au lieu du violet */
+.slide-left {
+    animation: slideLeft 1.1s ease;
+}
+
+.slide-right {
+    animation: slideRight 1.1s ease;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 
 
+/* ===== VARIABLES (si pas déjà définies dans base.html) ===== */
+:root {
+    --bleu-nuit: #1c2541;
+    --or-sombre: #d4af37;
+    --fond-doux: #fcfbf7;
+}
+
+/* ===== SECTION FAQ ===== */
+section {
+    background: linear-gradient(180deg, #fcfbf7 0%, #f7f5ef 100%);
+}
+
+/* ===== CONTENEUR PRINCIPAL ===== */
+.container {
+    position: relative;
+}
+
+/* ===== TITRES ===== */
+h2 {
+    letter-spacing: 1px;
+}
+
+p.text-muted {
+    font-size: 1.05rem;
+}
+
+/* ===== ACCORDION GLOBAL ===== */
+.accordion {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08),
+        0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+/* ===== ITEMS ===== */
+.accordion-item {
+    background: transparent;
+    border: none;
+}
+
+/* ===== BOUTON FAQ ===== */
+.accordion-button {
+    background: linear-gradient(90deg, #ffffff, #fbfaf6);
+    color: var(--bleu-nuit);
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(90deg, #fff8e1, #ffffff);
+    color: var(--or-sombre);
+    box-shadow: inset 0 -1px 0 rgba(212, 175, 55, 0.4);
+}
+
+/* Icône accordéon */
+.accordion-button::after {
+    filter: brightness(0.6);
+}
+
+/* ===== HOVER ===== */
+.accordion-button:hover {
+    transform: translateX(4px);
+    background: #fffdf5;
+}
+
+/* ===== CONTENU ===== */
+.accordion-body {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #444;
+    background-color: #ffffff;
+}
+
+/* ===== EFFET VOLUME INTERNE ===== */
+.accordion-body {
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* ===== ESPACEMENT ===== */
+.accordion-button {
+    padding: 1.5rem 1.25rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 2rem;
+    }
+
+    .accordion-button {
+        font-size: 1rem;
+    }
+}
+
+
+
+ 

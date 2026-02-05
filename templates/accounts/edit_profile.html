@@ -1,34 +1,129 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container py-5">
+
+<style>
+    :root {
+        --venus-vert: #145c44;
+        --venus-vert-light: #f0f7f4;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    .auth-card {
+        border-radius: 25px;
+        overflow: hidden;
+        background: white;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, var(--venus-vert) 0%, #0a3d2d 100%);
+        padding: 3rem 2rem;
+    }
+
+    /* Style des champs du formulaire */
+    .form-control {
+        border-radius: 12px;
+        border: 2px solid #eee;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--venus-vert);
+        box-shadow: 0 0 0 0.25rem rgba(20, 92, 68, 0.1);
+        outline: none;
+    }
+
+    .form-label {
+        color: var(--venus-vert);
+        font-weight: 600;
+        margin-left: 5px;
+    }
+
+    /* Boutons */
+    .btn-save {
+        background-color: var(--venus-jaune);
+        color: var(--venus-vert);
+        font-weight: 800;
+        text-transform: uppercase;
+        border-radius: 50px;
+        border: none;
+        padding: 15px;
+        transition: 0.3s;
+    }
+
+    .btn-save:hover {
+        background-color: var(--venus-vert);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-cancel {
+        color: #888;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: var(--venus-vert);
+    }
+</style>
+
+<div class="container py-5" style="min-height: 90vh;">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-bleu-nuit text-white p-4 text-center">
-                    <h2 class="h4 mb-0">Modifier mon profil</h2>
+        <div class="col-md-7 col-lg-6">
+            
+            <div class="auth-card shadow-lg border-0">
+                <div class="auth-header text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-circle fa-4x text-white opacity-50"></i>
+                    </div>
+                    <h2 class="text-white fw-bold mb-0">Modifier mon profil</h2>
+                    <p class="text-white-50 small mt-2">Mettez à jour vos informations personnelles</p>
                 </div>
-                <div class="card-body p-5">
+
+                <div class="card-body p-4 p-md-5">
                     <form method="POST">
                         {% csrf_token %}
-                        <div class="row g-3">
+                        
+                        <div class="row g-4">
                             {% for field in form %}
                             <div class="col-12">
-                                <label class="form-label fw-bold text-muted">{{ field.label }}</label>
+                                <label class="form-label small">{{ field.label }}</label>
                                 {{ field }}
+                                
                                 {% if field.errors %}
-                                    <div class="text-danger small">{{ field.errors }}</div>
+                                    <div class="text-danger x-small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ field.errors|first }}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if field.help_text %}
+                                    <div class="text-muted x-small mt-1 opacity-75">{{ field.help_text }}</div>
                                 {% endif %}
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="d-grid gap-2 mt-5">
-                            <button type="submit" class="btn-gold py-3">Enregistrer les modifications</button>
-                            <a href="{% url 'accounts:client_dashboard' %}" class="btn btn-link text-muted">Annuler</a>
+
+                        <div class="d-grid gap-3 mt-5">
+                            <button type="submit" class="btn-save shadow-sm">
+                                <i class="fas fa-check-circle me-2"></i>Enregistrer les modifications
+                            </button>
+                            
+                            <div class="text-center">
+                                <a href="{% url 'accounts:client_dashboard' %}" class="btn-cancel small">
+                                    <i class="fas fa-arrow-left me-1"></i> Retour au sanctuaire
+                                </a>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
 {% endblock %}

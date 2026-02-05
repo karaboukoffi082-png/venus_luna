@@ -9,5 +9,5 @@ urlpatterns = [
     path('a-propos/', views.about, name='about'),      # <--- AJOUTER CECI
     path('confidentialite-et-conditions/', views.confidentialite, name='privacy'),
     path('foire-aux-questions/', views.faq, name='faq'), # <--- AJOUTER CECI
-
+    path('conditions-generales-de-vente/', views.cgv_view, name='cgv'),
 ]

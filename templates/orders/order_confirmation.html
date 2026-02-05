@@ -1,41 +1,77 @@
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #d4af37; padding: 20px;">
-    <div style="text-align: center; background-color: #001529; padding: 20px;">
-        <h1 style="color: #d4af37; margin: 0;">VENUS LUNA</h1>
-    </div>
-    
-    <h2 style="color: #001529;">Merci pour votre commande, {{ order.shipping_address.full_name }} !</h2>
-    <p>Nous avons bien reçu votre paiement. Votre commande <strong>#{{ order.id }}</strong> est désormais en cours de préparation.</p>
-    
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr style="background-color: #f8f9fa;">
-            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left;">Produit</th>
-            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">Total</th>
-        </tr>
-        {% for item in order.items.all %}
-        <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ item.name }} (x{{ item.quantity }})</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">{{ item.price }} F</td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <td style="padding: 10px; font-weight: bold;">TOTAL PAYÉ</td>
-            <td style="padding: 10px; font-weight: bold; text-align: right; color: #d4af37;">{{ order.total }} FCFA</td>
-        </tr>
-    </table>
+<div style="background-color: #f4f4f4; padding: 20px; font-family: 'Playfair Display', serif, Arial;">
+    <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        
+        <div style="background-color: #2d8131ff; padding: 40px 20px; text-align: center;">
+            <h1 style="color: #d4af37; margin: 0; font-size: 28px; letter-spacing: 4px; text-transform: uppercase;">Venus Luna</h1>
+            <p style="color: rgba(212, 175, 55, 0.7); margin-top: 10px; font-size: 12px; letter-spacing: 2px;">L'ÉVEIL SPIRITUEL À LOMÉ</p>
+        </div>
 
-    <div style="margin-top: 30px; padding: 15px; background-color: #e6fffa; border-left: 5px solid #28a745;">
-        <p style="margin: 0; font-size: 14px;">
-            <strong>Paiement Confirmé :</strong><br>
-            Votre reçu officiel au format PDF est <strong>joint à cet email</strong>. Vous pouvez également le télécharger dans votre espace client sur notre site.
-        </p>
-    </div>
+        <div style="padding: 40px 30px; background-color: #ffffff;">
+            <h2 style="color: #0a3d2d; font-size: 22px; margin-bottom: 20px;">Gratitude & Lumière, {{ order.shipping_address.full_name }}</h2>
+            
+            <p style="color: #555; line-height: 1.6; font-size: 15px;">
+                Votre intention a porté ses fruits. Nous avons le plaisir de vous confirmer la réception de votre paiement pour la commande <strong style="color: #d4af37;">#{{ order.id }}</strong>. 
+                Nos artisans à Lomé préparent actuellement vos trésors avec le plus grand soin.
+            </p>
 
-    <div style="margin-top: 20px; text-align: center;">
-        <p style="font-size: 14px;">Notre équipe à Lomé vous contactera dès que votre colis sera prêt pour la livraison.</p>
-    </div>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 30px;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding: 12px; border-bottom: 2px solid #d4af37; color: #0a3d2d; font-size: 13px; text-transform: uppercase;">Article</th>
+                        <th style="text-align: right; padding: 12px; border-bottom: 2px solid #d4af37; color: #0a3d2d; font-size: 13px; text-transform: uppercase;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td style="padding: 15px 12px; border-bottom: 1px solid #eee; color: #333; font-size: 14px;">
+                            {{ item.name }} <span style="color: #999;">(x{{ item.quantity }})</span>
+                        </td>
+                        <td style="padding: 15px 12px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold; color: #0a3d2d;">
+                            {{ item.price }} F
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td style="padding: 20px 12px; font-weight: bold; font-size: 16px; color: #0a3d2d;">MONTANT TOTAL RÉGLÉ</td>
+                        <td style="padding: 20px 12px; font-weight: 900; font-size: 20px; text-align: right; color: #d4af37;">{{ order.total }} FCFA</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <p style="font-size: 12px; color: #777; margin-top: 30px; text-align: center;">
-        Boutique VENUS LUNA - Adidoadin, Lomé, Togo.<br>
-        Contact : +228 93 34 34 03
-    </p>
+            <div style="margin-top: 30px; padding: 20px; background-color: #f9f6ed; border-radius: 10px; border: 1px solid #e9dfc1;">
+                <table width="100%">
+                    <tr>
+                        <td style="vertical-align: top; width: 40px;">
+                            <span style="font-size: 24px;">📄</span>
+                        </td>
+                        <td>
+                            <p style="margin: 0; font-size: 13px; color: #6e5e31; line-height: 1.5;">
+                                <strong>Votre reçu est prêt :</strong><br>
+                                Un reçu officiel au format PDF est <strong>joint à cet e-mail</strong>. Il atteste de la validation de votre paiement via T-Money / Moov Money.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <p style="font-size: 14px; color: #777; margin-bottom: 20px;">Une question ? Contactez-nous directement sur WhatsApp</p>
+                <a href="https://wa.me/22893343403" style="background-color: #25D366; color: white; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-weight: bold; display: inline-block;">
+                    SUIVRE MA COMMANDE
+                </a>
+            </div>
+        </div>
+
+        <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #eee;">
+            <p style="font-size: 12px; color: #999; margin: 0; line-height: 1.8;">
+                <strong>VENUS LUNA</strong><br>
+                Adidoadin, Rue des Étoiles, Lomé, Togo<br>
+                Service client : +228 93 34 34 03
+            </p>
+            <div style="margin-top: 15px;">
+                <p style="font-size: 11px; color: #bbb;">Vous recevez cet email suite à votre achat sur venusluna.tg</p>
+            </div>
+        </div>
+    </div>
 </div>

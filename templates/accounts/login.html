@@ -2,32 +2,105 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 d-flex align-items-center" style="min-height: 80vh;">
+<style>
+    :root {
+        --venus-vert: #145c44;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    /* Fond spirituel pour la page de login */
+    .login-section {
+        background: linear-gradient(rgba(10, 61, 45, 0.8), rgba(10, 61, 45, 0.9)), 
+                    url("{% static 'img/bg-spirit.jpg' %}"); /* Ajoute une image zen en fond */
+        background-size: cover;
+        background-position: center;
+        min-height: 90vh;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+    }
+
+    .post-title {
+        color: white;
+        font-family: 'Playfair Display', serif; /* Ou ta police élégante */
+        letter-spacing: 2px;
+    }
+
+    /* Style des inputs dans le verre */
+    .auth-form input {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-radius: 12px !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        margin-bottom: 5px;
+    }
+
+    .text-gold {
+        color: var(--venus-jaune) !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-gold {
+        background-color: var(--venus-jaune);
+        color: var(--venus-vert);
+        font-weight: 800;
+        text-transform: uppercase;
+        border-radius: 50px;
+        border: none;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-gold:hover {
+        background-color: white;
+        color: var(--venus-vert);
+        transform: translateY(-2px);
+    }
+
+    .x-small { font-size: 0.75rem; }
+</style>
+
+<section class="login-section d-flex align-items-center">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <div class="glass-card text-center p-5 shadow-lg">
-                    <h2 class="post-title mb-4" style="font-size: 2.5rem;">Se Connecter</h2>
+                    <div class="mb-4">
+                        <i class="fas fa-moon fa-3x text-white opacity-75"></i>
+                    </div>
+                    
+                    <h2 class="post-title mb-2" style="font-size: 2.2rem;">Se Connecter</h2>
                     <p class="text-white-50 mb-4">Entrez dans votre sanctuaire personnel.</p>
                     
                     <form method="post" class="auth-form text-start">
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="mb-3">
-                                <label class="text-gold small mb-1">{{ field.label }}</label>
+                                <label class="text-gold x-small mb-1">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.errors %}
-                                    <div class="text-danger x-small">{{ field.errors|first }}</div>
+                                    <div class="text-warning x-small mt-1">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>{{ field.errors|first }}
+                                    </div>
                                 {% endif %}
                             </div>
                         {% endfor %}
                         
-                        <button type="submit" class="btn-gold w-100 py-3 mt-3">Ouvrir la session</button>
+                        <button type="submit" class="btn-gold w-100 py-3 mt-3">
+                            Ouvrir la session <i class="fas fa-sign-in-alt ms-2"></i>
+                        </button>
                     </form>
                     
-                    <div class="mt-4">
+                    <div class="mt-4 border-top border-white border-opacity-10 pt-4">
                         <p class="text-white-50 small">Nouveau sur l'Éveil ? 
-                            <a href="{% url 'accounts:register' %}" class="text-gold">Créer un compte</a>
+                            <a href="{% url 'accounts:register' %}" class="text-gold text-decoration-none">Créer un compte</a>
                         </p>
                     </div>
                 </div>

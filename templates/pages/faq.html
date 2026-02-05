@@ -1,52 +1,152 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<section class="py-5" style="background-color: #fcfbf7;">
-    <div class="container" style="max-width: 850px;">
+<style>
+    :root {
+        --venus-profond: #0a2e22;
+        --venus-aura: #145c44;
+        --venus-or: #d4af37;
+    }
+
+    .faq-section {
+        background: radial-gradient(circle at center, var(--venus-aura), var(--venus-profond));
+        min-height: 100vh;
+        padding-top: 100px;
+        padding-bottom: 80px;
+    }
+
+    .faq-title {
+        font-family: 'Playfair Display', serif;
+        color: var(--venus-or) !important;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    /* --- Accordéon avec texte NOIR --- */
+    .accordion-item {
+        /* Fond blanc cassé pour que le noir ressorte bien */
+        background: rgba(255, 255, 255, 0.9) !important; 
+        border: 2px solid var(--venus-or) !important;
+        margin-bottom: 18px;
+        border-radius: 20px !important;
+        overflow: hidden;
+    }
+
+    .accordion-button {
+        background: transparent !important;
+        /* TEXTE EN NOIR ICI */
+        color: #000000 !important; 
+        font-size: 1.15rem;
+        font-weight: 700 !important;
+        padding: 25px !important;
+        box-shadow: none !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+        color: var(--venus-profond) !important;
+        background: rgba(212, 175, 55, 0.2) !important;
+    }
+
+    /* Icône de flèche en noir */
+    .accordion-button::after {
+        filter: brightness(0) !important; /* Rend l'icône noire */
+    }
+
+    .accordion-body {
+        /* TEXTE DU CONTENU EN NOIR ICI */
+        color: #000000 !important; 
+        line-height: 1.8;
+        padding: 30px !important;
+        font-size: 1rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    strong {
+        color: var(--venus-profond) !important;
+        font-weight: 800;
+    }
+
+    /* --- Crédits --- */
+    .page-info-card {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px dashed var(--venus-or);
+        border-radius: 25px;
+        padding: 40px;
+        margin-top: 60px;
+        color: white; /* On garde les crédits en blanc pour le contraste sur le fond vert */
+    }
+
+    .stat-badge {
+        background: rgba(212, 175, 55, 0.15);
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        color: var(--venus-or) !important;
+        display: inline-block;
+        margin: 8px;
+        border: 1px solid var(--venus-or);
+    }
+</style>
+
+<section class="faq-section">
+    <div class="container" style="max-width: 900px;">
+        
         <div class="text-center mb-5">
-            <h2 class="display-4 fw-bold" style="color: var(--bleu-nuit);">Besoin d'aide ?</h2>
-            <p class="text-muted">Tout ce qu'il faut savoir sur vos commandes et nos produits.</p>
+            <h1 class="display-4 fw-bold faq-title">Foire aux Questions</h1>
+            <p class="lead text-white">Réponses et conseils de votre sanctuaire spirituel.</p>
+            <div style="height: 3px; width: 80px; background: var(--venus-or); margin: 25px auto;"></div>
         </div>
 
-        <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="faqEveil">
-            <div class="accordion-item border-bottom">
+        <div class="accordion" id="faqEveil">
+            
+            <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
-                        Les pierres sont-elles vraiment naturelles ?
+                    <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                        <i class="fas fa-gem me-3"></i> Les pierres sont-elles naturelles ?
                     </button>
                 </h2>
-                <div id="f1" class="accordion-collapse collapse show">
-                    <div class="accordion-body opacity-75">
-                        Absolument. Chaque pierre est sélectionnée pour son authenticité. Nous fuyons les imitations en plastique ou les pierres synthétiques. Si une pierre a subi un traitement thermique léger (comme certaines Citrines), nous le précisons en toute transparence.
-                    </div>
-                </div>
-            </div>
-
-            <div class="accordion-item border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
-                        Comment savoir quel cristal me convient ?
-                    </button>
-                </h2>
-                <div id="f2" class="accordion-collapse collapse">
-                    <div class="accordion-body opacity-75">
-                        L'intuition est votre meilleur guide. Souvent, la pierre qui vous attire visuellement est celle dont votre énergie a besoin. Vous pouvez aussi consulter nos descriptions détaillées par "Bienfait" (Amour, Protection, Sommeil).
+                <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqEveil">
+                    <div class="accordion-body">
+                        Chez <strong>Venus Luna</strong>, l'authentique est sacré. Toutes nos pierres sont 100% naturelles, sélectionnées avec soin pour leur pureté et leur origine éthique. Nous ne vendons aucune pierre de synthèse ou plastique.
                     </div>
                 </div>
             </div>
 
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
-                        Quels sont les délais de livraison à Lomé ?
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                        <i class="fas fa-truck me-3"></i> Livraison à Lomé et à l'intérieur ?
                     </button>
                 </h2>
-                <div id="f3" class="accordion-collapse collapse">
-                    <div class="accordion-body opacity-75">
-                        Toute commande passée avant 10h est généralement livrée le jour même. Pour les commandes de l'après-midi, la livraison s'effectue le lendemain matin.
+                <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqEveil">
+                    <div class="accordion-body">
+                        Nous livrons partout au <strong>Togo</strong>. À Lomé, la livraison se fait par coursier en moins de 24h. Pour les villes de l'intérieur, nous utilisons les services de transport habituels avec un délai de 48h maximum.
                     </div>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                        <i class="fas fa-mobile-alt me-3"></i> Paiement par TMoney ou Flooz ?
+                    </button>
+                </h2>
+                <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqEveil">
+                    <div class="accordion-body">
+                        C'est tout à fait possible ! Nous acceptons les paiements mobiles <strong>TMoney et Flooz</strong> pour faciliter vos transactions en toute sécurité. Les détails vous seront fournis lors du passage de votre commande.
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+        <div class="page-info-card text-center shadow">
+            <p class="small text-white-50 mb-0">Architecture Technique</p>
+            <h5 class="text-white mt-1" style="letter-spacing: 2px;">KARABOU K. MAGNOURÉWA</h5>
+            <p class="text-gold small text-uppercase fw-bold">Développeur Full-Stack Django</p>
+        </div>
+
     </div>
 </section>
 {% endblock %}

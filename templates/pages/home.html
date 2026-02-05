@@ -2,421 +2,414 @@
 {% load static %}
 
 {% block content %}
- 
+
+<style>
+    :root {
+        --venus-vert: #145c44; /* Vert émeraude profond */
+        --venus-vert-light: #f0f7f4; /* Fond vert très pâle */
+        --venus-or: #d4af37; /* Or classique */
+        --venus-jaune: #fbc02d; /* Jaune vibrant */
+        --venus-blanc: #ffffff;
+    }
+
+    body { background-color: var(--venus-blanc); color: #333; overflow-x: hidden; }
+    
+    .section-title { color: var(--venus-vert); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; position: relative; padding-bottom: 15px; margin-bottom: 30px; }
+    .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: var(--venus-or); }
+    .text-start.section-title::after { left: 0; transform: none; }
+
+    /* Bouton principal réutilisable */
+    .btn-main {
+        background-color: var(--venus-jaune); color: var(--venus-vert); border: none;
+        font-weight: 800; text-transform: uppercase; border-radius: 50px; 
+        transition: all 0.3s ease; text-decoration: none; display: inline-block;
+        box-shadow: 0 4px 15px rgba(251, 192, 45, 0.4);
+    }
+    .btn-main:hover { background-color: var(--venus-blanc); color: var(--venus-vert); transform: translateY(-3px); }
+</style>
 
 <header class="hero-section">
     {% for banner in banners %}
     <div class="hero-slide {% if forloop.first %}active{% endif %}">
         <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="hero-bg">
-        
         <div class="hero-overlay"></div>
-        
-        <div class="hero-content container">
+        <div class="hero-content container text-center">
             <h1 class="display-2 fw-bold mb-3 animate-text">{{ banner.title }}</h1>
-            <p class="h4 mb-4 animate-text-delay">{{ banner.subtitle }}</p>
-            <div class="mt-5">
-                <a href="{% url 'products:list' %}" class="btn-gold px-5 py-3">Découvrir la Collection</a>
-            </div>
+            <p class="h4 mb-4 animate-text-delay" style="color: var(--venus-jaune); font-weight: 300;">{{ banner.subtitle }}</p>
+            <a href="{% url 'products:list' %}" class="btn-main px-5 py-3">Explorer la Collection</a>
         </div>
     </div>
     {% empty %}
     <div class="hero-slide active">
         <div class="hero-overlay"></div>
-        <div class="hero-content container">
+        <div class="hero-content container text-center">
             <h1 class="display-2 fw-bold mb-3">VENUS LUNA</h1>
-            <p class="h4 mb-4">Éveil Spirituel & Bien-être</p>
-            <a href="{% url 'products:list' %}" class="btn-gold px-5 py-3">Boutique</a>
+            <p class="h4 mb-4" style="color: var(--venus-jaune); font-weight: 300;">Éveil Spirituel & Bien-être</p>
+            <a href="{% url 'products:list' %}" class="btn-main px-5 py-3">Découvrir la Boutique</a>
         </div>
     </div>
     {% endfor %}
 </header>
 
 <style>
-/* --- STYLE DU SLIDER VENUS LUNA --- */
-.hero-section {
-    position: relative;
-    height: 85vh; /* Hauteur de l'écran */
-    min-height: 500px;
-    background-color: #001529;
-    overflow: hidden;
-}
-
-.hero-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    z-index: 1;
-    transition: opacity 1.2s ease-in-out; /* Transition douce */
-    display: flex;
-    align-items: center;
-}
-
-.hero-slide.active {
-    opacity: 1;
-    z-index: 2;
-}
-
-.hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -2;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0,21,41,0.6), rgba(0,21,41,0.3));
-    z-index: -1;
-}
-
-.hero-content {
-    color: #ffffff;
-    z-index: 10;
-    text-align: center;
-}
-
-.animate-text {
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-    color: #ffffff !important;
-}
-
-.animate-text-delay {
-    color: #d4af37 !important; /* Couleur Or */
-    font-style: italic;
-}
-
-/* Bouton doré personnalisé */
-.btn-gold {
-    background-color: #d4af37;
-    color: #001529;
-    border: none;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-decoration: none;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.btn-gold:hover {
-    background-color: #f1c40f;
-    transform: scale(1.05);
-    color: #000;
-}
+    .hero-section { position: relative; height: 80vh; min-height: 500px; background-color: var(--venus-vert); overflow: hidden; }
+    .hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 1; display: flex; align-items: center; transition: opacity 1s ease-in-out; }
+    .hero-slide.active { opacity: 1; z-index: 2; }
+    .hero-bg { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.7); }
+    .hero-overlay { position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: linear-gradient(to bottom, rgba(20,92,68,0.5), rgba(0,0,0,0.4)); z-index: -1; }
+    .hero-content { color: #fff; z-index: 10; }
 </style>
 
+<section class="venus-brand-break">
+    <div class="logo-container">
+        <div class="glow-ring"></div>
+        <img src="/static/img/logovenusluna1.JPG" alt="Logo" class="floating-logo">
+    </div>
+    <h3 class="mt-4 fw-light text-white">L'harmonie entre Terre et Ciel</h3>
+</section>
+
+<style>
+    .venus-brand-break { padding: 80px 0; background: var(--venus-vert); display: flex; flex-direction: column; align-items: center; position: relative; }
+    .logo-container { position: relative; width: 200px; height: 200px; }
+    .floating-logo { width: 100%; border-radius: 50%; border: 5px solid var(--venus-or); animation: float 4s ease-in-out infinite; position: relative; z-index: 2; }
+    .glow-ring { position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; background: var(--venus-jaune); opacity: 0.3; filter: blur(20px); animation: pulse 4s infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.2; } 50% { transform: scale(1.1); opacity: 0.5; } }
+</style>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="p-4 border-hover">
+                    <div class="icon-circle mx-auto mb-3"><i class="fas fa-gem fa-2x"></i></div>
+                    <h5 class="fw-bold">Pierres Authentiques</h5>
+                    <p class="text-muted small">Chaque cristal est sélectionné avec soin pour sa pureté et son énergie vibratoire.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 border-hover">
+                    <div class="icon-circle mx-auto mb-3"><i class="fas fa-truck fa-2x"></i></div>
+                    <h5 class="fw-bold">Livraison Express</h5>
+                    <p class="text-muted small">Nous livrons partout à Lomé en moins de 24h et à l'intérieur du pays sous 48h.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 border-hover">
+                    <div class="icon-circle mx-auto mb-3"><i class="fas fa-leaf fa-2x"></i></div>
+                    <h5 class="fw-bold">Éthique & Nature</h5>
+                    <p class="text-muted small">Nos produits sont respectueux de l'environnement et sourcés de manière responsable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .icon-circle { width: 80px; height: 80px; background: var(--venus-vert-light); color: var(--venus-vert); display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
+    .border-hover { border-radius: 15px; transition: 0.3s; border: 1px solid transparent; }
+    .border-hover:hover { border-color: var(--venus-or); background: #f5fffcff; }
+    .border-hover:hover .icon-circle { background: var(--venus-vert); color: white; }
+</style>
+
+<section class="py-5" style="background-color: var(--venus-vert);">
+    <div class="container">
+        <h2 class="section-title text-center var(--venus-vert)" style="color: white !important;">Ils ont trouvé la paix</h2>
+        <div class="row g-4 mt-3">
+            <div class="col-md-4">
+                <div class="testimonial-card p-4 bg-white text-center">
+                    <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+                    <p class="fst-italic">"Les pierres de Venus Luna ont totalement changé l'énergie de mon bureau. Je me sens beaucoup plus apaisée."</p>
+                    <h6 class="fw-bold mt-3 mb-0">— Ablavi M.</h6>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card p-4 bg-white text-center scale-up shadow">
+                    <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+                    <p class="fst-italic">"Service client exceptionnel et livraison très rapide à Adidoadin. Je recommande vivement !"</p>
+                    <h6 class="fw-bold mt-3 mb-0">— Koffi T.</h6>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card p-4 bg-white text-center">
+                    <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+                    <p class="fst-italic">"Des articles spirituels de qualité qu'on ne trouve nulle part ailleurs au Togo."</p>
+                    <h6 class="fw-bold mt-3 mb-0">— Emefa S.</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .testimonial-card { border-radius: 20px; box-shadow: 0 10px 30px rgba(27, 167, 46, 0.1); }
+    .scale-up { transform: scale(1.05); border: 2px solid var(--venus-jaune); z-index: 5; position: relative; }
+    .stars { color: var(--venus-jaune); }
+</style>
+
+<section class="blog-home-section py-5" style="background: linear-gradient(180deg, #217a10ff 0%, #09b920ff 100%);">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 style="font-family: 'Playfair Display', serif; color: white; letter-spacing: 4px; text-transform: uppercase;">L'Oracle Venus & Luna</h2>
+            <div style="height: 2px; width: 60px; background: #d4af37; margin: 15px auto;"></div>
+            <p class="text-white-50 italic">Conseils spirituels et rituels d'éveil</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <article class="blog-card-home h-100 d-flex flex-column">
+                    <div class="post-thumbnail-home mb-4">
+                        <a href="{{ post.get_absolute_url }}">
+                            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'img/spirit-bg.jpeg' %}{% endif %}" class="w-100 h-100" alt="{{ post.title }}">
+                        </a>
+                    </div>
+                    <div class="flex-grow-1 px-2">
+                        <span style="color: #fbc02d; font-size: 0.8rem; opacity: 0.8;"><i class="far fa-calendar-alt me-1"></i> {{ post.created_at|date:"d M Y" }}</span>
+                        <h3 class="h5 mt-2 mb-3">
+                            <a href="{{ post.get_absolute_url }}" class="blog-link-title">{{ post.title }}</a>
+                        </h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">{{ post.content|truncatewords:12 }}</p>
+                    </div>
+                    <div class="mt-auto pt-3 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center">
+                        <span style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Par {{ post.author.username|default:"L'Oracle" }}</span>
+                        <a href="{{ post.get_absolute_url }}" class="read-more-gold">Lire la suite →</a>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5"><p class="text-white-50">Les chroniques sacrées arrivent bientôt...</p></div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'blog:list' %}" class="btn-outline-gold">VOIR TOUTES LES CHRONIQUES</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .blog-card-home { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 20px; transition: 0.4s; }
+    .blog-card-home:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.08); border-color: #d4af37; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
+    .post-thumbnail-home { position: relative; border-radius: 15px; overflow: hidden; height: 200px; border: 1px solid rgba(212, 175, 55, 0.2); }
+    .post-thumbnail-home img { object-fit: cover; opacity: 0.8; transition: 0.6s; }
+    .blog-link-title { color: white; text-decoration: none; font-family: 'Playfair Display', serif; transition: 0.3s; }
+    .blog-link-title:hover { color: #fbc02d; }
+    .read-more-gold { color: #fbc02d; text-decoration: none; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+    .btn-outline-gold { border: 1px solid #d4af37; color: #d4af37; font-weight: 600; font-size: 0.9rem; border-radius: 50px; padding: 10px 25px; text-decoration: none; }
+    .btn-outline-gold:hover { background: #d4af37; color: white; }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<section class="promo-newsletter-section overflow-hidden" style="background-color: #fcfbf7; padding: 60px 0;">
+    <div class="container-fluid px-4">
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-9 bg-white shadow-sm" style="border-radius: 30px; padding: 40px;">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div>
+                        <h3 class="mb-1" style="color: #1dcc34ff; font-family: 'Playfair Display', serif; font-weight: 700;">Nos Trésors Sélectionnés</h3>
+                        <p class="text-muted small mb-0">Découvrez nos produits phares du moment</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="btn-prev-custom"><i class="fas fa-arrow-left"></i></div>
+                        <div class="btn-next-custom"><i class="fas fa-arrow-right"></i></div>
+                    </div>
+                </div>
+
+                <div class="swiper manuel-promo-swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="card-promo-manuelle">
+                                <span class="badge-promo">Nouveau</span>
+                                <div class="img-container"><img src="{% static 'img/f2.png' %}" alt="P1"></div>
+                                <div class="content"><h6>Encens de Purification</h6><a href="{% url 'products:list' %}" class="btn-commander">Boutique</a></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="card-promo-manuelle">
+                                <span class="badge-promo">Populaire</span>
+                                <div class="img-container"><img src="{% static 'img/az9.jpeg' %}" alt="P2"></div>
+                                <div class="content"><h6>Bougie Mystique Or</h6><a href="{% url 'products:list' %}" class="btn-commander">Boutique</a></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="card-promo-manuelle">
+                                <div class="img-container"><img src="{% static 'img/f1.png' %}" alt="P3"></div>
+                                <div class="content"><h6>Cristal de Roche</h6><a href="{% url 'products:list' %}" class="btn-commander">Boutique</a></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="card-promo-manuelle">
+                                <div class="img-container"><img src="{% static 'img/f5.png' %}" alt="P4"></div>
+                                <div class="content"><h6>Huile de Chance</h6><a href="{% url 'products:list' %}" class="btn-commander">Boutique</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 d-flex align-items-center">
+                <div class="w-100 text-white p-5 shadow-lg text-center" style="background: linear-gradient(135deg, #61813bff 0%, #349b4bff 100%) !important; border-radius: 30px; min-height: 100%;">
+                    <div class="mb-4"><i class="fas fa-moon fa-3x" style="color: #f8fc04ff;"></i></div>
+                    <h4 class="fw-bold mb-3">Venus Luna</h4>
+                    <p class="small opacity-75 mb-4">Rejoignez notre cercle spirituel pour recevoir nos arrivages exclusifs à Lomé.</p>
+                    <a href="{% url 'accounts:login' %}" class="btn-gold-custom w-100 rounded-pill py-2 text-decoration-none d-inline-block">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .card-promo-manuelle { background: white; border: 1px solid rgba(30, 211, 84, 0.05); border-radius: 20px; overflow: hidden; text-align: center; transition: all 0.4s; height: 100%; position: relative; }
+    .card-promo-manuelle:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(78, 211, 78, 0.1); }
+    .img-container { height: 180px; padding: 20px; display: flex; align-items: center; justify-content: center; background: #fdfdfd; }
+    .img-container img { max-width: 100%; max-height: 100%; transition: 0.5s; }
+    .badge-promo { position: absolute; top: 10px; left: 10px; background: #d4af37; color: white; font-size: 0.6rem; padding: 3px 8px; border-radius: 50px; font-weight: 800; }
+    .btn-commander { display: block; background: #25aa37ff; color: #d4af37; border: 1px solid #d4af37; text-decoration: none; padding: 8px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; margin: 0 15px 15px; transition: 0.3s; }
+    .btn-commander:hover { background: #d4af37; color: white; }
+    .btn-prev-custom, .btn-next-custom { width: 40px; height: 40px; background: #f0f0f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+    .btn-gold-custom { background: #d4af37; color: #082d21; font-weight: 800; border: none; transition: 0.3s; }
+</style>
+
+<section class="home-catalogue-section py-5" style="background-color: #fcfbf7;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold" style="font-family: 'Playfair Display', serif; color: #259b35ff;">Nos Trésors Spirituels</h2>
+            <p class="text-muted">Découvrez nos dernières sélections sacrées</p>
+            <div style="height: 3px; width: 60px; background: #d4af37; margin: 15px auto;"></div>
+        </div>
+
+        <div class="row g-4">
+            {% for product in products %}
+            <div class="col-md-6 col-lg-4">
+                <div class="product-grid-card shadow-sm h-100">
+                    {% if product.compare_price %}
+                    <span class="badge-offre">OFFRE</span>
+                    {% endif %}
+                    <div class="img-zoom-container">
+                        <a href="{% url 'products:product_detail' product.slug %}">
+                            {% with product.images.all|first as first_img %}
+                            <img src="{% if first_img %}{{ first_img.image.url }}{% else %}{% static 'img/aze1.png' %}{% endif %}" class="w-100 h-100" style="object-fit: cover; transition: 0.6s;" alt="{{ product.name }}">
+                            {% endwith %}
+                        </a>
+                    </div>
+                    <div class="p-4 text-center">
+                        <p class="text-uppercase text-muted small mb-1">{{ product.category.name }}</p>
+                        <h5 class="fw-bold mb-3" style="font-family: 'Playfair Display', serif;">{{ product.name }}</h5>
+                        <div class="mb-3">
+                            {% if product.compare_price %}
+                            <span class="text-muted text-decoration-line-through small me-2">{{ product.compare_price }} F</span>
+                            {% endif %}
+                            <span class="fw-bold h5 mb-0" style="color: #d4af37;">{{ product.price }} F CFA</span>
+                        </div>
+                        <a href="{% url 'products:product_detail' product.slug %}" class="btn-explorer">EXPLORER</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'products:list' %}" class="btn-catalogue-all">VOIR TOUT LE CATALOGUE <i class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .product-grid-card { border-radius: 20px; overflow: hidden; background: white; border: none; transition: 0.4s; position: relative; }
+    .product-grid-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(65, 218, 34, 0.1) !important; }
+    .badge-offre { position: absolute; top: 15px; left: 15px; background: #f7f306ff; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; z-index: 2; }
+    .img-zoom-container { height: 280px; overflow: hidden; }
+    .product-grid-card:hover .img-zoom-container img { transform: scale(1.1); }
+    .btn-explorer { display: block; background: #229b40ff; color: #fceb09ff; border: 1px solid #f8f404ff; border-radius: 50px; padding: 10px; font-weight: 700; text-decoration: none; }
+    .btn-catalogue-all { border: 2px solid #289b28ff; color: #229e47ff; border-radius: 50px; padding: 15px 40px; font-weight: bold; text-decoration: none; display: inline-block; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="newsletter-box p-5 rounded-4 shadow-lg text-white text-center" style="background: linear-gradient(135deg, var(--venus-vert) 0%, #20c449ff 100%); position: relative; overflow: hidden;">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-warning text-dark mb-3 px-3 py-2">Offre Spéciale</span>
+                    <h2 class="display-5 fw-bold mb-3">Rejoignez le Cercle Luna</h2>
+                    <p class="mb-4 opacity-75">Inscrivez-vous pour recevoir nos conseils spirituels et profitez de -10% sur votre première commande.</p>
+                    <div class="d-flex gap-2 justify-content-center flex-column flex-md-row">
+                        <input type="email" class="form-control form-control-lg rounded-pill border-0 px-4" placeholder="Votre adresse email...">
+                        <a href="{% url 'accounts:login' %}" class="btn-main px-4 py-2 text-decoration-none d-flex align-items-center justify-content-center">S'inscrire</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .newsletter-box::after { content: '🌙'; position: absolute; font-size: 150px; bottom: -30px; right: -20px; opacity: 0.1; transform: rotate(-20deg); }
+</style>
+
+<section class="py-5" style="background-color: var(--venus-vert-light);">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5">
+                <h2 class="section-title text-start">Notre Localisation</h2>
+                <p class="lead text-dark mb-4">Retrouvez <strong>VENUS LUNA</strong> dans votre espace spirituel à Lomé.</p>
+                <div class="contact-box p-4 rounded shadow-sm mb-4" style="border-left: 5px solid var(--venus-jaune); background: white;">
+                    <p><i class="fas fa-map-marker-alt me-2" style="color: var(--venus-or);"></i> <strong>Lomé :</strong> Adidoadin, Rue des Étoiles, Togo</p>
+                    <p><i class="fab fa-whatsapp me-2" style="color: #25D366;"></i> WhatsApp : <a href="https://wa.me/22893343403" class="text-decoration-none fw-bold" style="color: var(--venus-vert);">+228 93 34 34 03</a></p>
+                    <p><i class="fas fa-phone-alt me-2" style="color: var(--venus-or);"></i> Fixe : +228 91 28 02 38</p>
+                    <p><i class="far fa-clock me-2" style="color: var(--venus-or);"></i> Ouvert : Lun - Sam (08:30 – 19:00)</p>
+                </div>
+                <div class="d-grid gap-3 d-md-flex">
+                    <a href="#" class="btn-gold-action text-center px-4"><i class="fas fa-directions me-2"></i>Itinéraire Maps</a>
+                    <a href="{% url 'products:list' %}" class="btn-main px-4 py-3 text-center text-decoration-none">Commander en ligne</a>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="map-container shadow-lg" style="border: 8px solid white; border-radius: 25px; overflow: hidden;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d1.1833333!3d6.1972222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTEnNTAnMCJOIDHCsDExJzAwLjAiRQ!5e0!3m2!1sfr!2stg!4v1640000000000!5m2!1sfr!2stg" width="100%" height="450" style="border:0;" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .btn-gold-action { display: inline-block; padding: 14px 25px; background-color: var(--venus-or); color: white; font-weight: 700; border-radius: 50px; text-decoration: none; }
+    .btn-gold-action:hover { background-color: var(--venus-vert); color: var(--venus-jaune); }
+</style>
+
+<section class="py-5 text-center text-white" style="background: linear-gradient(rgba(21, 177, 73, 0.9), rgba(24, 145, 40, 0.9)), url('{% static 'img/ab6.jpeg' %}') center/cover;">
+    <div class="container py-4">
+        <h2 class="display-5 fw-bold mb-4">Prêt pour votre voyage spirituel ?</h2>
+        <p class="lead mb-5">Livraison sécurisée partout au Togo.</p>
+        <a href="{% url 'products:list' %}" class="btn-main btn-lg px-5 py-3">Voir tous les articles</a>
+    </div>
+</section>
+
 <script>
-/* --- LOGIQUE DE DÉFILEMENT --- */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+    // Hero Slider
     const slides = document.querySelectorAll('.hero-slide');
     let currentSlide = 0;
-    const slideInterval = 6000; // 6 secondes par image
-
     if (slides.length > 1) {
         setInterval(() => {
-            // Désactiver la slide actuelle
             slides[currentSlide].classList.remove('active');
-            
-            // Calculer la suivante
             currentSlide = (currentSlide + 1) % slides.length;
-            
-            // Activer la nouvelle
             slides[currentSlide].classList.add('active');
-        }, slideInterval);
+        }, 5000);
     }
+
+    // Swiper Promo
+    new Swiper('.manuel-promo-swiper', {
+        slidesPerView: 2,
+        spaceBetween: 25,
+        loop: true,
+        autoplay: { delay: 4000 },
+        navigation: { nextEl: '.btn-next-custom', prevEl: '.btn-prev-custom' },
+        breakpoints: { 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1200: { slidesPerView: 4 } }
+    });
 });
 </script>
 
-
-<section class="venus-animated-section">
-    <style>
-        .venus-animated-section {
-            padding: 120px 0;
-            background: #ffffffff;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        /* Décoration d'arrière-plan (Cercles bleus diffus) */
-        .venus-animated-section::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(30, 58, 148, 0.05);
-            filter: blur(80px);
-            border-radius: 50%;
-            top: 10%;
-            left: 20%;
-        }
-
-        .logo-wrapper {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .main-logo-animated {
-            width: 250px; /* Taille du logo */
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(30, 58, 138, 0.15);
-            /* Animation principale */
-            animation: venusFloat 5s ease-in-out infinite;
-            border: 1px solid rgba(30, 58, 138, 0.1);
-        }
-
-        /* L'ombre dynamique sous le logo */
-        .logo-glow-shadow {
-            width: 180px;
-            height: 25px;
-            background: radial-gradient(circle, rgba(30, 58, 138, 0.2) 0%, transparent 70%);
-            margin-top: 40px;
-            border-radius: 50%;
-            animation: venusShadow 5s ease-in-out infinite;
-        }
-
-        /* Animation de flottement élégante */
-        @keyframes venusFloat {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-30px) scale(1.02);
-            }
-        }
-
-        /* Animation de l'ombre (rétrécit et s'atténue quand le logo monte) */
-        @keyframes venusShadow {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.6;
-            }
-            50% {
-                transform: scale(0.6);
-                opacity: 0.2;
-            }
-        }
-
-        /* Petit texte sous le logo (optionnel) */
-        .logo-caption {
-            margin-top: 20px;
-            font-family: 'Playfair Display', serif;
-            color: #1e3a8a;
-            font-style: italic;
-            letter-spacing: 2px;
-            opacity: 0.8;
-        }
-    </style>
-
-    <div class="logo-wrapper">
-        <img src="/static/img/logovenusluna.JPEG" alt="Venus-Luna Logo" class="main-logo-animated">
-        <div class="logo-glow-shadow"></div>
-        <p class="logo-caption">L'essence de la spiritualité</p>
-    </div>
-</section>
-<section class="py-5 container">
-    <div class="row align-items-center g-5">
-        <div class="col-lg-6 fade-in">
-            <div class="shadow-lg" style="border-radius:15px; overflow:hidden;">
-                <img src="{% static 'img/ab6.jpeg' %}" alt="Ambiance spirituelle" class="img-fluid" style="height:400px; width:100%; object-fit:cover;">
-            </div>
-        </div>
-        <div class="col-lg-6 fade-in">
-            <h2 class="section-title text-start mb-4" style="color: var(--bleu-nuit);">L'essence d'Éveil Spirituel</h2>
-            <p class="lead text-dark">Bienvenue dans votre sanctuaire à Lomé. Nous croyons que chaque objet possède une vibration unique capable d'harmoniser votre espace de vie.</p>
-            <p class="text-dark">{{ site_settings.description }}</p>
-            <a href="{% url 'core:about' %}" class="btn-gold-outline">Notre Histoire</a>
-        </div>
-    </div>
-</section>
-<section class="py-5 bg-soft">
-    <div class="container text-center">
-        <h2 class="section-title" style="color: var(--bleu-nuit);">Explorez nos Univers</h2>
-        <div class="row g-4 mt-2">
-            
-            <div class="col-md-4 fade-in">
-                <div class="category-card shadow-sm border-0">
-                    <div style="height:250px; overflow:hidden; border-radius:15px 15px 0 0;">
-                        <img src="{% static 'img/f1.png' %}" alt="Lithothérapie" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="p-4 bg-white" style="border-radius:0 0 15px 15px;">
-                        <h4 style="color: var(--bleu-nuit);">Lithothérapie</h4>
-                        <a href="{% url 'products:list' %}?category=lithotherapie" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in">
-                <div class="category-card shadow-sm border-0">
-                    <div style="height:250px; overflow:hidden; border-radius:15px 15px 0 0;">
-                        <img src="{% static 'img/f2.png' %}" alt="Purification" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="p-4 bg-white" style="border-radius:0 0 15px 15px;">
-                        <h4 style="color: var(--bleu-nuit);">Purification</h4>
-                        <a href="{% url 'products:list' %}?category=purification" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in">
-                <div class="category-card shadow-sm border-0">
-                    <div style="height:250px; overflow:hidden; border-radius:15px 15px 0 0;">
-                        <img src="{% static 'img/16000re.jpeg' %}" alt="Accessoires" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="p-4 bg-white" style="border-radius:0 0 15px 15px;">
-                        <h4 style="color: var(--bleu-nuit);">Accessoires</h4>
-                        <a href="{% url 'products:list' %}?category=accessoires" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-<section class="py-5 bg-soft">
-    <div class="container text-center">
-        
-        <div class="row g-4 mt-2">
-            
-            <div class="col-md-4 fade-in">
-                <div class="category-card shadow-sm border-0">
-                    <div style="height:250px; overflow:hidden; border-radius:15px 15px 0 0;">
-                        <img src="{% static 'img/22000.jpeg' %}" alt="Lithothérapie" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="p-4 bg-white" style="border-radius:0 0 15px 15px;">
-                        <h4 style="color: var(--bleu-nuit);">Livres & Savoirs spirituels</h4>
-                        <a href="{% url 'products:list' %}?category=lithotherapie" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in">
-                <div class="category-card shadow-sm border-0">
-                    <div style="height:250px; overflow:hidden; border-radius:15px 15px 0 0;">
-                        <img src="{% static 'img/f5.png' %}" alt="Purification" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="p-4 bg-white" style="border-radius:0 0 15px 15px;">
-                        <h4 style="color: var(--bleu-nuit);">Huiles & Essences</h4>
-                        <a href="{% url 'products:list' %}?category=purification" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in">
-                <div class="category-card shadow-sm border-0">
-                    <div style="height:250px; overflow:hidden; border-radius:15px 15px 0 0;">
-                        <img src="{% static 'img/f4.png' %}" alt="Accessoires" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="p-4 bg-white" style="border-radius:0 0 15px 15px;">
-                        <h4 style="color: var(--bleu-nuit);">Savons & Soins spirituels</h4>
-                        <a href="{% url 'products:list' %}?category=accessoires" class="text-gold text-decoration-none fw-bold">Voir plus →</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-<section class="py-5 bg-soft">
-    <div class="container">
-        <div class="row align-items-center g-5">
-            
-            <div class="col-lg-5 fade-in">
-                <h2 class="section-title mb-4" style="color: #1e3a8a; font-weight: bold;">
-                    Notre Localisation
-                </h2>
-                <p class="lead text-dark">
-                    Retrouvez <strong>VENUS LUNA</strong> dans votre espace spirituel à Lomé.
-                </p>
-                <div class="text-dark mb-4">
-                    <p class="mb-2">📍 <strong>Quartier :</strong> Adidoadin, Lomé – Togo</p>
-                    <p class="mb-2">🕒 <strong>Ouvert :</strong> Lun - Sam (08:30 – 19:00)</p>
-                    <p class="mb-0">📞 <strong>Contact :</strong> +228 93 34 34 03</p>
-                </div>
-                
-                <a href="https://www.google.com/maps/search/?api=1&query=Boutique+spirituelle+Venus+Luna+Adidoadin+Lome" 
-                   target="_blank" 
-                   class="btn-gold-action">
-                    Ouvrir dans Google Maps
-                </a>
-            </div>
-
-            <div class="col-lg-7 fade-in">
-                <div class="shadow-lg" style="border-radius:15px; overflow:hidden; border: 2px solid #d4af37;">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.425301887309!2d1.1844080758416035!3d6.209236493778553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x102357ac0d43f93f%3A0x5dcccdc43bdf94e8!2sBoutique%20spirituelle%20Venus%20Luna!5e0!3m2!1sfr!2stg!4v1707000000000!5m2!1sfr!2stg" 
-                        width="100%" 
-                        height="450" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<style>
-/* Bouton Or / Bleu Nuit */
-.btn-gold-action {
-    display: inline-block;
-    padding: 14px 30px;
-    background-color: #d4af37;
-    color: #1e3a8a;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-.btn-gold-action:hover {
-    background-color: #1e3a8a;
-    color: #d4af37;
-}
-
-.bg-soft {
-    background-color: #fcfcfc;
-}
-</style>
-
-<section class="py-5" style="background-color: var(--bleu-nuit);">
-    <div class="container text-center">
-        <h2 class="display-4 mb-4" style="color: var(--or-clair);">Commencez votre voyage intérieur</h2>
-        <p class="h5 mb-5 text-white opacity-75">Livraison rapide partout à Lomé et dans les environs.</p>
-        <a href="{% url 'products:list' %}" class="btn-gold btn-lg px-5">Visiter la Boutique</a>
-    </div>
-</section>
-
-<style>
-    .text-dark { color: #2d2d2d !important; }
-    .text-gold { color: var(--or-sombre) !important; }
-    .bg-soft { background-color: var(--bg-soft); }
-    .category-card { transition: transform 0.3s ease; border-radius: 15px; }
-    .category-card:hover { transform: translateY(-10px); }
-</style>
 {% endblock %}

@@ -4,5 +4,5 @@ from . import views
 app_name = 'admin_custom'
 
 urlpatterns = [
-    path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('', views.dashboard_view, name='dashboard'),
 ]

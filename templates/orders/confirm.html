@@ -2,67 +2,178 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 text-center" style="background-color: #001524; min-height: 100vh; display: flex; align-items: center;">
-    <div class="container">
-        <div class="mb-4">
-            <div class="display-1" style="color: #D4AF37; animation: bounceIn 1s ease;">
-                <i class="fas fa-check-circle"></i>
-            </div>
-        </div>
+<style>
+    :root {
+        --venus-vert-nuit: #328f41ff;
+        --venus-vert: #43b14cff;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
 
-        <h1 class="display-5 fw-bold mb-3" style="color: #D4AF37; font-family: 'Playfair Display', serif;">Commande Confirmée !</h1>
-        
-        <p class="lead text-white-50 mb-5">Merci pour votre confiance. Vos trésors spirituels sont en route vers vous.</p>
+    .success-section {
+        background: radial-gradient(circle at center, var(--venus-vert), var(--venus-vert-nuit));
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        color: white;
+        overflow: hidden;
+        position: relative;
+    }
 
+    /* Animation de l'icône de succès */
+    .success-icon-wrapper {
+        font-size: 6rem;
+        color: var(--venus-jaune);
+        filter: drop-shadow(0 0 20px rgba(251, 192, 45, 0.4));
+        animation: sealPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes sealPop {
+        0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+        100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    .glass-success-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 35px;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+
+    .order-number-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: rgba(212, 175, 55, 0.1);
+        border: 1px dashed var(--venus-or);
+        border-radius: 50px;
+        color: var(--venus-jaune);
+        font-family: 'Courier New', Courier, monospace;
+        letter-spacing: 2px;
+    }
+
+    .btn-download {
+        background: transparent;
+        border: 2px solid var(--venus-or);
+        color: var(--venus-or) !important;
+        border-radius: 50px;
+        font-weight: 700;
+        transition: 0.4s;
+    }
+
+    .btn-download:hover {
+        background: var(--venus-or);
+        color: var(--venus-vert-nuit) !important;
+        transform: translateY(-3px);
+    }
+
+    .btn-whatsapp-success {
+        background: #25D366;
+        color: white !important;
+        border-radius: 50px;
+        font-weight: 700;
+        transition: 0.4s;
+        box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+    }
+
+    .btn-whatsapp-success:hover {
+        background: #128C7E;
+        transform: scale(1.02);
+    }
+
+    /* Effet d'éclat en arrière-plan */
+    .glow-aura {
+        position: absolute;
+        width: 300px; height: 300px;
+        background: var(--venus-or);
+        filter: blur(150px);
+        opacity: 0.1;
+        z-index: 0;
+    }
+</style>
+
+<section class="success-section py-5">
+    <div class="glow-aura" style="top: 10%; left: 10%;"></div>
+    <div class="glow-aura" style="bottom: 10%; right: 10%;"></div>
+
+    <div class="container position-relative" style="z-index: 1;">
         <div class="row justify-content-center">
-            <div class="col-md-7">
-                <div class="p-4 rounded-4 mb-4 shadow-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212, 175, 55, 0.3);">
-                    
-                    <h4 class="fw-bold mb-4" style="color: #D4AF37;">Récapitulatif de la commande #{{ order.id }}</h4>
-                    
-                    <div class="text-start mb-4 p-3 rounded-3" style="background: rgba(0,0,0,0.3);">
-                        <p class="mb-2 text-white"><strong><i class="fas fa-user me-2" style="color: #D4AF37;"></i>Client :</strong> {{ order.shipping_address.full_name }}</p>
-                        <p class="mb-2 text-white"><strong><i class="fas fa-money-bill-wave me-2" style="color: #D4AF37;"></i>Montant total :</strong> <span class="fw-bold" style="color: #D4AF37;">{{ order.total_amount }} F</span></p>
-                        <p class="mb-0 text-white"><strong><i class="fas fa-info-circle me-2" style="color: #D4AF37;"></i>Statut :</strong> <span class="badge bg-success">Paiement validé</span></p>
+            <div class="col-lg-7 text-center">
+                
+                <div class="success-icon-wrapper mb-4">
+                    <i class="fas fa-certificate"></i> <div style="font-size: 2.5rem; margin-top: -4.5rem; color: var(--venus-vert-nuit);">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+
+                <h1 class="display-4 fw-bold mb-3" style="font-family: 'Playfair Display', serif;">Commande Reçue !</h1>
+                <p class="lead text-white-50 mb-5">Votre voyage avec Venus Luna commence ici. Que ces articles vous apportent la paix recherchée.</p>
+
+                <div class="glass-success-card p-4 p-md-5 mb-4">
+                    <div class="mb-4">
+                        <span class="small text-uppercase text-white-50 ls-2">Référence de votre commande</span><br>
+                        <span class="order-number-badge mt-2">#{{ order.id }}</span>
                     </div>
 
-                    <hr style="border-color: rgba(212, 175, 55, 0.2);">
+                    <div class="row g-4 text-start mb-5">
+                        <div class="col-md-6 border-end border-white border-opacity-10">
+                            <label class="x-small text-gold text-uppercase fw-bold ls-1 mb-2">Destinataire</label>
+                            <p class="mb-0 fw-bold">{{ order.shipping_address.full_name }}</p>
+                            <p class="small text-white-50 mb-0">{{ order.shipping_address.address }}</p>
+                        </div>
+                        <div class="col-md-6 ps-md-4">
+                            <label class="x-small text-gold text-uppercase fw-bold ls-1 mb-2">Montant Réglé</label>
+                            <p class="h4 mb-0 fw-bold text-gold">{{ order.total_amount }} F</p>
+                            <span class="badge bg-success bg-opacity-25 text-success small border border-success border-opacity-25 mt-1">
+                                <i class="fas fa-shield-alt me-1"></i> Transaction BKAPAY OK
+                            </span>
+                        </div>
+                    </div>
 
-                    <a href="{% url 'orders:order_pdf' order.id %}" class="btn w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm" 
-                       style="background-color: #D4AF37; color: #001524; border: none;">
-                        <i class="fas fa-file-pdf me-2"></i> Télécharger mon reçu PDF
-                    </a>
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'orders:order_pdf' order.id %}" class="btn btn-download py-3">
+                            <i class="fas fa-file-invoice me-2"></i> TÉLÉCHARGER VOTRE REÇU PDF
+                        </a>
+                        
+                        <a href="https://wa.me/22893343403?text=Bonjour%20Venus%20Luna,%20ma%20commande%20n°{{ order.id }}%20vient%20d'être%20confirmée." 
+                           target="_blank" class="btn btn-whatsapp-success py-3">
+                            <i class="fab fa-whatsapp me-2"></i> SUIVRE SUR WHATSAPP
+                        </a>
+                    </div>
+                </div>
 
-                    <p class="small text-white-50 mb-3">Besoin d'aide ? Contactez notre support à Lomé :</p>
-                    
-                    <a href="https://wa.me/22893343403?text=Bonjour%20Venus%20Luna,%20je%20viens%20de%20passer%20la%20commande%20n°{{ order.id }}." 
-                       target="_blank" 
-                       class="btn btn-whatsapp w-100 py-3 mb-3 rounded-pill fw-bold shadow-sm text-white">
-                        <i class="fab fa-whatsapp me-2"></i> Contacter via WhatsApp
-                    </a>
-
-                    <a href="{% url 'products:list' %}" class="btn btn-outline-light w-100 py-2 rounded-pill opacity-75">
-                        Retourner à la boutique
+                <div class="mt-5">
+                    <p class="small text-white-50 mb-4">Un email de confirmation a été envoyé à : <br><strong class="text-white">{{ order.email }}</strong></p>
+                    <a href="{% url 'products:list' %}" class="text-gold text-decoration-none fw-bold small ls-2">
+                        <i class="fas fa-arrow-left me-2"></i> RETOURNER À LA BOUTIQUE
                     </a>
                 </div>
-                
-                <p class="text-white-50 small">Un email de confirmation a été envoyé à <strong>{{ order.email }}</strong>.</p>
+
             </div>
         </div>
     </div>
 </section>
 
-<style>
-    .btn-whatsapp { background-color: #25D366; transition: 0.3s; }
-    .btn-whatsapp:hover { background-color: #128C7E; transform: translateY(-2px); color: white; }
-    
-    @keyframes bounceIn {
-        0% { transform: scale(0.3); opacity: 0; }
-        50% { transform: scale(1.05); opacity: 1; }
-        70% { transform: scale(0.9); }
-        100% { transform: scale(1); }
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+    var duration = 3 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#d4af37', '#fbc02d', '#ffffff'] };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
     }
 
-    .rounded-4 { border-radius: 1.5rem !important; }
-</style>
+    var interval = setInterval(function() {
+      var timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      var particleCount = 20 * (timeLeft / duration);
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+</script>
 {% endblock %}

@@ -2,81 +2,267 @@
 {% load static %}
 
 {% block content %}
-<section class="container mt-5">
-    <div class="text-center mb-5">
-        <h1 style="color: var(--or-sombre); font-size: 3rem;">Nos Trésors Spirituels</h1>
-        <p class="text-dark">Éveillez votre âme avec nos articles sélectionnés à Lomé.</p>
-    </div>
+<style>
+    :root {
+        --venus-profond: #2b9b3aff;
+        --venus-aura: #2e9c3dff;
+        --venus-or: #d4af37;
+        --venus-creme: #fcfbf7;
+    }
 
-    <div class="row">
-        <div class="col-md-3">
-            <h4 class="mb-4" style="color: var(--bleu-nuit); border-bottom: 2px solid var(--or-sombre); display: inline-block;">Catégories</h4>
-            <ul class="list-unstyled">
-                <li class="mb-3">
-                    <a href="{% url 'products:list' %}" 
-                       class="text-decoration-none {% if not request.GET.category %}text-gold fw-bold{% else %}text-dark{% endif %}">
-                        <i class="fas fa-gem me-2"></i>Tous les produits
-                    </a>
-                </li>
-                
-                {% for cat in categories %}
-                <li class="mb-3">
-                    <a href="?category={{ cat.slug }}" 
-                       class="text-decoration-none {% if request.GET.category == cat.slug %}text-gold fw-bold{% else %}text-dark{% endif %}">
-                        {{ cat.name }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
+    .shop-section {
+        background-color: var(--venus-creme);
+        min-height: 100vh;
+    }
+
+    /* --- BARRE DE RECHERCHE STYLISÉE --- */
+    .search-container {
+        max-width: 700px;
+        margin: 0 auto 50px auto;
+        position: relative;
+    }
+
+    .search-bar {
+        background: white;
+        border: 2px solid rgba(212, 175, 55, 0.2);
+        border-radius: 50px;
+        padding: 15px 30px;
+        padding-right: 60px;
+        font-size: 1.1rem;
+        transition: 0.4s;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        width: 100%;
+    }
+
+    .search-bar:focus {
+        outline: none;
+        border-color: var(--venus-or);
+        box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .search-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--venus-profond);
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .search-btn:hover {
+        background: var(--venus-or);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Style des catégories (Sidebar) */
+    .category-sidebar {
+        background: white;
+        border-radius: 25px;
+        padding: 30px;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        position: sticky;
+        top: 100px;
+    }
+
+    .category-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: 12px;
+        color: var(--venus-profond);
+        transition: 0.3s;
+        text-decoration: none;
+        margin-bottom: 5px;
+    }
+
+    .category-link:hover, .category-link.active {
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--venus-or);
+        font-weight: 700;
+        transform: translateX(10px);
+    }
+
+    /* Cartes Produits */
+    .product-grid-card {
+        border-radius: 20px;
+        overflow: hidden;
+        background: white;
+        border: none;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .product-grid-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+    }
+
+    .img-zoom-container {
+        height: 280px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .img-zoom-container img {
+        transition: 0.6s ease;
+    }
+
+    .product-grid-card:hover .img-zoom-container img {
+        transform: scale(1.1);
+    }
+
+    .badge-promo {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: var(--venus-or);
+        color: var(--venus-profond);
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        z-index: 2;
+    }
+
+    .btn-wishlist {
+        background: white;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+
+    .btn-discover {
+        background: var(--venus-profond);
+        color: var(--venus-or);
+        border: 1px solid var(--venus-or);
+        border-radius: 50px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: 0.3s;
+    }
+
+    .btn-discover:hover {
+        background: var(--venus-or);
+        color: var(--venus-profond);
+    }
+
+    .empty-state {
+        padding: 80px 0;
+        border: 2px dashed rgba(212, 175, 55, 0.2);
+        border-radius: 40px;
+    }
+</style>
+
+<section class="shop-section py-5">
+    <div class="container">
+        
+        <div class="text-center mb-4 fade-up">
+            <h1 class="display-4 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--venus-profond);">
+                Nos Trésors Spirituels
+            </h1>
+            <p class="text-muted italic">Éveillez votre âme avec nos articles sélectionnés à Lomé.</p>
         </div>
 
-        <div class="col-md-9">
-            <div class="row g-4">
-                {% for product in products %}
-                <div class="col-md-4">
-                    <div class="product-card position-relative border-0 shadow-sm rounded-3 overflow-hidden bg-white">
-                        
-                        <a href="{% url 'products:toggle_wishlist' product.id %}" class="btn-wishlist position-absolute top-0 end-0 m-3 text-danger" style="z-index: 10;">
-                            <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart fa-lg"></i>
+        <div class="search-container fade-up">
+            <form action="{% url 'products:list' %}" method="get">
+                <input type="text" name="q" class="search-bar" placeholder="Rechercher une pierre, une catégorie..." value="{{ request.GET.q }}">
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="category-sidebar shadow-sm">
+                    <h5 class="fw-bold mb-4" style="color: var(--venus-or);">Catégories</h5>
+                    <div class="category-list">
+                        <a href="{% url 'products:list' %}" 
+                           class="category-link {% if not request.GET.category %}active{% endif %}">
+                            <i class="fas fa-th-large me-3"></i> Tous les trésors
                         </a>
+                        
+                        {% for cat in categories %}
+                        <a href="?category={{ cat.slug }}" 
+                           class="category-link {% if request.GET.category == cat.slug %}active{% endif %}">
+                            <i class="fas fa-sparkles me-3"></i> {{ cat.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
 
-                        <div class="product-img-container" style="height: 250px; overflow: hidden;">
-                            {% with product.images.all|first as first_img %}
-                                {% if first_img %}
-                                    <img src="{{ first_img.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ product.name }}">
-                                {% else %}
-                                    <img src="{% static 'img/aze1.png' %}" class="w-100 h-100" style="object-fit: cover;" alt="No image">
-                                {% endif %}
-                            {% endwith %}
-                        </div>
-
-                        <div class="p-3 text-center">
-                            <h5 class="mb-2" style="color: var(--bleu-nuit);">{{ product.name }}</h5>
-                            <div class="mb-3">
-                                {% if product.compare_price %}
-                                <span class="old-price text-decoration-line-through text-muted small me-2">{{ product.compare_price }} F</span>
-                                {% endif %}
-                                <span class="fw-bold" style="color: var(--or-sombre); font-size: 1.1rem;">{{ product.price }} FCFA</span>
-                            </div>
-                            <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-gold d-block py-2">Découvrir</a>
-                        </div>
+                    <div class="mt-5 p-3 rounded-4" style="background: var(--venus-creme); font-size: 0.85rem;">
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-info-circle me-2 text-gold"></i> 
+                            Besoin d'un conseil ? 
+                            <a href="https://wa.me/22893343403" class="text-gold fw-bold">WhatsApp</a>
+                        </p>
                     </div>
                 </div>
-                {% empty %}
-                <div class="col-12 text-center py-5">
-                    <i class="fas fa-search fa-3x mb-3" style="color: var(--or-sombre);"></i>
-                    <p class="text-dark italic">Aucun trésor n'a été trouvé dans cette catégorie pour le moment.</p>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-md-6 col-xl-4 fade-up">
+                        <div class="product-grid-card shadow-sm h-100">
+                            
+                            <div class="img-zoom-container">
+                                {% if product.compare_price %}
+                                    <span class="badge-promo">Offre</span>
+                                {% endif %}
+                                
+                                <a href="{% url 'products:toggle_wishlist' product.id %}" class="btn-wishlist position-absolute top-0 end-0 m-3 text-dark" style="z-index: 10; text-decoration: none;">
+                                    <i class="{% if product.id in wishlist_ids %}fas text-danger{% else %}far{% endif %} fa-heart"></i>
+                                </a>
+
+                                <a href="{% url 'products:product_detail' product.slug %}">
+                                    {% with product.images.all|first as first_img %}
+                                        <img src="{% if first_img %}{{ first_img.image.url }}{% else %}{% static 'img/aze1.png' %}{% endif %}" 
+                                             class="w-100 h-100" style="object-fit: cover;" alt="{{ product.name }}">
+                                    {% endwith %}
+                                </a>
+                            </div>
+
+                            <div class="p-4 text-center">
+                                <h5 class="fw-bold mb-2" style="font-family: 'Playfair Display', serif;">{{ product.name }}</h5>
+                                
+                                <div class="mb-3">
+                                    {% if product.compare_price %}
+                                        <span class="text-muted text-decoration-line-through small me-2">{{ product.compare_price }} F</span>
+                                    {% endif %}
+                                    <span class="fw-bold h5 mb-0" style="color: var(--venus-or);">{{ product.price }} F CFA</span>
+                                </div>
+
+                                <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-discover w-100 py-2">
+                                    Explorer
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center">
+                        <div class="empty-state">
+                            <i class="fas fa-search fa-4x mb-4 opacity-20" style="color: var(--venus-or);"></i>
+                            <h3 class="fw-bold">Aucun trésor trouvé</h3>
+                            <p class="text-muted">Nous n'avons rien trouvé pour votre recherche. Essayez un autre mot-clé.</p>
+                            <a href="{% url 'products:list' %}" class="btn btn-discover px-4 rounded-pill mt-3">Réinitialiser</a>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
 </section>
-
-<style>
-    .text-gold { color: var(--or-sombre) !important; }
-    .text-dark { color: #2d2d2d !important; }
-    .product-card { transition: transform 0.3s ease; }
-    .product-card:hover { transform: translateY(-5px); }
-</style>
 {% endblock %}

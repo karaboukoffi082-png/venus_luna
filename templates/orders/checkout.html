@@ -2,37 +2,127 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5" style="background-color: #030303ff; min-height: 100vh;">
+<style>
+    :root {
+        --venus-vert-nuit: #47a15bff;
+        --venus-vert: #3dad4cff;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    .checkout-section {
+        background: radial-gradient(circle at bottom right, var(--venus-vert), var(--venus-vert-nuit));
+        min-height: 100vh;
+        color: white;
+    }
+
+    .glass-checkout-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        border-radius: 25px;
+    }
+
+    /* Style des labels et champs */
+    .form-label-gold {
+        color: var(--venus-jaune);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .checkout-form input, .checkout-form select, .checkout-form textarea {
+        background: rgba(0, 0, 0, 0.4) !important;
+        color: white !important;
+        border: 1px solid rgba(212, 175, 55, 0.2) !important;
+        border-radius: 12px !important;
+        padding: 14px 18px !important;
+        transition: 0.3s all;
+    }
+
+    .checkout-form input:focus, .checkout-form select:focus {
+        border-color: var(--venus-jaune) !important;
+        box-shadow: 0 0 15px rgba(251, 192, 45, 0.15) !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /* Panneau récapitulatif */
+    .summary-card {
+        border-radius: 25px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        overflow: hidden;
+    }
+
+    .summary-header {
+        background: rgba(212, 175, 55, 0.05);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        padding: 20px;
+    }
+
+    .order-item-img {
+        width: 55px;
+        height: 55px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-pay {
+        background: linear-gradient(135deg, var(--venus-or), var(--venus-jaune));
+        color: var(--venus-vert-nuit) !important;
+        border: none;
+        border-radius: 15px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        transition: 0.4s;
+    }
+
+    .btn-pay:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+    }
+
+    .bkapay-notice {
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 4px solid var(--venus-or);
+        border-radius: 10px;
+    }
+</style>
+
+<section class="checkout-section py-5">
     <div class="container">
-        <h1 class="mb-5 text-center" style="color: #D4AF37; font-family: 'Playfair Display', serif; letter-spacing: 2px;">FINALISER VOTRE COMMANDE</h1>
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold" style="font-family: 'Playfair Display', serif;">Finaliser votre Commande</h1>
+            <div style="height: 2px; width: 100px; background: var(--venus-or); margin: 15px auto;"></div>
+        </div>
 
         <div class="row g-5">
             <div class="col-lg-7">
-                <div class="p-4 rounded-4 shadow-lg" style="background: rgba(40, 62, 182, 0.02); border: 1px solid rgba(212, 175, 55, 0.2);">
-                    <h3 style="color: #D4AF37; font-size: 1.5rem;" class="mb-4">
-                        <i class="fas fa-shipping-fast me-2"></i>Informations de Livraison
+                <div class="glass-checkout-card p-4 p-md-5">
+                    <h3 class="h5 mb-4 text-white d-flex align-items-center">
+                        <i class="fas fa-map-marker-alt text-gold me-3"></i> Destination de livraison
                     </h3>
                     
                     <form method="post" class="checkout-form" id="checkout-form">
                         {% csrf_token %}
-                        <div class="row g-3">
+                        <div class="row g-4">
                             {% for field in form %}
                             <div class="{% if field.name == 'full_name' or field.name == 'email' or field.name == 'address' %}col-12{% else %}col-md-6{% endif %}">
-                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37; letter-spacing: 1px;">{{ field.label }}</label>
-                                <div class="custom-field">
-                                    {{ field }}
-                                </div>
+                                <label class="form-label-gold">{{ field.label }}</label>
+                                {{ field }}
                                 {% if field.errors %}
-                                    <div class="text-danger small mt-1" style="font-size: 0.8rem;">{{ field.errors|first }}</div>
+                                    <div class="text-danger x-small mt-1"><i class="fas fa-exclamation-circle me-1"></i> {{ field.errors|first }}</div>
                                 {% endif %}
                             </div>
                             {% endfor %}
                             
                             <div class="col-12 mt-4">
-                                <label class="form-label small fw-bold text-uppercase" style="color: #D4AF37;">Zone de livraison (Lomé & Environs)</label>
-                                <select class="form-select bg-dark text-white border-gold" id="zone-select" name="shipping_zone" required 
-                                        style="border: 1px solid rgba(212, 175, 55, 0.4); height: 50px; border-radius: 8px;">
-                                    <option value="0" selected disabled>Choisissez votre quartier...</option>
+                                <label class="form-label-gold">Zone de livraison (Lomé & Environs)</label>
+                                <select class="form-select" id="zone-select" name="shipping_zone" required>
+                                    <option value="0" selected disabled>Où devons-nous livrer ?</option>
                                     {% for zone in zones %}
                                     <option value="{{ zone.price }}">{{ zone.name }} (+{{ zone.price }} F)</option>
                                     {% endfor %}
@@ -40,16 +130,17 @@
                             </div>
                         </div>
 
-                        <div class="mt-5 p-4 rounded-4 bg-black border-gold" style="border: 1px solid rgba(212, 175, 55, 0.5); background: linear-gradient(45deg, #000, #001524);">
-                            <h4 style="color: #D4AF37;" class="h6 mb-3"><i class="fas fa-lock me-2"></i>Paiement Sécurisé</h4>
-                            <p class="small text-white-50 mb-0">
-                                Vous allez être redirigé vers **Bkapay** pour finaliser le règlement via 
-                                <span class="text-white fw-bold">TMoney</span> ou <span class="text-white fw-bold">Moov Money</span>.
+                        <div class="mt-5 p-3 bkapay-notice">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-shield-check text-gold me-2"></i>
+                                <span class="small fw-bold text-white">PAIEMENT SÉCURISÉ VIA BKAPAY</span>
+                            </div>
+                            <p class="x-small text-white-50 mb-0">
+                                Règlement instantané par **TMoney** ou **Moov Money**. Votre commande sera validée immédiatement après confirmation du transfert.
                             </p>
                         </div>
 
-                        <button type="submit" class="btn w-100 py-3 mt-4 fs-5 fw-bold shadow-lg text-uppercase transition-all" 
-                                style="background-color: #D4AF37; color: #001524; border-radius: 8px; border: none;">
+                        <button type="submit" class="btn btn-pay w-100 py-3 mt-4 text-uppercase">
                             Confirmer et Payer (<span id="btn-total">{{ total }}</span> F)
                         </button>
                     </form>
@@ -57,77 +148,61 @@
             </div>
 
             <div class="col-lg-5">
-                <div class="sticky-top" style="top: 100px;">
-                    <div class="card bg-transparent border-gold rounded-4 overflow-hidden shadow-lg" style="border: 1px solid rgba(212, 175, 55, 0.3);">
-                        <div class="card-header py-3 bg-black" style="border-bottom: 1px solid rgba(212, 175, 55, 0.3);">
-                            <h4 class="mb-0 h5 text-center" style="color: #D4AF37; letter-spacing: 1px;">RÉSUMÉ DE LA COMMANDE</h4>
+                <div class="sticky-top" style="top: 110px;">
+                    <div class="summary-card shadow-lg">
+                        <div class="summary-header text-center">
+                            <h4 class="mb-0 h6 text-gold ls-2">VOTRE SÉLECTION</h4>
                         </div>
-                        <div class="card-body p-0" style="max-height: 350px; overflow-y: auto; background: rgba(0,0,0,0.3);">
-                            <ul class="list-group list-group-flush">
-                                {% for item in items %}
-                                <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid rgba(212,175,55,0.1);">
-                                    <div class="d-flex align-items-center">
-                                        <div class="position-relative me-3">
-                                            <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle" style="background-color: #D4AF37; color: #001524; font-size: 0.7rem;">{{ item.quantity }}</span>
-                                            <div style="width: 50px; height: 50px; background: #111; border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.2);">
-                                                {% if item.product.images.first %}
-                                                    <img src="{{ item.product.images.first.image.url }}" class="w-100 h-100 object-fit-cover">
-                                                {% else %}
-                                                    <div class="h-100 d-flex align-items-center justify-content-center text-muted"><i class="fas fa-gem"></i></div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <span class="small fw-bold">{{ item.name }}</span>
-                                    </div>
-                                    <span style="color: #D4AF37;" class="fw-bold">{{ item.subtotal }} F</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
+                        
+                        <div class="p-4" style="max-height: 400px; overflow-y: auto;">
+                            {% for item in items %}
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative">
+                                    <img src="{% if item.product.images.first %}{{ item.product.images.first.image.url }}{% else %}{% static 'img/default.jpg' %}{% endif %}" class="order-item-img">
+                                    <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle bg-gold text-dark border border-dark border-2" style="font-size: 0.65rem;">
+                                        {{ item.quantity }}
+                                    </span>
+                                </div>
+                                <div class="ms-3 flex-grow-1">
+                                    <p class="small fw-bold mb-0 text-white">{{ item.name }}</p>
+                                    <p class="x-small text-white-50 mb-0">Réf: #{{ item.product.id }}</p>
+                                </div>
+                                <div class="text-end">
+                                    <span class="small fw-bold text-gold">{{ item.subtotal }} F</span>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        <div class="card-footer bg-black p-4" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
+
+                        <div class="bg-black bg-opacity-30 p-4 border-top border-white border-opacity-10">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-white-50 small">Sous-total produits</span>
-                                <span class="text-white">{{ total }} F</span>
+                                <span class="text-white-50 small">Articles</span>
+                                <span class="small">{{ total }} F</span>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
-                                <span class="text-white-50 small">Frais de livraison</span>
-                                <span class="fw-bold" id="shipping-cost" style="color: #D4AF37;">0 F</span>
+                                <span class="text-white-50 small">Livraison</span>
+                                <span class="fw-bold text-gold" id="shipping-cost">0 F</span>
                             </div>
-                            <hr style="border-color: rgba(212, 175, 55, 0.3);">
-                            <div class="d-flex justify-content-between h3 mb-0">
-                                <span style="color: #D4AF37;" class="fw-bold">TOTAL</span>
-                                <span style="color: #D4AF37;" class="fw-bold"><span id="grand-total">{{ total }}</span> F</span>
+                            
+                            <hr class="border-white border-opacity-10 my-3">
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0 fw-bold text-white">TOTAL</span>
+                                <div class="text-end">
+                                    <span class="h3 fw-bold text-gold mb-0"><span id="grand-total">{{ total }}</span> F</span>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="x-small text-white-50"><i class="fas fa-info-circle me-1"></i> Des questions ? Contactez-nous sur WhatsApp au +228 93 34 34 03</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<style>
-    /* Correction de l'affichage des champs (Texte blanc sur fond sombre) */
-    .custom-field input, .custom-field textarea, .form-control {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #ffffff !important;
-        border: 1px solid rgba(212, 175, 55, 0.3) !important;
-        padding: 12px 15px !important;
-        border-radius: 8px !important;
-    }
-
-    .custom-field input:focus, .form-control:focus {
-        background-color: #ffffff !important;
-        color: #001524 !important;
-        border-color: #D4AF37 !important;
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-    }
-
-    .btn:hover {
-        filter: brightness(1.1);
-        transform: translateY(-2px);
-    }
-</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -136,17 +211,21 @@
         const totalDisplay = document.getElementById('grand-total');
         const btnTotal = document.getElementById('btn-total');
         
-        // On récupère le sous-total sans les textes
+        // Nettoyage du sous-total pour le calcul
         const subtotal = parseInt("{{ total }}".replace(/\D/g, '')) || 0;
 
         zoneSelect.addEventListener('change', function() {
             const shipPrice = parseInt(this.value) || 0;
             const finalTotal = subtotal + shipPrice;
 
-            // Mise à jour de l'affichage
+            // Animation de mise à jour
             shippingDisplay.innerText = shipPrice.toLocaleString() + " F";
             totalDisplay.innerText = finalTotal.toLocaleString();
             btnTotal.innerText = finalTotal.toLocaleString();
+            
+            // Petit effet visuel sur le prix total
+            totalDisplay.classList.add('text-white');
+            setTimeout(() => totalDisplay.classList.remove('text-white'), 200);
         });
     });
 </script>

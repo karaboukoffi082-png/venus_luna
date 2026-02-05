@@ -2,63 +2,149 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 d-flex align-items-center" style="min-height: 80vh; background-color: var(--bleu-nuit);">
-    <div class="container text-center">
+<style>
+    :root {
+        --venus-vert-profond: #3eac43ff;
+        --venus-vert-aura: #299941ff;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    .success-confirmation-section {
+        background: radial-gradient(circle at center, var(--venus-vert-aura), var(--venus-vert-profond));
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        color: white;
+    }
+
+    .glass-instruction-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 30px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+
+    .payment-box {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+        border: 1px dashed var(--venus-or);
+        position: relative;
+    }
+
+    .success-checkmark {
+        font-size: 5rem;
+        color: var(--venus-jaune);
+        filter: drop-shadow(0 0 15px rgba(251, 192, 45, 0.4));
+        animation: checkBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes checkBounce {
+        0% { transform: scale(0); opacity: 0; }
+        80% { transform: scale(1.2); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .btn-whatsapp-payment {
+        background: #25D366;
+        color: white !important;
+        border-radius: 50px;
+        font-weight: 700;
+        transition: 0.4s;
+        box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+    }
+
+    .btn-whatsapp-payment:hover {
+        background: #128C7E;
+        transform: translateY(-3px);
+    }
+
+    .copy-badge {
+        font-size: 0.65rem;
+        background: var(--venus-or);
+        color: var(--venus-vert-profond);
+        padding: 2px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+</style>
+
+<section class="success-confirmation-section py-5">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="mb-4 fade-in">
-                    <div class="success-icon-container">
-                        <i class="fas fa-check-circle fa-5x text-gold"></i>
-                    </div>
+            <div class="col-lg-8 text-center">
+                
+                <div class="mb-4">
+                    <i class="fas fa-check-circle success-checkmark"></i>
                 </div>
 
-                <h1 class="display-5 text-gold mb-3 fw-bold">Merci pour votre confiance !</h1>
+                <h1 class="display-5 fw-bold mb-3" style="font-family: 'Playfair Display', serif;">Commande Bien Reçue !</h1>
                 <p class="lead text-white-50 mb-5">
-                    Votre commande **#{{ order.id }}** a été enregistrée avec succès. 
-                    Un membre de l'équipe **VENUS LUNA** vous contactera sous peu.
+                    Votre commande <span class="text-gold fw-bold">#{{ order.id }}</span> est enregistrée. <br>
+                    Elle sera activée dès réception de votre transfert.
                 </p>
 
-                <div class="p-4 rounded-4 mb-5 text-start" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.3);">
-                    <h4 class="h6 text-gold text-uppercase fw-bold mb-3">Étape finale : Paiement</h4>
-                    <p class="small text-white-50">Si vous n'avez pas encore effectué le transfert, merci de le faire pour valider l'expédition :</p>
+                <div class="glass-instruction-card p-4 p-md-5 text-start">
+                    <h3 class="h5 text-gold mb-4 text-center text-md-start">
+                        <i class="fas fa- wallet me-2"></i> Instructions de Paiement (Togo)
+                    </h3>
                     
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-white-50 small">Montant total :</span>
-                        <span class="text-gold fw-bold h5 mb-0">{{ order.total_price }} FCFA</span>
+                    <div class="payment-box p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-7 mb-3 mb-md-0">
+                                <label class="x-small text-white-50 text-uppercase ls-1">Numéro de transfert (TMoney / Moov)</label>
+                                <div class="d-flex align-items-center mt-1">
+                                    <span class="h4 mb-0 fw-bold">+228 93 34 34 03</span>
+                                    <span class="ms-2 copy-badge" onclick="copyToClipboard('+22893343403')">Copier</span>
+                                </div>
+                                <p class="small text-white-50 mt-1 mb-0">Nom : VENUS LUNA / Boutique Officielle</p>
+                            </div>
+                            <div class="col-md-5 text-md-end">
+                                <label class="x-small text-white-50 text-uppercase ls-1">Montant à envoyer</label>
+                                <h3 class="text-gold fw-bold mb-0">{{ order.total_price }} FCFA</h3>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-white-50 small">Numéro TMoney/Flooz :</span>
-                        <span class="text-white fw-bold">+228 93 34 34 03</span>
+
+                    <div class="mt-4 p-3 rounded-3" style="background: rgba(251, 192, 45, 0.05); border-left: 4px solid var(--venus-jaune);">
+                        <p class="small mb-0 text-white-50">
+                            <i class="fas fa-camera-retro text-gold me-2"></i> 
+                            <strong>Important :</strong> Pour accélérer le traitement, envoyez la <strong>capture d'écran</strong> ou le message de confirmation du transfert via le bouton WhatsApp ci-dessous.
+                        </p>
                     </div>
-                    <hr class="border-gold opacity-25">
-                    <p class="x-small text-muted mb-0 italic">
-                        <i class="fas fa-info-circle me-1"></i> 
-                        Envoyez une capture d'écran du transfert sur WhatsApp pour une validation plus rapide.
-                    </p>
+
+                    <div class="row g-3 mt-4">
+                        <div class="col-md-6">
+                            <a href="https://wa.me/22893343403?text=Bonjour%20Venus%20Luna,%20voici%20mon%20reçu%20pour%20la%20commande%20#{{ order.id }}" 
+                               class="btn btn-whatsapp-payment w-100 py-3">
+                                <i class="fab fa-whatsapp me-2"></i> ENVOYER MON REÇU
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'products:list' %}" class="btn btn-outline-light w-100 py-3 rounded-pill opacity-75">
+                                CONTINUER MES ACHATS
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                    <a href="{% url 'products:list' %}" class="btn-gold-outline px-4 py-2">Continuer mes achats</a>
-                    <a href="https://wa.me/22893343403?text=Bonjour,%20je%20viens%20de%20passer%20la%20commande%20#{{ order.id }}" 
-                       class="btn btn-success px-4 py-2 rounded-pill">
-                        <i class="fab fa-whatsapp me-2"></i>Envoyer le reçu
-                    </a>
-                </div>
+                <p class="mt-5 x-small text-white-50">
+                    Besoin d'aide ? Appelez-nous directement au +228 93 34 34 03 <br>
+                    Venus Luna - Adidoadin, Lomé.
+                </p>
+
             </div>
         </div>
     </div>
 </section>
 
-<style>
-    .success-icon-container {
-        animation: scaleUp 0.5s ease-out;
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Numéro copié : " + text);
+        });
     }
-    @keyframes scaleUp {
-        0% { transform: scale(0); opacity: 0; }
-        70% { transform: scale(1.2); }
-        100% { transform: scale(1); opacity: 1; }
-    }
-    .text-white-50 { color: rgba(255,255,255,0.6) !important; }
-    .bg-soft-gold { background: rgba(212, 175, 55, 0.1); }
-</style>
+</script>
 {% endblock %}

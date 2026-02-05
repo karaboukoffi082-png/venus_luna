@@ -17,8 +17,11 @@ urlpatterns = [
     path('orders/', include('apps.orders.urls', namespace='orders')),
     path('blog/', include('apps.blog.urls', namespace='blog')),
     path('contact/', include('apps.contact.urls', namespace='contact')),
- 
-    # 3. DASHBOARD PERSONNALISÉ (Si tu en as vraiment besoin)
+    path('admin/', admin.site.urls), # L'admin Django classique
+    path('', include('apps.core.urls', namespace='core')),
+    
+    # config/urls.py
+    path('dashboard-admin/', include('admin_custom.urls')),
     # Note : Évite de mettre "/admin" dans l'URL pour ne pas créer de conflit
     
 ]

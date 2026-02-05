@@ -1,24 +1,166 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<section class="py-5 bg-light text-dark">
+<style>
+    :root {
+        --venus-profond: #030a08;
+        --venus-or: #d4af37;
+        --venus-texte: rgba(255, 255, 255, 0.8);
+    }
+
+    .privacy-section {
+        background-color: var(--venus-profond);
+        color: white;
+        min-height: 100vh;
+        line-height: 1.7;
+    }
+
+    .privacy-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        padding: 60px 40px;
+    }
+
+    .privacy-title {
+        font-family: 'Playfair Display', serif;
+        color: var(--venus-or);
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .intro-text {
+        font-size: 1.1rem;
+        text-align: center;
+        color: var(--venus-or);
+        font-style: italic;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        padding-bottom: 30px;
+    }
+
+    .privacy-block {
+        margin-bottom: 45px;
+        position: relative;
+    }
+
+    .privacy-block h4 {
+        color: var(--venus-or);
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .privacy-block h4::after {
+        content: "";
+        flex-grow: 1;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(212, 175, 55, 0.3), transparent);
+        margin-left: 20px;
+    }
+
+    .privacy-block p {
+        color: var(--venus-texte);
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+    }
+
+    .strong-commitment {
+        color: white;
+        font-weight: 600;
+        background: rgba(212, 175, 55, 0.05);
+        padding: 15px;
+        border-left: 3px solid var(--venus-or);
+        display: block;
+    }
+
+    .note-box {
+        font-size: 0.85rem;
+        color: var(--venus-or);
+        border: 1px dashed rgba(212, 175, 55, 0.4);
+        padding: 12px 20px;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+        .privacy-card { padding: 30px 20px; }
+    }
+</style>
+
+<section class="privacy-section py-5">
     <div class="container" style="max-width: 900px;">
-        <div class="bg-white p-5 rounded-4 shadow-sm border-top border-gold border-5">
-            <h1 class="display-5 fw-bold mb-4" style="color: var(--bleu-nuit);">Confidentialité & Conditions</h1>
-            
-            <div class="mb-5">
-                <h4 class="text-gold border-bottom pb-2">1. Collecte des Informations</h4>
-                <p>Nous collectons uniquement les données nécessaires au bon acheminement de vos énergies : votre nom pour vous identifier, votre adresse à Lomé pour la livraison, et votre numéro WhatsApp pour le suivi en temps réel. **Éveil Spirituel s'engage à ne jamais vendre ou louer vos données.**</p>
+
+        <div class="privacy-card rounded-5 shadow-lg fade-up">
+
+            <h1 class="display-5 privacy-title">Confidentialité & Engagement</h1>
+
+            <p class="intro-text mb-5">
+                "Chez Venus Luna, la pureté de nos intentions s'étend à la protection de vos données. 
+                Nous honorons la confiance que vous nous accordez."
+            </p>
+
+            <div class="privacy-block">
+                <h4><i class="fas fa-eye-slash me-3 small"></i>1. Collecte des Informations</h4>
+                <p>
+                    Nous collectons uniquement les informations essentielles au bon fonctionnement de nos services : votre nom, numéro WhatsApp, et adresse de livraison à Lomé.
+                </p>
+                <span class="strong-commitment">
+                    <i class="fas fa-shield-alt me-2"></i> Venus Luna ne vendra, ne louera et ne cédera jamais vos données personnelles à des tiers.
+                </span>
             </div>
 
-            <div class="mb-5">
-                <h4 class="text-gold border-bottom pb-2">2. Sécurité des Paiements Mobile</h4>
-                <p>Au Togo, la confiance est la base de nos échanges. Les paiements par TMoney ou Flooz sont vérifiés manuellement. Une fois le transfert effectué, votre commande passe au statut "En cours de préparation". Nous vous recommandons de garder une capture d'écran du transfert comme preuve d'achat.</p>
+            <div class="privacy-block">
+                <h4><i class="fas fa-lock me-3 small"></i>2. Sécurité des Données</h4>
+                <p>
+                    Vos informations sont stockées dans un environnement numérique sécurisé. L'accès est strictement limité à l'équipe logistique pour la préparation de vos colis.
+                </p>
             </div>
 
-            <div class="mb-5">
-                <h4 class="text-gold border-bottom pb-2">3. Politique de Livraison</h4>
-                <p>Nos coursiers parcourent Lomé du lundi au samedi. Les frais de livraison sont calculés pour être les plus justes possibles selon votre quartier. Si un produit arrive endommagé (cristal brisé), contactez-nous sous 24h pour un remplacement gracieux.</p>
+            <div class="privacy-block">
+                <h4><i class="fas fa-mobile-alt me-3 small"></i>3. Paiements & Vérification</h4>
+                <p>
+                    Les transactions via <strong>TMoney</strong> et <strong>Flooz</strong> sont vérifiées manuellement. Ce processus garantit une sécurité maximale contre les erreurs de transfert.
+                </p>
+                <div class="note-box mt-2">
+                    <i class="fas fa-info-circle me-2"></i> Conseil : Conservez toujours une capture d'écran de votre SMS de confirmation de transfert.
+                </div>
             </div>
+
+            <div class="privacy-block">
+                <h4><i class="fas fa-truck me-3 small"></i>4. Livraison & Retours</h4>
+                <p>
+                    Nos coursiers partenaires couvrent Lomé et ses environs. En cas d'article endommagé durant le transport, contactez-nous sous 24h pour un remplacement immédiat.
+                </p>
+            </div>
+
+            <div class="privacy-block">
+                <h4><i class="fas fa-leaf me-3 small"></i>5. Responsabilité Spirituelle</h4>
+                <p>
+                    Nos produits visent l'harmonie énergétique. Ils complètent votre cheminement personnel mais ne remplacent en aucun cas un avis médical ou un traitement de santé.
+                </p>
+            </div>
+
+            <div class="privacy-block mb-0">
+                <h4><i class="fas fa-envelope-open-text me-3 small"></i>6. Questions & Droits</h4>
+                <p>
+                    Vous avez le droit de demander la suppression de votre compte et de vos données à tout moment. Pour toute question, notre sanctuaire vous répond :
+                </p>
+                <div class="mt-4">
+                    <a href="https://wa.me/22893343403" class="btn btn-outline-warning btn-sm rounded-pill px-4">
+                        <i class="fab fa-whatsapp me-2"></i> Assistance WhatsApp
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'core:index' %}" class="text-white-50 text-decoration-none small">
+                <i class="fas fa-chevron-left me-2"></i> Retourner à la boutique
+            </a>
         </div>
     </div>
 </section>

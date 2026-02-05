@@ -2,102 +2,179 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5" style="background-color: #001524; min-height: 100vh;">
+<style>
+    :root {
+        --venus-vert-profond: #3fa155ff;
+        --venus-vert-aura: #469654ff;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    .history-section {
+        background: radial-gradient(circle at top left, var(--venus-vert-aura), var(--venus-vert-profond));
+        min-height: 100vh;
+        color: white;
+    }
+
+    .glass-table-container {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .table {
+        --bs-table-bg: transparent;
+        --bs-table-color: white;
+        --bs-table-hover-bg: rgba(212, 175, 55, 0.03);
+        margin-bottom: 0;
+    }
+
+    .table thead {
+        background: rgba(212, 175, 55, 0.05);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .table thead th {
+        font-family: 'Playfair Display', serif;
+        color: var(--venus-or);
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 20px;
+    }
+
+    .order-id {
+        font-family: 'Courier New', monospace;
+        color: var(--venus-jaune);
+        background: rgba(251, 192, 45, 0.1);
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+
+    /* Style des Badges Venus */
+    .venus-badge {
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .badge-paid { background: rgba(40, 167, 69, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+    .badge-pending { background: rgba(241, 196, 15, 0.15); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.3); }
+    .badge-shipped { background: rgba(52, 152, 219, 0.15); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.3); }
+
+    .btn-action {
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        transition: 0.3s;
+        padding: 8px 16px;
+    }
+
+    .btn-details {
+        background: var(--venus-or);
+        color: var(--venus-vert-profond) !important;
+        border: none;
+    }
+
+    .btn-details:hover {
+        background: var(--venus-jaune);
+        transform: translateY(-2px);
+    }
+
+    .btn-receipt {
+        border: 1px solid rgba(212, 175, 55, 0.4);
+        color: var(--venus-or);
+        background: transparent;
+    }
+
+    .btn-receipt:hover {
+        border-color: var(--venus-or);
+        background: rgba(212, 175, 55, 0.05);
+        color: var(--venus-jaune);
+    }
+</style>
+
+<section class="history-section py-5">
     <div class="container">
-        <div class="text-center mb-5">
-            <h1 style="color: #D4AF37; font-family: 'Playfair Display', serif;" class="display-4">Mon Historique</h1>
-            <p class="text-white-50">Retrouvez ici le suivi de toutes vos commandes et vos reçus.</p>
-        </div>
+        <header class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-2" style="font-family: 'Playfair Display', serif;">Mes Archives</h1>
+            <div style="height: 2px; width: 60px; background: var(--venus-or); margin: 0 auto 15px;"></div>
+            <p class="text-white-50">L'historique de vos acquisitions spirituelles chez Venus Luna.</p>
+        </header>
 
         {% if orders %}
-            <div class="table-responsive rounded-4 shadow-lg" style="border: 1px solid rgba(212, 175, 55, 0.2); background: rgba(255,255,255,0.02);">
-                <table class="table table-hover align-middle mb-0" style="color: white;">
-                    <thead style="background: rgba(212, 175, 55, 0.1);">
-                        <tr style="color: #D4AF37; border-bottom: 2px solid #D4AF37;">
-                            <th class="py-3 px-4">Commande</th>
-                            <th class="py-3">Date</th>
-                            <th class="py-3">Statut</th>
-                            <th class="py-3">Total</th>
-                            <th class="py-3 text-end px-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in orders %}
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="py-4 px-4 fw-bold">#{{ order.id }}</td>
-                            <td class="py-4">{{ order.created_at|date:"d M Y" }}</td>
-                            <td class="py-4">
-                                {% if order.status == 'paid' %}
-                                    <span class="badge rounded-pill bg-success-subtle text-success px-3">Payé</span>
-                                {% elif order.status == 'pending' %}
-                                    <span class="badge rounded-pill bg-warning-subtle text-warning px-3">En attente</span>
-                                {% elif order.status == 'shipped' %}
-                                    <span class="badge rounded-pill bg-info-subtle text-info px-3">Expédié</span>
-                                {% else %}
-                                    <span class="badge rounded-pill bg-secondary-subtle text-white px-3">{{ order.get_status_display }}</span>
-                                {% endif %}
-                            </td>
-                            <td class="py-4 fw-bold" style="color: #D4AF37;">{{ order.total }} F</td>
-                            <td class="py-4 text-end px-4">
-                                <div class="d-flex justify-content-end gap-2">
-                                    {% if order.receipt %}
-                                        <a href="{% url 'orders:download_receipt' order.id %}" class="btn btn-sm btn-outline-gold">
-                                            <i class="fas fa-file-pdf me-1"></i> Reçu
-                                        </a>
+            <div class="glass-table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Référence</th>
+                                <th>Date d'initiation</th>
+                                <th>État du voyage</th>
+                                <th>Investissement</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                <td class="ps-4 py-4">
+                                    <span class="order-id">#{{ order.id }}</span>
+                                </td>
+                                <td class="text-white-50">{{ order.created_at|date:"d M Y" }}</td>
+                                <td>
+                                    {% if order.status == 'paid' %}
+                                        <span class="venus-badge badge-paid"><i class="fas fa-check-circle me-1"></i> Payé</span>
+                                    {% elif order.status == 'pending' %}
+                                        <span class="venus-badge badge-pending"><i class="fas fa-hourglass-half me-1"></i> En attente</span>
+                                    {% elif order.status == 'shipped' %}
+                                        <span class="venus-badge badge-shipped"><i class="fas fa-truck me-1"></i> Expédié</span>
+                                    {% else %}
+                                        <span class="venus-badge bg-dark border border-secondary text-white-50">{{ order.get_status_display }}</span>
                                     {% endif %}
-                                    <a href="{% url 'orders:order_confirm' order.id %}" class="btn btn-sm btn-gold">
-                                        Détails
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                </td>
+                                <td class="fw-bold text-gold">{{ order.total }} <small>F</small></td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        {% if order.receipt %}
+                                            <a href="{% url 'orders:download_receipt' order.id %}" class="btn btn-action btn-receipt">
+                                                <i class="fas fa-file-pdf me-1"></i> Reçu
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'orders:order_confirm' order.id %}" class="btn btn-action btn-details">
+                                            Détails
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         {% else %}
-            <div class="text-center py-5 rounded-4" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(212, 175, 55, 0.3);">
-                <i class="fas fa-box-open fa-4x mb-3" style="color: rgba(212, 175, 55, 0.3);"></i>
-                <h3 class="text-white">Aucune commande pour le moment</h3>
-                <p class="text-white-50 mb-4">Vos futurs trésors spirituels apparaîtront ici.</p>
-                <a href="{% url 'products:product_list' %}" class="btn btn-gold px-5 py-2 mt-2">Découvrir nos produits</a>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="glass-table-container py-5 text-center px-4">
+                        <div class="mb-4 opacity-25">
+                            <i class="fas fa-scroll fa-5x text-gold"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Vos archives sont vierges</h3>
+                        <p class="text-white-50 mb-5">Le premier chapitre de votre collection reste à écrire. Explorez nos trésors pour commencer.</p>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-details px-5 py-3 rounded-pill text-uppercase ls-1">
+                            Ouvrir la boutique
+                        </a>
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>
 </section>
-
-<style>
-    .btn-gold {
-        background-color: #D4AF37;
-        color: #001524;
-        font-weight: 600;
-        border: none;
-        transition: all 0.3s ease;
-    }
-    .btn-gold:hover {
-        background-color: #f1c40f;
-        transform: translateY(-2px);
-        color: #001524;
-    }
-    .btn-outline-gold {
-        border: 1px solid #D4AF37;
-        color: #D4AF37;
-        transition: all 0.3s ease;
-    }
-    .btn-outline-gold:hover {
-        background-color: rgba(212, 175, 55, 0.1);
-        color: #f1c40f;
-        border-color: #f1c40f;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.03) !important;
-    }
-    .badge {
-        font-size: 0.8rem;
-        letter-spacing: 0.5px;
-    }
-    .bg-success-subtle { background-color: rgba(25, 135, 84, 0.2) !important; }
-    .bg-warning-subtle { background-color: rgba(255, 193, 7, 0.2) !important; }
-    .bg-info-subtle { background-color: rgba(13, 202, 240, 0.2) !important; }
-</style>
 {% endblock %}

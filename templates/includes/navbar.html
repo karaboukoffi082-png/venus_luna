@@ -1,172 +1,186 @@
+{% load static %}
+
+<style>
+    :root {
+        /* Palette harmonisée : Vert Herboristerie & Or Venus */
+        --venus-vert: #1ed828ff;        /* Le vert de ton image de référence */
+        --venus-vert-dark: #5d7224;   /* Vert sombre pour les interactions */
+        --venus-vert-pale: #f4f7eb;   /* Fond très léger pour le contraste */
+        --venus-or: #d4af37;          /* Or pour l'élégance */
+        --venus-jaune: #fbc02d;       /* Jaune pour les alertes/admin */
+        --venus-rouge: #d11149;       /* Rouge du badge "à découvrir" */
+    }
+
+    /* --- NAVBAR --- */
+    .custom-navbar {
+        background: var(--venus-vert) !important;
+        border-bottom: 3px solid var(--venus-vert-dark);
+        padding: 0.5rem 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: 0.4s;
+    }
+
+    /* Logo avec halo blanc */
+    .navbar-logo {
+        height: 130px;
+        width: auto;
+        border-radius: 100%;
+        border: 8px solid white;
+        background: white;
+        transition: 0.3s;
+    }
+    
+    .navbar-logo:hover {
+        transform: scale(1.05) rotate(5deg);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Liens du menu style "Blocs" */
+    .nav-link {
+        color: white !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+        padding: 15px 20px !important;
+        transition: 0.3s;
+    }
+
+    .nav-link:hover { 
+        background-color: var(--venus-vert-dark);
+        color: var(--venus-jaune) !important;
+    }
+
+    /* Badge "À découvrir" (Style exact de l'image) */
+    .badge-decouvrir {
+        background-color: var(--venus-rouge);
+        color: white;
+        font-size: 0.6rem;
+        padding: 2px 8px;
+        border-radius: 4px;
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-weight: bold;
+        z-index: 10;
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* --- ÉLÉMENTS DE DROITE --- */
+    .admin-link {
+        color: var(--venus-jaune) !important;
+        border: 1px solid var(--venus-jaune);
+        padding: 5px 15px !important;
+        border-radius: 50px;
+        font-weight: 700 !important;
+        background: rgba(251, 192, 45, 0.1);
+        font-size: 0.8rem;
+    }
+
+    .cart-icon-wrapper {
+        position: relative;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .cart-badge {
+        position: absolute;
+        top: -8px; right: -12px;
+        background: var(--venus-rouge);
+        color: white;
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 50%;
+        border: 2px solid var(--venus-vert);
+    }
+
+    .user-avatar {
+        width: 35px; height: 35px;
+        border-radius: 50%;
+        border: 2px solid white;
+        object-fit: cover;
+    }
+
+    /* Dropdown Stylisé */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--venus-vert-pale);
+        color: var(--venus-vert);
+    }
+</style>
+
 <nav class="navbar navbar-expand-lg sticky-top custom-navbar">
-    <div class="container-fluid px-0"> 
-        
-        <a class="navbar-brand d-flex align-items-center ps-0 ms-0" href="{% url 'core:home' %}">
-            <img src="/static/img/logovenusluna.JPEG" alt="Logo Venus Luna" class="navbar-logo">
+    <div class="container"> 
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
+            <img src="/static/img/logovenusluna1.JPG" alt="Logo Venus Luna" class="navbar-logo">
+            <span class="ms-3 d-none d-sm-inline fw-bold text-white" style="font-family: 'Playfair Display'; letter-spacing: 1px;">VENUS-LUNA</span>
         </a>
 
-        <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fas fa-bars text-white"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'core:home' %}">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'products:list' %}">Boutique</a></li>
+                
+                <li class="nav-item" style="position: relative;">
+                    <span class="badge-decouvrir"><i class="far fa-thumbs-up"></i> à découvrir !</span>
+                    <a class="nav-link" href="{% url 'products:list' %}">Boutique</a>
+                </li>
+                
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:list' %}">Blog</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'core:contact' %}">Contact</a></li>
-                
-                {# AJOUT DU LIEN DASHBOARD POUR L'ADMIN #}
-                {% if user.is_staff %}
-                <li class="nav-item">
-                    <a class="nav-link text-warning fw-bold" href="{% url 'orders:admin_dashboard' %}">
-                        <i class="fas fa-chart-line me-1"></i> Dashboard
-                    </a>
-                </li>
-                {% endif %}
             </ul>
 
-            <div class="d-flex align-items-center gap-4 pe-4">
-                <a href="{% url 'orders:cart_detail' %}" class="cart-icon-wrapper">
-                    <i class="fas fa-shopping-cart"></i>
+            <div class="d-flex align-items-center gap-3">
+                
+                {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'admin_custom:dashboard' %}" class="admin-link d-flex align-items-center gap-2">
+                        <i class="fas fa-shield-alt"></i> <span>ADMIN</span>
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'orders:cart_detail' %}" class="cart-icon-wrapper me-2">
+                    <i class="fas fa-shopping-bag"></i>
                     <span class="cart-badge">{{ cart_items|length|default:"0" }}</span>
                 </a>
 
                 {% if user.is_authenticated %}
                     <div class="dropdown">
-                        <a class="user-dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="d-flex align-items-center" href="#" data-bs-toggle="dropdown" style="text-decoration: none;">
                             {% if user.profile.avatar %}
-                                <img src="{{ user.profile.avatar.url }}" alt="Photo" class="user-avatar">
+                                <img src="{{ user.profile.avatar.url }}" class="user-avatar">
                             {% else %}
-                                <i class="fas fa-user-circle fs-5"></i>
+                                <i class="fas fa-user-circle fs-2 text-white"></i>
                             {% endif %}
-                            <span class="d-none d-md-inline">{{ user.username }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 animate slideIn">
-                            <li><a class="dropdown-item" href="{% url 'accounts:client_dashboard' %}">Mon Profil</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end mt-3 border-0">
+                            <li><a class="dropdown-item py-2" href="{% url 'accounts:client_dashboard' %}"><i class="fas fa-user-circle me-2"></i> Profil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{% url 'accounts:logout' %}" method="post" class="px-3">
                                     {% csrf_token %}
-                                    <button type="submit" class="logout-btn">Déconnexion</button>
+                                    <button type="submit" class="btn btn-link text-danger p-0 text-decoration-none fw-bold" style="font-size: 0.85rem;">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Déconnexion
+                                    </button>
                                 </form>
                             </li>
                         </ul>
                     </div>
                 {% else %}
-                    <a href="{% url 'accounts:login' %}" class="login-link">Connexion</a>
-                    <a href="{% url 'accounts:register' %}" class="btn-register">S'inscrire</a>
+                    <a href="{% url 'accounts:login' %}" class="text-white text-decoration-none small fw-bold">Connexion</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-sm btn-light rounded-pill px-3 fw-bold" style="color: var(--venus-vert);">S'inscrire</a>
                 {% endif %}
             </div>
         </div>
     </div>
 </nav>
-
-<style>
-/* --- DESIGN GLOBAL NAVBAR --- */
-.custom-navbar {
-    background-color: #16af96c7; /* Bleu profond */
-    padding: 0.3rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
-}
-
-/* --- LOGO COLLÉ À GAUCHE --- */
-.navbar-logo {
-    height: 90px;
-    width: auto;
-    object-fit: contain;
-    display: block;
-    border-radius: 30px; 
-    margin-left: 0 !important;
-}
-
-.navbar-brand {
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-right: 2rem;
-}
-
-/* --- LIENS DE NAVIGATION --- */
-.nav-link {
-    color: white !important;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-    padding: 0.5rem 1rem;
-}
-
-.nav-link:hover {
-    color: #d4af37 !important; /* Or au survol */
-}
-
-/* --- PANIER --- */
-.cart-icon-wrapper {
-    position: relative;
-    color: white;
-    font-size: 1.3rem;
-}
-
-.cart-badge {
-    position: absolute;
-    top: -8px;
-    right: -10px;
-    background-color: #d4af37; /* Or luxueux */
-    color: #1e3a8a;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-}
-
-/* --- BOUTON UTILISATEUR --- */
-.user-dropdown-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 15px;
-    border: 1.5px solid white;
-    border-radius: 30px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.user-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.login-link {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.btn-register {
-    background-color: white;
-    color: #1e3a8a;
-    font-weight: bold;
-    padding: 8px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-}
-
-.logout-btn {
-    background: none;
-    border: none;
-    color: #dc3545;
-    font-weight: bold;
-    padding: 0;
-}
-
-/* Inversion de l'icône burger sur mobile */
-.navbar-toggler-icon {
-    filter: invert(1);
-}
-</style>

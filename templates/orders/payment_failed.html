@@ -2,90 +2,129 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5 d-flex align-items-center" style="background-color: #030303; min-height: 80vh;">
-    <div class="container text-center">
-        <div class="mb-4 fade-in">
-            <div class="error-icon-wrapper">
-                <i class="fas fa-exclamation-circle"></i>
-            </div>
-        </div>
+<style>
+    :root {
+        --venus-vert-nuit: #3ba349ff;
+        --venus-vert: #2ab341ff;
+        --venus-or: #d4af37;
+        --venus-erreur: #e74c3c;
+    }
 
-        <h1 class="display-4 fw-bold mb-3" style="color: #e74c3c; font-family: 'Playfair Display', serif;">Échec du paiement</h1>
-        
-        <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 600px;">
-            Nous n'avons pas pu traiter votre transaction via <strong>BKApay</strong>. 
-            Cela peut être dû à une interruption de connexion ou à une annulation de l'opération.
-        </p>
+    .error-section {
+        background: radial-gradient(circle at center, #1a0a0a, var(--venus-vert-nuit));
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        color: white;
+    }
 
-        <div class="row justify-content-center mb-5">
-            <div class="col-md-5">
-                <div class="p-4 rounded-4" style="background: rgba(231, 76, 60, 0.05); border: 1px solid rgba(231, 76, 60, 0.2);">
-                    <h5 style="color: #e74c3c;"><i class="fas fa-question-circle me-2"></i>Que faire ?</h5>
-                    <ul class="text-start text-white-50 small mt-3">
-                        <li>Vérifiez votre solde <strong>TMoney</strong> ou <strong>Moov Money</strong>.</li>
-                        <li>Assurez-vous d'avoir validé la demande de confirmation sur votre téléphone.</li>
-                        <li>Réessayez de valider votre panier.</li>
-                    </ul>
+    .glass-error-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(231, 76, 60, 0.2);
+        border-radius: 35px;
+        padding: 50px 30px;
+    }
+
+    .error-icon-animated {
+        font-size: 5rem;
+        color: var(--venus-erreur);
+        filter: drop-shadow(0 0 15px rgba(231, 76, 60, 0.3));
+        animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+
+    .btn-retry {
+        background: var(--venus-or);
+        color: var(--venus-vert-nuit) !important;
+        border-radius: 50px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        transition: 0.4s;
+    }
+
+    .btn-retry:hover {
+        background: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+    }
+
+    .help-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .help-list li {
+        margin-bottom: 12px;
+        padding-left: 30px;
+        position: relative;
+        font-size: 0.95rem;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .help-list li::before {
+        content: '✦';
+        position: absolute;
+        left: 0;
+        color: var(--venus-erreur);
+    }
+</style>
+
+<section class="error-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 text-center">
+                
+                <div class="glass-error-card">
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle error-icon-animated"></i>
+                    </div>
+
+                    <h1 class="display-5 fw-bold mb-3" style="font-family: 'Playfair Display', serif;">Paiement Interrompu</h1>
+                    
+                    <p class="text-white-50 mb-5">
+                        Votre transaction avec <span class="text-white fw-bold">BKApay</span> n'a pas pu aboutir. 
+                        Ne vous inquiétez pas, votre panier a été conservé.
+                    </p>
+
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-md-10">
+                            <div class="p-4 rounded-4 text-start" style="background: rgba(231, 76, 60, 0.03); border: 1px solid rgba(231, 76, 60, 0.1);">
+                                <h5 class="h6 fw-bold text-uppercase ls-1 mb-3" style="color: var(--venus-erreur);">Points à vérifier :</h5>
+                                <ul class="help-list">
+                                    <li>Votre solde <strong>TMoney</strong> ou <strong>Moov Money</strong> est suffisant.</li>
+                                    <li>Vous avez saisi le bon code secret sur votre téléphone.</li>
+                                    <li>La session de paiement n'a pas expiré (délai de confirmation).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="{% url 'orders:checkout' %}" class="btn btn-retry px-5 py-3 text-uppercase">
+                            <i class="fas fa-sync-alt me-2"></i> Réessayer maintenant
+                        </a>
+                        <a href="https://wa.me/22893343403?text=Bonjour%20Venus%20Luna,%20mon%20paiement%20BKApay%20a%20échoué." 
+                           class="btn btn-outline-light px-5 py-3 rounded-pill fw-bold text-uppercase opacity-75">
+                            Besoin d'aide ?
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-            <a href="{% url 'orders:checkout' %}" class="btn-gold px-5 py-3 fw-bold text-uppercase">Réessayer le paiement</a>
-            <a href="{% url 'core:contact' %}" class="btn-outline-white px-5 py-3 fw-bold text-uppercase">Besoin d'aide ?</a>
+                <div class="mt-5">
+                    <a href="{% url 'products:list' %}" class="text-white-50 text-decoration-none small ls-1">
+                        <i class="fas fa-chevron-left me-2"></i> Retourner à la boutique
+                    </a>
+                </div>
+
+            </div>
         </div>
     </div>
 </section>
-
-<style>
-    .error-icon-wrapper {
-        font-size: 80px;
-        color: #e74c3c;
-        animation: pulseError 2s infinite;
-    }
-
-    .btn-gold {
-        background-color: #D4AF37;
-        color: #001524;
-        border: none;
-        border-radius: 5px;
-        transition: 0.3s;
-        text-decoration: none;
-    }
-
-    .btn-gold:hover {
-        background-color: #b8962d;
-        color: #001524;
-        transform: translateY(-3px);
-    }
-
-    .btn-outline-white {
-        background-color: transparent;
-        color: white;
-        border: 1px solid rgba(255,255,255,0.3);
-        border-radius: 5px;
-        transition: 0.3s;
-        text-decoration: none;
-    }
-
-    .btn-outline-white:hover {
-        background-color: white;
-        color: #030303;
-    }
-
-    @keyframes pulseError {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.05); opacity: 0.8; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-
-    .fade-in {
-        animation: fadeIn 1s ease-in;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-</style>
 {% endblock %}

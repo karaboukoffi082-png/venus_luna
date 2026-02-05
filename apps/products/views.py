@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Q  # Ajout de Q pour la recherche
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 from datetime import timedelta
@@ -15,7 +15,7 @@ from apps.orders.models import Order, OrderItem
 def admin_dashboard(request):
     # 1. Statistiques Globales
     total_orders = Order.objects.count()
-    # Note : 'total' doit correspondre au champ dans apps.orders.models.Order
+    # On filtre sur 'delivered' pour le revenu réel
     total_revenue = Order.objects.filter(status='delivered').aggregate(Sum('total'))['total__sum'] or 0
     total_customers = User.objects.filter(is_staff=False).count()
     pending_orders = Order.objects.filter(status='pending').count()
@@ -64,12 +64,15 @@ def admin_dashboard(request):
 @login_required
 def toggle_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    wish_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+    # Correction : on vérifie si l'item existe déjà pour cet utilisateur
+    wish_item = Wishlist.objects.filter(user=request.user, product=product).first()
     
-    if not created:
+    if wish_item:
         wish_item.delete() 
+    else:
+        Wishlist.objects.create(user=request.user, product=product)
         
-    return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
+    return redirect(request.META.get('HTTP_REFERER', 'products:list'))
 
 @login_required
 def wishlist_detail(request):
@@ -77,16 +80,28 @@ def wishlist_detail(request):
     return render(request, 'products/wishlist.html', {'items': items})
 
 def product_list(request):
-    category_slug = request.GET.get('category')
     categories = Category.objects.all()
     products = Product.objects.filter(is_active=True)
     
+    # --- LOGIQUE DE RECHERCHE (Correction ici) ---
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query)
+        )
+
+    # --- FILTRE PAR CATÉGORIE ---
+    category_slug = request.GET.get('category')
     if category_slug:
         products = products.filter(category__slug=category_slug)
     
+    # --- GESTION DE LA WISHLIST (ICÔNES CŒUR) ---
     wishlist_ids = []
     if request.user.is_authenticated:
-        wishlist_ids = request.user.wishlist.values_list('product_id', flat=True)
+        # On récupère les IDs des produits déjà en wishlist
+        wishlist_ids = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
     
     return render(request, 'products/product_list.html', {
         'categories': categories,
@@ -94,7 +109,6 @@ def product_list(request):
         'wishlist_ids': wishlist_ids
     })
 
-# CORRECTION ICI : Utilisation du slug au lieu du PK pour correspondre au modèle
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, is_active=True)
     related_products = Product.objects.filter(category=product.category).exclude(slug=slug)[:4]

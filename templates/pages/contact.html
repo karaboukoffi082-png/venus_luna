@@ -1,91 +1,198 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<section class="py-5">
+<style>
+    :root {
+        --venus-nuit: #2a8d3bff; /* Ajusté pour correspondre à ton vert herboristerie */
+        --venus-aura: #337938ff;
+        --venus-or: #d4af37;
+        --venus-texte: rgba(255, 255, 255, 0.98);
+    }
+
+    .contact-section {
+        background: radial-gradient(circle at top, var(--venus-aura), var(--venus-nuit));
+        color: white;
+        min-height: 100vh;
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
+    .contact-title {
+        font-family: 'Playfair Display', serif;
+        color: var(--venus-or);
+        letter-spacing: 2px;
+    }
+
+    .contact-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 30px;
+        transition: 0.3s;
+    }
+
+    .contact-card:hover {
+        border-color: var(--venus-or);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .contact-item i {
+        font-size: 1.5rem;
+        color: var(--venus-or);
+        width: 50px;
+        height: 50px;
+        background: rgba(212, 175, 55, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+
+    .contact-item h6 {
+        margin: 0;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--venus-or);
+    }
+
+    .contact-item p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: white;
+    }
+
+    /* Ajustement des champs de formulaire Django pour la lisibilité */
+    .contact-form input, 
+    .contact-form textarea,
+    .contact-form select {
+        background: rgba(255, 255, 255, 0.95) !important; /* Fond clair pour que le texte soit lisible */
+        border: 1px solid rgba(212, 175, 55, 0.2) !important;
+        color: #0a2e22 !important; /* Texte sombre sur fond clair */
+        border-radius: 12px !important;
+        padding: 12px 15px !important;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .contact-form label {
+        font-size: 0.85rem;
+        color: var(--venus-or);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    .btn-submit {
+        background: var(--venus-or);
+        color: var(--venus-nuit);
+        border: none;
+        border-radius: 50px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        transition: 0.4s;
+        margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+        background: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .divider {
+        height: 2px;
+        width: 60px;
+        background: var(--venus-or);
+    }
+</style>
+
+<section class="contact-section">
     <div class="container">
         <div class="text-center mb-5">
-            <h1 class="display-4 fw-bold" style="color: var(--bleu-nuit);">Entrez en Contact</h1>
-            <p class="text-dark">Une question spirituelle ou besoin d'aide pour une commande ?</p>
+            <h1 class="display-4 fw-bold contact-title">Entrez en Contact</h1>
+            <p class="lead text-white-50 mx-auto" style="max-width: 700px;">
+                Une question spirituelle, un conseil lithothérapie ou un besoin d’assistance ? Notre sanctuaire vous répond avec bienveillance.
+            </p>
+            <div class="divider mx-auto mt-3"></div>
         </div>
 
-        <div class="row g-5">
+        <div class="row g-5 justify-content-center">
             <div class="col-lg-4">
-                <div class="bg-white p-4 h-100 rounded shadow-sm border-gold-soft">
-                    <h3 class="text-gold h5 mb-4 fw-bold">Nos Coordonnées</h3>
-                    
-                    <div class="d-flex mb-4">
-                        <i class="fas fa-map-marker-alt text-gold mt-1 me-3"></i>
+                <div class="contact-card h-100 p-4 p-md-5">
+                    <h3 class="h4 mb-4 text-white" style="font-family: 'Playfair Display', serif;">Nos Coordonnées</h3>
+
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
                         <div>
-                            <h6 class="mb-0 text-dark fw-bold">Localisation</h6>
-                            <p class="text-dark small mb-0">Adidoadin, Rue des Étoiles, Lomé - Togo</p>
+                            <h6>Sanctuaire Physique</h6>
+                            <p>Adidoadin, Rue des Étoiles, Lomé</p>
                         </div>
                     </div>
 
-                    <div class="d-flex mb-4">
-                        <i class="fab fa-whatsapp text-gold mt-1 me-3"></i>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
                         <div>
-                            <h6 class="mb-0 text-dark fw-bold">WhatsApp</h6>
-                            <p class="text-dark small mb-0">+228 93 34 34 03</p>
+                            <h6>WhatsApp Direct</h6>
+                            <p>+228 93 34 34 03</p>
                         </div>
                     </div>
 
-                    <div class="d-flex mb-4">
-                        <i class="far fa-envelope text-gold mt-1 me-3"></i>
+                    <div class="contact-item">
+                        <i class="far fa-envelope"></i>
                         <div>
-                            <h6 class="mb-0 text-dark fw-bold">Email</h6>
-                            <p class="text-dark small mb-0">satchivimichel82@gmail.com</p>
+                            <h6>Messagerie Électronique</h6>
+                            <p style="font-size: 0.85rem;">satchivimichel82@gmail.com</p>
                         </div>
+                    </div>
+
+                    <div class="mt-5 p-3 rounded-4 text-center" style="background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--venus-or);">
+                        <p class="small mb-0 fst-italic text-white-50">
+                            <i class="fas fa-history me-2"></i> Temps de réponse moyen : 4 heures.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-8">
-                <div class="bg-white p-4 rounded shadow-sm border-gold-soft">
-                    <form method="post" class="auth-form">
+            <div class="col-lg-7">
+                <div class="contact-card p-4 p-md-5">
+                    <h3 class="h4 mb-4 text-white" style="font-family: 'Playfair Display', serif;">Envoyez un message</h3>
+                    <form method="post" class="contact-form">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="text-dark small fw-bold mb-1">Nom</label>
+                                <label>Nom complet</label>
                                 {{ form.name }}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="text-dark small fw-bold mb-1">Email</label>
+                                <label>Votre Email</label>
                                 {{ form.email }}
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="text-dark small fw-bold mb-1">Objet</label>
+                            <label>Sujet de votre demande</label>
                             {{ form.subject }}
                         </div>
-                        <div class="mb-4">
-                            <label class="text-dark small fw-bold mb-1">Message</label>
+                        <div class="mb-3">
+                            <label>Comment pouvons-nous vous aider ?</label>
                             {{ form.body }}
                         </div>
-                        <button type="submit" class="btn-gold w-100 py-3 fw-bold">Envoyer mon message</button>
+                        <button type="submit" class="btn-submit w-100 py-3">
+                            Transmettre au Sanctuaire
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<style>
-    .border-gold-soft { border: 1px solid rgba(212, 175, 55, 0.2); }
-    .text-gold { color: var(--or-sombre) !important; }
-    
-    /* On s'assure que les champs du formulaire sont bien visibles */
-    input, textarea, select {
-        background-color: #fff !important;
-        color: #333 !important;
-        border: 1px solid #ddd !important;
-        padding: 10px !important;
-        width: 100%;
-        border-radius: 8px;
-    }
-    
-    input:focus, textarea:focus {
-        border-color: var(--or-sombre) !important;
-        outline: none;
-        box-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
-    }
-</style>
 {% endblock %}

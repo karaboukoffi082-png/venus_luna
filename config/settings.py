@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-
+import sys
 # Chargement du fichier .env
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # --- SÉCURITÉ (Utilise les variables du .env) ---
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-it')
 DEBUG = os.getenv('DEBUG') == 'True'
@@ -32,8 +32,10 @@ INSTALLED_APPS = [
     'apps.blog',
     'apps.contact',
     'apps.core',
-]
 
+    'admin_custom', # Assure-toi qu'elle est bien là
+    # ...
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
       #'whitenoise.middleware.WhiteNoiseMiddleware', Pour les fichiers statiques en prod

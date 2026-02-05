@@ -2,95 +2,212 @@
 {% load static %}
 
 {% block content %}
+<style>
+    :root {
+        --venus-nuit: #030a08;
+        --venus-aura: #0a3d2d;
+        --venus-or: #d4af37;
+        --venus-or-clair: #f3e309;
+    }
+
+    .product-detail-section {
+        background-color: #fcfbf7; /* Fond crème très léger pour faire ressortir les cristaux */
+        min-height: 100vh;
+    }
+
+    /* Galerie Image */
+    .main-image-wrapper {
+        position: relative;
+        background: white;
+        border-radius: 30px;
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        overflow: hidden;
+        transition: 0.3s;
+    }
+
+    .main-image-wrapper:hover {
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .thumbnail-img {
+        transition: all 0.3s ease;
+        opacity: 0.6;
+        border: 2px solid transparent !important;
+    }
+
+    .thumbnail-img:hover, .active-thumb {
+        opacity: 1;
+        border-color: var(--venus-or) !important;
+        transform: translateY(-3px);
+    }
+
+    /* Infos Produit */
+    .product-info-box {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .badge-availability {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 8px 15px;
+        border-radius: 50px;
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--venus-or);
+        font-weight: 700;
+    }
+
+    /* Formulaire Quantité */
+    .qty-input-group {
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 50px;
+        padding: 5px 15px;
+        background: white;
+    }
+
+    .btn-gold-action {
+        background: var(--venus-nuit);
+        color: var(--venus-or);
+        border: 1px solid var(--venus-or);
+        border-radius: 50px;
+        padding: 15px 30px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        transition: 0.4s;
+    }
+
+    .btn-gold-action:hover {
+        background: var(--venus-or);
+        color: var(--venus-nuit);
+        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Description */
+    .description-card {
+        background: white;
+        border-radius: 40px;
+        border: 1px solid rgba(0,0,0,0.05);
+        padding: 50px;
+    }
+
+    .breadcrumb-item a { color: var(--venus-or); }
+    .breadcrumb-item.active { color: var(--venus-nuit); opacity: 0.6; }
+</style>
+
 <section class="product-detail-section py-5">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-4">
+        
+        <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'products:list' %}" class="text-gold fw-bold text-decoration-none">Boutique</a></li>
-                <li class="breadcrumb-item active text-dark" aria-current="page">{{ product.name }}</li>
+                <li class="breadcrumb-item"><a href="{% url 'products:list' %}" class="fw-bold text-decoration-none">Le Sanctuaire</a></li>
+                <li class="breadcrumb-item active fw-bold" aria-current="page">{{ product.name }}</li>
             </ol>
         </nav>
 
         <div class="row g-5">
             <div class="col-lg-6">
-                <div class="main-image-container mb-3 shadow-sm rounded overflow-hidden">
+                <div class="main-image-wrapper mb-4">
                     {% for img in product.images.all %}
                         {% if img.is_main %}
-                            <img src="{{ img.image.url }}" id="main-display" alt="{{ img.alt_text }}" class="img-fluid w-100" style="max-height: 500px; object-fit: contain; background: #fff;">
+                            <img src="{{ img.image.url }}" id="main-display" alt="{{ img.alt_text }}" 
+                                 class="img-fluid w-100" style="height: 550px; object-fit: contain;">
                         {% endif %}
                     {% endfor %}
                 </div>
-                <div class="d-flex gap-2 overflow-auto pb-2">
+                
+                <div class="d-flex gap-3 justify-content-center overflow-auto py-2">
                     {% for img in product.images.all %}
                     <img src="{{ img.image.url }}" 
-                         class="thumbnail-img rounded cursor-pointer {% if img.is_main %}active-thumb{% endif %}" 
-                         onclick="document.getElementById('main-display').src=this.src"
-                         style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #ddd; cursor: pointer;"
-                         onmouseover="this.style.borderColor='var(--or-sombre)'"
-                         onmouseout="this.style.borderColor='#ddd'">
+                         class="thumbnail-img rounded-4 cursor-pointer {% if img.is_main %}active-thumb{% endif %}" 
+                         onclick="changeImage(this)"
+                         style="width: 90px; height: 90px; object-fit: cover; background: white; padding: 5px;">
                     {% endfor %}
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <div class="product-info-box p-4 rounded bg-white shadow-sm" style="border: 1px solid rgba(184,134,11,0.2);">
-                    <h1 class="display-5 fw-bold mb-3" style="color: var(--bleu-nuit);">{{ product.name }}</h1>
+                <div class="product-info-box ps-lg-4">
+                    <span class="badge-availability mb-3 d-inline-block">
+                        <i class="fas fa-sparkles me-2"></i> Trésor Disponible
+                    </span>
                     
+                    <h1 class="display-4 fw-bold mb-2" style="font-family: 'Playfair Display', serif; color: var(--venus-nuit);">
+                        {{ product.name }}
+                    </h1>
+
                     <div class="d-flex align-items-center mb-4">
-                        <span class="price-detail h2 mb-0 me-3 fw-bold" style="color: var(--or-sombre);">{{ product.price }} FCFA</span>
+                        <span class="h2 mb-0 fw-bold" style="color: var(--venus-or);">{{ product.price }} F CFA</span>
                         {% if product.compare_price %}
-                            <span class="text-decoration-line-through text-muted h4 mb-0">{{ product.compare_price }} F</span>
+                            <span class="ms-3 text-muted text-decoration-line-through h5 mb-0 opacity-50">{{ product.compare_price }} F</span>
                         {% endif %}
                     </div>
 
-                    <p class="lead text-dark mb-4">{{ product.short_description }}</p>
+                    <p class="lead mb-5" style="color: #555; line-height: 1.6;">{{ product.short_description }}</p>
 
-                    <hr style="border-color: var(--or-sombre); opacity: 0.2;">
-
-                    <form action="{% url 'orders:cart_add' product.id %}" method="post" class="mt-4">
+                    <form action="{% url 'orders:cart_add' product.id %}" method="post">
                         {% csrf_token %}
-                        <div class="row g-3 align-items-end">
+                        <div class="row g-3">
                             <div class="col-md-4">
-                                <label class="small fw-bold text-dark d-block mb-2">Quantité</label>
-                                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control border-gold py-2">
+                                <div class="qty-input-group d-flex align-items-center justify-content-between">
+                                    <span class="small fw-bold text-uppercase opacity-50">Qté</span>
+                                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                           class="form-control border-0 bg-transparent text-center fw-bold" style="width: 60px;">
+                                </div>
                             </div>
                             <div class="col-md-8">
-                                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold text-uppercase" style="height: 46px;">
-                                    <i class="fas fa-shopping-cart me-2"></i> Ajouter au Panier
+                                <button type="submit" class="btn-gold-action w-100 h-100">
+                                    <i class="fas fa-shopping-bag me-3"></i> Ajouter au Panier
                                 </button>
                             </div>
                         </div>
                     </form>
 
-                    <div class="mt-4 small">
-                        <p class="text-dark"><i class="fas fa-check-circle text-success me-2"></i> État : <strong>En stock ({{ product.stock }} disponibles)</strong></p>
-                        <p class="text-dark"><i class="fas fa-truck text-gold me-2"></i> Livraison partout à Lomé et environs</p>
+                    <div class="mt-5 p-4 rounded-4" style="background: white; border: 1px solid rgba(0,0,0,0.05);">
+                        <div class="row text-center">
+                            <div class="col-4 border-end">
+                                <i class="fas fa-shield-alt text-gold mb-2"></i>
+                                <p class="x-small mb-0 fw-bold">100% Naturel</p>
+                            </div>
+                            <div class="col-4 border-end">
+                                <i class="fas fa-truck text-gold mb-2"></i>
+                                <p class="x-small mb-0 fw-bold">Lomé 24h</p>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-leaf text-gold mb-2"></i>
+                                <p class="x-small mb-0 fw-bold">Éthique</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-5">
+        <div class="row mt-5 pt-5">
             <div class="col-12">
-                <h3 class="border-bottom pb-3 mb-4" style="color: var(--bleu-nuit); font-family: 'Playfair Display', serif;">
-                    <i class="fas fa-leaf me-2 text-gold"></i>Vertus et Description
-                </h3>
-                <div class="description-content p-4 rounded bg-white shadow-sm" style="line-height: 1.8; color: var(--text-dark); font-size: 1.1rem;">
-                    {{ product.description|linebreaks }}
+                <div class="description-card shadow-sm">
+                    <h3 class="display-6 mb-4 text-center" style="font-family: 'Playfair Display', serif; color: var(--venus-nuit);">
+                        Sagesse & Vertus de la Pierre
+                    </h3>
+                    <div style="height: 2px; width: 60px; background: var(--venus-or); margin: 0 auto 40px;"></div>
+                    
+                    <div class="description-content" style="line-height: 2; color: #444; font-size: 1.1rem;">
+                        {{ product.description|linebreaks }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<style>
-    .border-gold { border: 1px solid var(--or-sombre) !important; }
-    .text-gold { color: var(--or-sombre) !important; }
-    .btn-gold { 
-        background: linear-gradient(45deg, var(--or-sombre), var(--or-clair));
-        border: none;
-        color: var(--bleu-nuit) !important;
+<script>
+    function changeImage(element) {
+        document.getElementById('main-display').src = element.src;
+        // Gérer la classe active
+        document.querySelectorAll('.thumbnail-img').forEach(img => img.classList.remove('active-thumb'));
+        element.classList.add('active-thumb');
     }
-    .btn-gold:hover { transform: scale(1.02); filter: brightness(1.1); }
-</style>
+</script>
 {% endblock %}

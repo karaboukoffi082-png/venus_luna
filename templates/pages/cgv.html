@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    :root {
+        --venus-nuit: #030a08;
+        --venus-or: #d4af37;
+        --venus-texte: #444;
+    }
+
+    .cgv-section {
+        background-color: #fcfbf7;
+        color: var(--venus-texte);
+        line-height: 1.8;
+    }
+
+    .cgv-container {
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        padding: 60px;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .cgv-header {
+        border-bottom: 2px solid var(--venus-or);
+        padding-bottom: 30px;
+        margin-bottom: 50px;
+    }
+
+    .cgv-header h1 {
+        font-family: 'Playfair Display', serif;
+        color: var(--venus-nuit);
+        font-weight: 800;
+    }
+
+    .cgv-block {
+        margin-bottom: 40px;
+    }
+
+    .cgv-block h3 {
+        font-family: 'Playfair Display', serif;
+        color: var(--venus-or);
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .cgv-block h3 span {
+        font-size: 0.9rem;
+        background: var(--venus-or);
+        color: white;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+
+    .cgv-text {
+        font-size: 1rem;
+        padding-left: 45px;
+    }
+
+    .highlight-box {
+        background: rgba(212, 175, 55, 0.05);
+        border-left: 4px solid var(--venus-or);
+        padding: 20px 30px;
+        margin: 20px 0;
+        font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+        .cgv-container { padding: 30px 20px; }
+        .cgv-text { padding-left: 0; }
+    }
+</style>
+
+<section class="cgv-section py-5">
+    <div class="container" style="max-width: 1000px;">
+        
+        <div class="cgv-container fade-up">
+            
+            <div class="cgv-header text-center">
+                <h1 class="display-5">Conditions Générales de Vente</h1>
+                <p class="text-muted mt-2">Dernière mise à jour : Février 2026 — Lomé, Togo</p>
+            </div>
+
+            <div class="cgv-block">
+                <h3><span>1</span> Objet & Acceptation</h3>
+                <div class="cgv-text">
+                    <p>
+                        Les présentes conditions régissent les ventes effectuées sur le site <strong>Venus Luna</strong>. 
+                        En validant votre commande, vous déclarez accepter sans réserve l’intégralité des présentes conditions générales.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cgv-block">
+                <h3><span>2</span> Produits & Disponibilité</h3>
+                <div class="cgv-text">
+                    <p>
+                        Chaque cristal et article spirituel est unique. Les photographies sont les plus fidèles possibles mais ne peuvent assurer une similitude parfaite avec le produit reçu (nuances de couleurs, formes naturelles des pierres).
+                    </p>
+                    <p>
+                        Nos offres sont valables tant qu’elles sont visibles sur le site et dans la limite des stocks disponibles à notre sanctuaire de Lomé.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cgv-block">
+                <h3><span>3</span> Prix & Paiement</h3>
+                <div class="cgv-text">
+                    <p>
+                        Les prix sont indiqués en <strong>Francs CFA (XOF)</strong>. Venus Luna se réserve le droit de modifier ses prix à tout moment.
+                    </p>
+                    <div class="highlight-box">
+                        <strong>Modes de paiement acceptés :</strong> TMoney, Flooz et Paiement à la livraison (sous conditions).
+                    </div>
+                    <p>
+                        La commande n'est définitivement validée qu'après confirmation manuelle du transfert mobile par notre équipe.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cgv-block">
+                <h3><span>4</span> Livraison à Lomé & Environs</h3>
+                <div class="cgv-text">
+                    <p>
+                        Les livraisons sont effectuées par nos coursiers partenaires. Le client s'engage à être présent ou joignable par téléphone lors du passage du livreur. 
+                    </p>
+                    <ul>
+                        <li><strong>Délais :</strong> 24h à 48h ouvrables.</li>
+                        <li><strong>Frais :</strong> Calculés selon la zone géographique (Quartier).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cgv-block">
+                <h3><span>5</span> Droit de Rétractation & Retours</h3>
+                <div class="cgv-text">
+                    <p>
+                        Compte tenu de la nature énergétique et fragile des produits, les retours ne sont acceptés qu'en cas de <strong>défectuosité majeure</strong> ou de casse lors du transport, signalée dans les <strong>24 heures</strong> suivant la réception.
+                    </p>
+                    <p>
+                        Aucun retour ne sera accepté pour "changement d'avis" après utilisation ou purification de la pierre.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cgv-block">
+                <h3><span>6</span> Responsabilité</h3>
+                <div class="cgv-text">
+                    <p>
+                        Venus Luna ne saurait être tenue pour responsable des dommages résultant d'une mauvaise utilisation des produits (ingestion de pierres, brûlures liées aux encens, etc.).
+                    </p>
+                    <p>
+                        Les vertus lithothérapeutiques mentionnées sur le site sont issues de traditions et ne constituent pas une science médicale.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 pt-4 border-top">
+                <p class="small text-muted">
+                    Pour toute question relative à ces conditions, contactez-nous via WhatsApp : <br>
+                    <a href="https://wa.me/22893343403" class="text-gold fw-bold text-decoration-none">+228 93 34 34 03</a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-4">
+            <button onclick="window.print()" class="btn btn-outline-dark btn-sm rounded-pill px-4">
+                <i class="fas fa-print me-2"></i> Imprimer les CGV
+            </button>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

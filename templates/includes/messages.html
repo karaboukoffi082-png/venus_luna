@@ -1,12 +1,103 @@
 {% if messages %}
-<div class="container mt-3">
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-lg border-0 rounded-3" role="alert" 
-         style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); color: var(--or-clair);">
-        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-info-circle{% endif %} me-2"></i>
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: invert(1);"></button>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            {% for message in messages %}
+            <div class="alert venus-alert alert-dismissible fade show shadow-lg" role="alert">
+                <div class="d-flex align-items-center">
+                    <div class="alert-icon-circle me-3">
+                        {% if message.tags == 'success' %}
+                            <i class="fas fa-magic"></i>
+                        {% elif message.tags == 'error' or message.tags == 'danger' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="fas fa-moon"></i>
+                        {% else %}
+                            <i class="fas fa-sparkles"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="alert-content flex-grow-1">
+                        <strong class="d-block small text-uppercase fw-bold text-gold mb-1">
+                            {% if message.tags == 'success' %}Énergie Positive{% else %}Message de l'Oracle{% endif %}
+                        </strong>
+                        <span class="text-white opacity-90">{{ message }}</span>
+                    </div>
+
+                    <button type="button" class="btn-close-venus" data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
 </div>
+
+<style>
+    .venus-alert {
+        background: rgba(10, 61, 45, 0.7) !important; /* Fond vert émeraude translucide */
+        backdrop-filter: blur(15px) saturate(150%);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 20px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+        animation: slideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Animation d'entrée */
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-icon-circle {
+        width: 45px;
+        height: 45px;
+        background: var(--venus-jaune);
+        color: var(--venus-vert-dark);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: 0 0 15px rgba(251, 192, 45, 0.4);
+    }
+
+    .text-gold {
+        color: var(--venus-jaune) !important;
+        letter-spacing: 1px;
+    }
+
+    /* Bouton fermer personnalisé */
+    .btn-close-venus {
+        background: transparent;
+        border: none;
+        color: white;
+        opacity: 0.5;
+        transition: 0.3s;
+        padding: 0 5px;
+    }
+
+    .btn-close-venus:hover {
+        opacity: 1;
+        color: var(--venus-jaune);
+        transform: rotate(90deg);
+    }
+
+    /* Adaptation selon les tags Django */
+    .alert-danger { border-left: 5px solid #dc3545 !important; }
+    .alert-success { border-left: 5px solid var(--venus-jaune) !important; }
+</style>
+
+<script>
+    // Auto-suppression des messages après 5 secondes pour ne pas encombrer l'écran
+    setTimeout(function() {
+        let alerts = document.querySelectorAll('.venus-alert');
+        alerts.forEach(function(alert) {
+            let bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 6000);
+</script>
 {% endif %}

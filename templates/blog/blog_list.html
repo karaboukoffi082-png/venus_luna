@@ -1,26 +1,151 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <h1 class="text-gold text-center mb-5 display-4 post-title">venus & luna</h1>
+<style>
+    :root {
+        --venus-vert: #145c44;
+        --venus-vert-dark: #0a3d2d;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+    }
+
+    .blog-section {
+        background: linear-gradient(180deg, var(--venus-vert-dark) 0%, var(--venus-vert) 100%);
+        min-height: 100vh;
+    }
+
+    /* Style du titre principal */
+    .venus-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        color: white;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Carte de blog stylisée */
+    .blog-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        padding: 20px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .blog-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--venus-or);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Image du post */
+    .post-thumbnail {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        height: 220px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .post-thumbnail img {
+        transition: transform 0.6s ease;
+    }
+
+    .blog-card:hover .post-thumbnail img {
+        transform: scale(1.1);
+    }
+
+    /* Typographie */
+    .post-link-title {
+        color: white;
+        text-decoration: none;
+        font-family: 'Playfair Display', serif;
+        transition: 0.3s;
+        display: block;
+        line-height: 1.3;
+    }
+
+    .post-link-title:hover {
+        color: var(--venus-jaune);
+    }
+
+    .btn-read-more {
+        color: var(--venus-jaune);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s;
+    }
+
+    .btn-read-more:hover {
+        letter-spacing: 2px;
+        color: white;
+    }
+
+    .text-gold-light {
+        color: var(--venus-jaune);
+        opacity: 0.8;
+    }
+</style>
+
+<section class="blog-section py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h1 class="venus-title display-4 mb-2">Venus & Luna</h1>
+            <div style="height: 2px; width: 80px; background: var(--venus-or); margin: 0 auto;"></div>
+            <p class="text-white-50 mt-3 italic">Chroniques de spiritualité et d'éveil</p>
+        </div>
         
-        <div class="row g-4">
+        <div class="row g-4 justify-content-center">
             {% for post in posts %}
             <div class="col-md-6 col-lg-4">
-                <article class="blog-card glass-card h-100">
-                    <div class="mb-3 overflow-hidden rounded-3" style="height: 200px; background: #000;">
-                         <img src="{% static 'img/spirit-bg.jpeg' %}" class="w-100 h-100 object-fit-cover opacity-50">
+                <article class="blog-card h-100 d-flex flex-column">
+                    <div class="post-thumbnail mb-4">
+                        <a href="{{ post.get_absolute_url }}">
+                            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'img/spirit-bg.jpeg' %}{% endif %}" class="w-100 h-100 object-fit-cover opacity-75" alt="{{ post.title }}">
+                        </a>
+                        <div class="position-absolute top-0 end-0 p-3">
+                            <span class="badge rounded-pill bg-dark bg-opacity-50 border border-gold text-gold-light">
+                                <i class="fas fa-star small"></i> Éveil
+                            </span>
+                        </div>
                     </div>
                     
-                    <h3 class="h4 mb-3"><a href="{{ post.get_absolute_url }}" class="text-white text-decoration-none">{{ post.title }}</a></h3>
-                    <p class="text-white-50 small mb-4">{{ post.content|truncatewords:20 }}</p>
+                    <div class="px-2 flex-grow-1">
+                        <div class="mb-2">
+                            <span class="text-gold-light small">
+                                <i class="far fa-calendar-alt me-1"></i> {{ post.created_at|date:"d M Y" }}
+                            </span>
+                        </div>
+                        
+                        <h3 class="h4 mb-3">
+                            <a href="{{ post.get_absolute_url }}" class="post-link-title">
+                                {{ post.title }}
+                            </a>
+                        </h3>
+                        
+                        <p class="text-white-50 small mb-4">
+                            {{ post.content|truncatewords:18 }}
+                        </p>
+                    </div>
                     
-                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                        <span class="text-gold small"><i class="far fa-calendar-alt me-2"></i>{{ post.created_at|date:"d M Y" }}</span>
-                        <a href="{{ post.get_absolute_url }}" class="text-gold">Lire la suite →</a>
+                    <div class="d-flex justify-content-between align-items-center mt-auto px-2 pt-3 border-top border-white border-opacity-10">
+                        <span class="text-white-50 x-small">Par {{ post.author.username|default:"L'Oracle" }}</span>
+                        <a href="{{ post.get_absolute_url }}" class="btn-read-more">
+                            Explorer <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                        </a>
                     </div>
                 </article>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-white-50">Le ciel est clair, aucun message n'est encore apparu.</p>
             </div>
             {% endfor %}
         </div>
