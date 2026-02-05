@@ -2,13 +2,12 @@
 
 <style>
     :root {
-        /* Palette harmonisée : Vert Herboristerie & Or Venus */
-        --venus-vert: #1ed828ff;        /* Le vert de ton image de référence */
-        --venus-vert-dark: #5d7224;   /* Vert sombre pour les interactions */
-        --venus-vert-pale: #f4f7eb;   /* Fond très léger pour le contraste */
-        --venus-or: #d4af37;          /* Or pour l'élégance */
-        --venus-jaune: #fbc02d;       /* Jaune pour les alertes/admin */
-        --venus-rouge: #d11149;       /* Rouge du badge "à découvrir" */
+        --venus-vert: #1ed828ff;
+        --venus-vert-dark: #5d7224;
+        --venus-vert-pale: #f4f7eb;
+        --venus-or: #d4af37;
+        --venus-jaune: #fbc02d;
+        --venus-rouge: #d11149;
     }
 
     /* --- NAVBAR --- */
@@ -20,22 +19,29 @@
         transition: 0.4s;
     }
 
-    /* Logo avec halo blanc */
+    /* Logo */
     .navbar-logo {
         height: 130px;
         width: auto;
+        position: relative;
         border-radius: 100%;
         border: 8px solid white;
         background: white;
         transition: 0.3s;
+        margin-left: 0;
     }
-    
+
     .navbar-logo:hover {
         transform: scale(1.05) rotate(5deg);
         box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     }
 
-    /* Liens du menu style "Blocs" */
+    /* Supprime toute marge Bootstrap du logo */
+    .navbar-brand {
+        margin-left: 0 !important;
+        padding-left: 10px;
+    }
+
     .nav-link {
         color: white !important;
         font-weight: 600;
@@ -51,7 +57,6 @@
         color: var(--venus-jaune) !important;
     }
 
-    /* Badge "À découvrir" (Style exact de l'image) */
     .badge-decouvrir {
         background-color: var(--venus-rouge);
         color: white;
@@ -68,7 +73,6 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    /* --- ÉLÉMENTS DE DROITE --- */
     .admin-link {
         color: var(--venus-jaune) !important;
         border: 1px solid var(--venus-jaune);
@@ -87,7 +91,8 @@
 
     .cart-badge {
         position: absolute;
-        top: -8px; right: -12px;
+        top: -8px; 
+        right: -12px;
         background: var(--venus-rouge);
         color: white;
         font-size: 0.65rem;
@@ -97,13 +102,13 @@
     }
 
     .user-avatar {
-        width: 35px; height: 35px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         border: 2px solid white;
         object-fit: cover;
     }
 
-    /* Dropdown Stylisé */
     .dropdown-menu {
         border: none;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -115,13 +120,45 @@
         background-color: var(--venus-vert-pale);
         color: var(--venus-vert);
     }
+
+    /* =========================
+   AJUSTEMENT SPÉCIAL MOBILE
+   ========================= */
+@media (max-width: 768px) {
+
+    /* Logo plus petit sur mobile */
+    .navbar-logo {
+        height: 75px;
+        border-width: 5px;
+    }
+
+    /* Texte VENUS-LUNA un peu plus discret */
+    .navbar-brand span {
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Navbar plus compacte */
+    .custom-navbar {
+        padding: 0.3rem 0.5rem;
+    }
+
+    /* Évite que le logo pousse le menu */
+    .navbar-brand {
+        padding-left: 8px;
+    }
+}
+
 </style>
 
 <nav class="navbar navbar-expand-lg sticky-top custom-navbar">
-    <div class="container"> 
+    <div class="container-fluid px-0">
+        
         <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
             <img src="/static/img/logovenusluna1.JPG" alt="Logo Venus Luna" class="navbar-logo">
-            <span class="ms-3 d-none d-sm-inline fw-bold text-white" style="font-family: 'Playfair Display'; letter-spacing: 1px;">VENUS-LUNA</span>
+            <span class="ms-3 d-none d-sm-inline fw-bold text-white" style="font-family: 'Playfair Display'; letter-spacing: 1px;">
+                VENUS-LUNA
+            </span>
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -131,18 +168,17 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'core:home' %}">Accueil</a></li>
-                
+
                 <li class="nav-item" style="position: relative;">
                     <span class="badge-decouvrir"><i class="far fa-thumbs-up"></i> à découvrir !</span>
                     <a class="nav-link" href="{% url 'products:list' %}">Boutique</a>
                 </li>
-                
+
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:list' %}">Blog</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'core:contact' %}">Contact</a></li>
             </ul>
 
             <div class="d-flex align-items-center gap-3">
-                
                 {% if user.is_authenticated and user.is_staff %}
                     <a href="{% url 'admin_custom:dashboard' %}" class="admin-link d-flex align-items-center gap-2">
                         <i class="fas fa-shield-alt"></i> <span>ADMIN</span>
@@ -156,20 +192,20 @@
 
                 {% if user.is_authenticated %}
                     <div class="dropdown">
-                        <a class="d-flex align-items-center" href="#" data-bs-toggle="dropdown" style="text-decoration: none;">
+                        <a class="d-flex align-items-center" href="#" data-bs-toggle="dropdown">
                             {% if user.profile.avatar %}
                                 <img src="{{ user.profile.avatar.url }}" class="user-avatar">
                             {% else %}
                                 <i class="fas fa-user-circle fs-2 text-white"></i>
                             {% endif %}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end mt-3 border-0">
+                        <ul class="dropdown-menu dropdown-menu-end mt-3">
                             <li><a class="dropdown-item py-2" href="{% url 'accounts:client_dashboard' %}"><i class="fas fa-user-circle me-2"></i> Profil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{% url 'accounts:logout' %}" method="post" class="px-3">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-link text-danger p-0 text-decoration-none fw-bold" style="font-size: 0.85rem;">
+                                    <button type="submit" class="btn btn-link text-danger p-0 fw-bold">
                                         <i class="fas fa-sign-out-alt me-2"></i> Déconnexion
                                     </button>
                                 </form>
@@ -177,8 +213,10 @@
                         </ul>
                     </div>
                 {% else %}
-                    <a href="{% url 'accounts:login' %}" class="text-white text-decoration-none small fw-bold">Connexion</a>
-                    <a href="{% url 'accounts:register' %}" class="btn btn-sm btn-light rounded-pill px-3 fw-bold" style="color: var(--venus-vert);">S'inscrire</a>
+                    <a href="{% url 'accounts:login' %}" class="text-white fw-bold">Connexion</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-sm btn-light rounded-pill px-3 fw-bold" style="color: var(--venus-vert);">
+                        S'inscrire
+                    </a>
                 {% endif %}
             </div>
         </div>
